@@ -1,0 +1,33 @@
+{
+  "name": "local-live-captions",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:app": "vite --mode desktop",
+    "preview": "vite preview --mode site",
+    "build": "npm run build:site && npm run build:app",
+    "build:site": "vite build --mode site --outDir dist/site && cp dist/site/index.html dist/site/404.html",
+    "build:app": "vite build --mode desktop --outDir dist/app",
+    "test": "vitest run && playwright test",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@fontsource-variable/fraunces": "5.2.8",
+    "@fontsource/atkinson-hyperlegible": "5.2.8",
+    "@tauri-apps/api": "2.8.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.58.2",
+    "@tauri-apps/cli": "2.8.4",
+    "@types/node": "24.3.0",
+    "playwright-core": "1.58.2",
+    "typescript": "5.9.2",
+    "vite": "7.3.6",
+    "vitest": "3.2.7"
+  }
+}

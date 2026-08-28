@@ -1,0 +1,7 @@
+{
+  "model": "factory-image",
+  "generated": "2026-08-28",
+  "tool": "/opt/fleet/lib/gen-image.sh",
+  "prompt": "Use case: stylized-concept. Asset type: wide landing-page hero for an offline Linux live-caption desktop app. Scene: a surreal empty university lecture room built as a tactile paper diorama; a small cobalt laptop on a desk; translucent tomato-red sound waves enter from the left and fold into broad cream paper caption ribbons above the desk. Editorial magazine illustration, cut paper, dry pastel, subtle grain, hand-built shadows, slightly uncanny scale. Wide landscape composition with the main objects on the right and calm negative space on the left. Warm window light, quiet and reassuring, deep forest ink, parchment cream, cobalt blue, tomato red, tiny acid-yellow accents. No people, no faces, no brands, no logos, no readable text, no letters, no watermark, no generic gradients, no glossy 3D.",
+  "review": "Accepted: no people, brand marks, malformed text, seams, or misleading interface elements."
+}
