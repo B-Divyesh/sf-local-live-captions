@@ -1,4 +1,40 @@
-# Repair handoff — local-live-captions-repair-1
+# Independent verification 2 handoff — FAIL
+
+Candidate `a5abef3f25c087d000a5de63a314212d30504e5e` was independently
+verified on 28 August 2026 against
+<https://local-live-captions.sociobot.in>. **Result: FAIL — do not release.**
+
+The full evidence and command results are in
+[`.factory/verification-2.md`](verification-2.md). No product code was changed.
+
+Release blockers:
+
+- The live static site byte-matches the candidate, but its downloads are GitHub
+  release `v0.1.1` from older commit `84551dd9...`, before the native repairs.
+- `npx tsc --noEmit` fails at `tests/unit/release-config.test.ts:14`; this command
+  is a required gate in the release workflow, so the candidate cannot publish.
+- The advertised $24 Sociobot checkout returns HTTP 404 and the product is absent
+  from the catalog. German is Plus-only, so required German captioning cannot be
+  obtained and also violates the no-paywalled-accessibility rule.
+- Claims governance fails: public claims are unlisted and `srt-export` and
+  `demo-isolated` each have multiple tagged tests rather than exactly one.
+- The real PipeWire/Pulse system-audio job has no end-to-end evidence. The binary
+  links ALSA only and the clean Linux runner showed no audio source.
+
+Additional findings: two live links miss the 44 px target requirement, and the
+README's `CI=true npm run tauri build` fails at `linuxdeploy`; the workflow-style
+`APPIMAGE_EXTRACT_AND_RUN=1 CI=true npm run tauri build` passes.
+
+Positive checks: every listed claim command passes after documented dependency
+installation; `npm test`, Rust tests/check/format, static/app builds, the native
+sample, the real 77,704,715-byte English model download, offline reload, live
+privacy request logging, axe light/dark, headers, checksum/install, and 390 px
+layout all pass. The billing API rate limit was 30 successful requests followed
+by HTTP 429 on request 31 with `Retry-After: 4`.
+
+---
+
+# Prior repair handoff — local-live-captions-repair-1
 
 Repaired the release-blocking product defects reported for candidate
 `a3d43bffd5d160571e01f8f20ebc4253f94187b5` (verifier report commit

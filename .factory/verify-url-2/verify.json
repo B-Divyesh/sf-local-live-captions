@@ -1,0 +1,14 @@
+{
+  "url": "https://local-live-captions.sociobot.in",
+  "loadMs": 1067,
+  "errors": [],
+  "a11y": {
+    "title": "Local Live Captions — Caption Linux audio locally",
+    "lang": "en",
+    "h1": 1,
+    "main": true,
+    "imgsMissingAlt": 0,
+    "buttonsUnlabeled": 0,
+    "textLength": 2368
+  }
+}
