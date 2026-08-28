@@ -1,61 +1,32 @@
-# Local Live Captions — build handoff
+# Verification handoff — FAIL
 
-## What was built
+Candidate `a3d43bffd5d160571e01f8f20ebc4253f94187b5` was independently tested on 28 August 2026 against <https://local-live-captions.sociobot.in>.
 
-- A Tauri 2 desktop app with a Rust audio path, selected input-device capture, five-second in-memory chunks, 16 kHz resampling, and local whisper.cpp transcription.
-- A consent checkbox that blocks real capture until confirmed. Capture state remains visible in the overlay.
-- On-demand official Whisper model downloads. English Tiny is free. A $24 one-time Plus license adds larger English and multilingual English/German models.
-- Sociobot checkout, license return storage, daily cached browser verification, in-app paste-to-restore, and server-side verification before paid model download.
-- An always-on-top caption view with live updates, caption sizing, pause/stop, SRT export, loading, empty, device-error, model-error, and offline-error copy.
-- A one-click sample on `/demo` and in the desktop first-run screen. Browser demo state is restricted to `demo:` session keys.
-- A responsive static site in `dist/site`, with platform-aware release downloads, privacy and terms routes, service-worker offline support, a designed 404, metadata, security headers, sitemap, and installers.
-- Original surreal editorial artwork generated for the product. Prompt and provenance are in `.factory/design.md` and `assets/src/`.
-- A tag-triggered GitHub Actions matrix for unsigned AppImage/deb, MSI/EXE, and universal macOS builds. It also publishes `SHA256SUMS` and `latest.json`.
+**Release decision: FAIL. Do not promote this candidate.**
 
-## How to run and verify
+The first screen, one-click browser demo, offline reload, release downloads/checksums, static build, TypeScript, Rust compilation, light-mode axe checks, mobile layout, and performance budgets passed. Deployed HTML, JS, CSS, and service-worker hashes match the candidate build.
+
+Release blockers:
+
+1. `CI=true npm run tauri build` fails in a clean checkout because untracked Rust resolution selects `tauri v2.11.5` while npm pins `@tauri-apps/api v2.8.0`. `src-tauri/Cargo.lock` is not tracked.
+2. The live “Buy Plus” URL returns HTTP 404, so the advertised $24 purchase and German/larger-model access are unavailable.
+3. Native audio/privacy claims are not proved: their claim test runs only bundled browser text, and many other landing/README promises have no claim entry.
+4. Axe finds serious dark-mode contrast failures on the live landing/demo and desktop setup, plus a serious 4.19:1 failure on desktop “Stop captions.”
+5. SRT export emits invalid times after 59 seconds (`65` seconds becomes `00:00:65,000`).
+6. Native capture startup can fail after returning success, leaving the UI saying “Capturing”; several device-error paths leave the running flag stuck and prevent retry.
+7. Multiple mobile links are below 44 px.
+
+Additional defects: demo state survives “Start for real,” the caption screen has no `<h1>`, unknown routes return HTTP 200, hashed assets use only `max-age=30`, and returned license tokens are not verified on arrival.
+
+Full evidence, commands, metrics, the observed 30-request API allowance, and severity are in `.factory/verification.md`. Screenshots and the required URL-verifier output are under `.factory/`.
+
+To reproduce the decisive failures:
 
 ```sh
 npm ci
-npm test
-npm run build:site
-npm run build:app
-npx tsc --noEmit
-cargo fmt --check --manifest-path src-tauri/Cargo.toml
+CI=true npm run tauri build
+curl -i https://api.sociobot.in/api/v1/products/local-live-captions/checkout
+node --experimental-strip-types --input-type=module -e "import('./src/sample.ts').then(({toSrt}) => console.log(toSrt([{at:65,end:3661,text:'Boundary caption'}])))"
 ```
 
-Verified on 28 August 2026:
-
-- Vitest: 2 passed.
-- Playwright: 14 passed, 2 intentional per-project skips.
-- Every test referenced in `.factory/claims.json` passed in the demo sandbox.
-- Axe: no serious or critical violations on the landing page.
-- Mobile: no horizontal overflow at 390 × 844.
-- Build: `dist/site/index.html` and `dist/app/index.html` generated.
-- Initial site JavaScript: 24.4 KB raw / 8.9 KB gzip.
-- CSS: 17.1 KB raw / 4.6 KB gzip.
-- Hero WebP: 28 KB mobile / 56 KB desktop.
-- Self-hosted fonts loaded on the first view: about 71 KB WOFF2.
-- Lighthouse mobile: performance 99, accessibility 100, best practices 96, SEO 100.
-- Lighthouse lab metrics: LCP 1.7 s, CLS 0.044, total blocking time 0 ms.
-- `npm audit`: 0 vulnerabilities.
-- Rust formatting and Cargo manifest metadata passed. Platform binaries are intentionally built by GitHub Actions, per the installer contract.
-- GitHub Actions: Linux, Windows, macOS, and final manifest jobs passed.
-- Release checksum: the published Debian package matched `SHA256SUMS`.
-- Release manifest: valid JSON for v0.1.1 with seven platform assets.
-
-Release workflow: <https://github.com/B-Divyesh/sf-local-live-captions/actions/runs/33193693227>
-
-Release: <https://github.com/B-Divyesh/sf-local-live-captions/releases/tag/v0.1.1>
-
-## Known gaps
-
-- The 20-minute user pilot in the success measure has not happened. Caption retention and real lecture accuracy remain unmeasured.
-- Linux system sound must appear as an input device. Most PipeWire and PulseAudio desktops expose a monitor source, but some users must enable it in sound settings.
-- macOS and Windows builds can caption selectable inputs. Automatic system-loopback routing is not implemented in v0.1.
-- The app holds no audio files. A crash during an active session loses transcript text that was not exported.
-
-## Needs operator action
-
-- Register `local-live-captions` and its $24 one-time Plus price in the Sociobot billing system. The code intentionally uses only the slug.
-- Add `APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` release secrets when signing certificates are available. v0.1 builds are unsigned and the site says so.
-- Run the 20-minute English and German accessibility pilot with consenting users. Record model, hardware, word-error patterns, and whether captions stayed enabled.
+Before reverification: track a compatible Cargo lockfile/version set; register and test the paid product; add meaningful native integration/claim coverage; fix SRT formatting and capture error propagation; repair contrast and touch targets; discard demo state on exit; serve real 404 status and immutable hashed assets; then rerun every claim command, `npm test`, native packaging, axe in both themes, and a real consenting system-audio transcription session.
