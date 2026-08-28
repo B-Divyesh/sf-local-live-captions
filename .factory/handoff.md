@@ -92,5 +92,16 @@ on a tag, then publishes checksums and `latest.json`. macOS/Windows signing
 still requires the operator-provided `APPLE_CERTIFICATE` and
 `WINDOWS_CERT_PFX` secrets if signed releases are desired.
 
-Static deployment evidence and the repair commit are appended below after the
-push/deploy step.
+## Deployment evidence
+
+Repair commit `eaa20ea02b4fbf3467a20d9c7901cb607efcfdb9` was pushed to `main`
+and deployed with `/opt/fleet/lib/deploy-static.sh local-live-captions dist/site`.
+
+- Live URL: <https://local-live-captions.sociobot.in>
+- Live `verify-url.sh`: HTTP 200; 692 ms load; no console errors; title,
+  `lang=en`, one `<h1>`, `<main>`, and image alt checks all pass.
+- Live unknown route: `https://local-live-captions.sociobot.in/not-a-route`
+  returns HTTP 404.
+- Live hashed JS has `Cache-Control: public, max-age=31536000, immutable`.
+- Live checkout endpoint remains HTTP 404 pending the external billing
+  registration described above.
