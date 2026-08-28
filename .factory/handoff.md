@@ -41,11 +41,11 @@ Verified on 28 August 2026:
 - Rust formatting and Cargo manifest metadata passed. Platform binaries are intentionally built by GitHub Actions, per the installer contract.
 - GitHub Actions: Linux, Windows, macOS, and final manifest jobs passed.
 - Release checksum: the published Debian package matched `SHA256SUMS`.
-- Release manifest: valid JSON for v0.1.0 with seven platform assets.
+- Release manifest: valid JSON for v0.1.1 with seven platform assets.
 
-Release workflow: <https://github.com/B-Divyesh/sf-local-live-captions/actions/runs/33192826059>
+Release workflow: <https://github.com/B-Divyesh/sf-local-live-captions/actions/runs/33193693227>
 
-Release: <https://github.com/B-Divyesh/sf-local-live-captions/releases/tag/v0.1.0>
+Release: <https://github.com/B-Divyesh/sf-local-live-captions/releases/tag/v0.1.1>
 
 ## Known gaps
 
