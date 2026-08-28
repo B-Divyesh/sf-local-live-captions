@@ -13,6 +13,15 @@ test("landing page states the job and has one heading", async ({ page }) => {
   expect(accessibility.violations.filter((item) => ["serious", "critical"].includes(item.impact || ""))).toEqual([]);
 });
 
+test("dark pages have no serious or critical contrast violations", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  for (const route of ["/", "/demo"]) {
+    await page.goto(route);
+    const accessibility = await new AxeBuilder({ page }).analyze();
+    expect(accessibility.violations.filter((item) => ["serious", "critical"].includes(item.impact || ""))).toEqual([]);
+  }
+});
+
 test("routes have distinct titles and one h1", async ({ page }) => {
   for (const [path, title] of [["/demo", "Demo — Local Live Captions"], ["/privacy", "Privacy — Local Live Captions"], ["/terms", "Terms — Local Live Captions"], ["/missing", "Page not found — Local Live Captions"]]) {
     await page.goto(path);
@@ -27,6 +36,17 @@ test("mobile layout fits 390px", async ({ page }, testInfo) => {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
   await expect(page.getByText("Demo — sample data, nothing is saved")).toBeVisible();
+});
+
+test("mobile navigation and footer links meet the 44px target", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "mobile project only");
+  await page.goto("/");
+  const sizes = await page.locator("nav a, .footer-links a, .wordmark").evaluateAll((elements) => elements.map((element) => {
+    const box = element.getBoundingClientRect();
+    return { width: box.width, height: box.height };
+  }));
+  expect(sizes).not.toHaveLength(0);
+  expect(sizes.every((size) => size.width >= 44 && size.height >= 44)).toBe(true);
 });
 
 test("@claim:private-local demo sends no data elsewhere", async ({ page }) => {
@@ -68,6 +88,29 @@ test("@claim:demo-isolated reset clears only demo settings", async ({ page }) =>
   await page.getByRole("button", { name: "Reset demo" }).click();
   const values = await page.evaluate(() => ({ real: localStorage.getItem("real:keep"), demo: sessionStorage.getItem("demo:caption-size") }));
   expect(values).toEqual({ real: "yes", demo: null });
+});
+
+test("@claim:demo-isolated leaving the demo discards only demo settings", async ({ page }) => {
+  await page.goto("/demo");
+  await page.evaluate(() => { localStorage.setItem("real:keep", "yes"); sessionStorage.setItem("demo:caption-size", "40"); });
+  await page.getByRole("link", { name: "Start for real" }).click();
+  await expect(page).toHaveURL(/\/$/);
+  const values = await page.evaluate(() => ({ real: localStorage.getItem("real:keep"), demo: sessionStorage.getItem("demo:caption-size") }));
+  expect(values).toEqual({ real: "yes", demo: null });
+});
+
+test("returned licenses are verified immediately", async ({ page }) => {
+  await page.route("https://api.github.com/**", (route) => route.fulfill({ status: 404, body: "{}" }));
+  let verifyRequests = 0;
+  await page.route("https://api.sociobot.in/api/v1/products/local-live-captions/verify?license=returned-token", (route) => {
+    verifyRequests += 1;
+    return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ valid: true }) });
+  });
+  await page.goto("/?license=returned-token");
+  await expect(page.getByText("Plus is active on this browser.")).toBeVisible();
+  expect(verifyRequests).toBe(1);
+  await expect(page).toHaveURL(/\/$/);
+  await expect.poll(() => page.evaluate(() => localStorage.getItem("sb_license:local-live-captions:verified"))).not.toBeNull();
 });
 
 test("@claim:free-and-paid pricing stays explicit", async ({ page }) => {

@@ -37,10 +37,10 @@ h3, p { margin-top: 0; }
 .skip-link:focus { transform: translateY(0); }
 
 .site-header { display: flex; align-items: center; justify-content: space-between; min-height: 88px; padding: 16px clamp(20px, 5vw, 80px); border-bottom: 1px solid rgb(20 36 31 / 22%); }
-.wordmark { display: flex; align-items: center; gap: 10px; font-weight: 700; line-height: .9; text-decoration: none; }
-.wordmark svg { width: 42px; height: 42px; fill: none; stroke: var(--tomato); stroke-width: 3; stroke-linecap: round; }
+.wordmark { display: flex; align-items: center; min-height: 44px; min-width: 44px; gap: 10px; font-weight: 700; line-height: .9; text-decoration: none; }
+.wordmark svg { width: 44px; height: 44px; fill: none; stroke: var(--tomato); stroke-width: 3; stroke-linecap: round; }
 nav { display: flex; align-items: center; gap: clamp(16px, 3vw, 40px); }
-nav a { font-weight: 700; text-decoration: none; border-bottom: 2px solid transparent; }
+nav a { display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; font-weight: 700; text-decoration: none; border-bottom: 2px solid transparent; }
 nav a:hover { border-color: var(--tomato); }
 
 .hero { min-height: calc(100vh - 88px); display: grid; grid-template-columns: minmax(320px, .85fr) minmax(420px, 1.15fr); align-items: center; gap: clamp(32px, 6vw, 96px); padding: clamp(56px, 8vw, 112px) clamp(20px, 5vw, 80px); overflow: hidden; }
@@ -117,6 +117,7 @@ input[type="range"] { accent-color: var(--tomato); min-height: 44px; }
 footer { background: var(--night); color: var(--cream); padding: 56px clamp(20px, 5vw, 80px); display: grid; grid-template-columns: 1fr auto auto; gap: 32px 64px; }
 footer p { color: #c8d4cc; margin-bottom: 0; }
 .footer-links { display: flex; flex-direction: column; gap: 8px; }
+.footer-links a { display: inline-flex; align-items: center; min-height: 44px; }
 .build { font-size: .85rem; }
 
 .demo-banner { position: sticky; z-index: 10; top: 0; min-height: 52px; background: var(--acid); color: var(--ink); padding: 8px clamp(20px, 5vw, 80px); display: flex; justify-content: space-between; align-items: center; gap: 16px; }
@@ -170,20 +171,24 @@ footer p { color: #c8d4cc; margin-bottom: 0; }
 .live-words .older { color: #9daaa4; font-size: .78em; }
 .overlay-controls { border-top: 1px solid #40534b; border-bottom: 0; }
 .overlay-controls label { display: flex; align-items: center; gap: 8px; }
-.stop-button { background: var(--tomato) !important; color: white !important; border-color: var(--tomato) !important; }
+.stop-button { background: var(--tomato) !important; color: var(--cream) !important; border-color: var(--tomato) !important; }
 
 @media (prefers-color-scheme: dark) {
-  :root { --paper: #0b1714; --paper-deep: #14241f; --surface: #1b2e28; --ink: #fffaf0; --ink-soft: #c8d4cc; --cobalt: #88baff; --shadow: 0 18px 50px rgb(0 0 0 / 35%); }
-  .price { color: #150c09; }
-  .price .button, .price input { color: #14241f; }
+  :root { --paper: #0b1714; --paper-deep: #14241f; --surface: #1b2e28; --ink: #fffaf0; --ink-soft: #c8d4cc; --tomato: #b83b28; --cobalt: #1d6db7; --shadow: 0 18px 50px rgb(0 0 0 / 35%); }
+  .eyebrow, .kicker, .section-mark, .walkthrough article > b, .demo-notes time { color: #ffab96; }
+  .price { color: var(--cream); }
+  .price .section-mark, .price .kicker { color: var(--cream); }
+  .price .button.primary { color: var(--cream); }
+  .price .button.secondary, .price input { color: var(--ink); }
+  .demo-banner, .demo-banner button { color: #14241f; }
   .hero-art figcaption { color: var(--ink); }
   .caption-stage { border-color: #71827b; }
+  .desktop-setup select, .desktop-setup select option { color: var(--ink); background: var(--surface); }
 }
 
 @media (max-width: 800px) {
   .site-header { align-items: flex-start; }
-  nav { display: grid; grid-template-columns: repeat(2, auto); gap: 6px 18px; }
-  nav a { min-height: 32px; }
+  nav { display: grid; grid-template-columns: repeat(2, auto); gap: 8px 18px; }
   .hero { grid-template-columns: 1fr; min-height: auto; }
   .hero-copy { order: 1; }
   .hero-art { order: 2; }

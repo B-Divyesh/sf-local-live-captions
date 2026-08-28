@@ -76,7 +76,7 @@ function landing(): string {
 }
 
 function demoPage(): string {
-  return shell(`<div class="demo-banner" role="status"><strong>Demo — sample data, nothing is saved</strong><span><button type="button" data-action="reset-demo">Reset demo</button><a class="nav-link" href="/">Start for real</a></span></div><main id="main" class="demo-main" tabindex="-1"><div class="demo-heading"><p class="eyebrow">Sample astronomy lecture</p><h1 tabindex="-1">See live captions before installing</h1><p>This sample uses a bundled transcript. It makes no network requests.</p></div>${preview("demo")}<aside class="demo-notes"><h2>Session transcript</h2><ol id="transcript-list">${SAMPLE_LINES.map((line) => `<li><time>00:${String(line.at).padStart(2, "0")}</time> ${escapeHtml(line.text)}</li>`).join("")}</ol><div class="export-row"><button class="button secondary" type="button" data-action="export-txt">Export TXT</button><button class="button secondary" type="button" data-action="export-srt">Export SRT</button></div></aside></main>`);
+  return shell(`<div class="demo-banner" role="status"><strong>Demo — sample data, nothing is saved</strong><span><button type="button" data-action="reset-demo">Reset demo</button><a class="nav-link" data-action="exit-demo" href="/">Start for real</a></span></div><main id="main" class="demo-main" tabindex="-1"><div class="demo-heading"><p class="eyebrow">Sample astronomy lecture</p><h1 tabindex="-1">See live captions before installing</h1><p>This sample uses a bundled transcript. It makes no network requests.</p></div>${preview("demo")}<aside class="demo-notes"><h2>Session transcript</h2><ol id="transcript-list">${SAMPLE_LINES.map((line) => `<li><time>00:${String(line.at).padStart(2, "0")}</time> ${escapeHtml(line.text)}</li>`).join("")}</ol><div class="export-row"><button class="button secondary" type="button" data-action="export-txt">Export TXT</button><button class="button secondary" type="button" data-action="export-srt">Export SRT</button></div></aside></main>`);
 }
 
 const legal = {
@@ -102,7 +102,9 @@ function downloadFile(name: string, text: string, type: string): void {
 function wireShared(): void {
   document.querySelectorAll<HTMLAnchorElement>("a.nav-link").forEach((link) => link.addEventListener("click", (event) => {
     if (link.origin !== location.origin || event.metaKey || event.ctrlKey || event.shiftKey) return;
-    event.preventDefault(); history.pushState({}, "", link.pathname + link.search); render();
+    event.preventDefault();
+    if (link.dataset.action === "exit-demo") discardDemo();
+    history.pushState({}, "", link.pathname + link.search); render();
   }));
   document.querySelectorAll<HTMLInputElement>("[data-caption-size]").forEach((input) => input.addEventListener("input", () => {
     const stage = input.closest<HTMLElement>(".caption-stage")!;
@@ -121,10 +123,14 @@ function wireShared(): void {
   document.querySelectorAll<HTMLElement>("[data-action='export-txt']").forEach((button) => button.addEventListener("click", () => downloadFile("sample-transcript.txt", toTxt(SAMPLE_LINES), "text/plain")));
 }
 
+function discardDemo(): void {
+  Object.keys(sessionStorage).filter((key) => key.startsWith("demo:")).forEach((key) => sessionStorage.removeItem(key));
+}
+
 function wireDemo(): void {
   const stored = sessionStorage.getItem("demo:caption-size");
   if (stored) document.querySelectorAll<HTMLInputElement>("[data-caption-size]").forEach((input) => { input.value = stored; input.dispatchEvent(new Event("input")); });
-  document.querySelector<HTMLElement>("[data-action='reset-demo']")?.addEventListener("click", () => { Object.keys(sessionStorage).filter((key) => key.startsWith("demo:")).forEach((key) => sessionStorage.removeItem(key)); render(); });
+  document.querySelector<HTMLElement>("[data-action='reset-demo']")?.addEventListener("click", () => { discardDemo(); render(); });
 }
 
 async function setupDownloads(): Promise<void> {
@@ -162,6 +168,7 @@ function setupLicense(): void {
   const input = document.querySelector<HTMLInputElement>("#license");
   const existing = returned || localStorage.getItem(LICENSE_KEY);
   if (input && existing) input.value = existing;
+  if (returned) void verifyStoredLicense(returned, result!);
   form?.addEventListener("submit", async (event) => {
     event.preventDefault(); const token = input!.value.trim();
     if (!token) { result!.textContent = "Enter the license token from your receipt."; return; }
@@ -173,6 +180,24 @@ function setupLicense(): void {
       else { localStorage.removeItem(LICENSE_KEY); result!.textContent = "This license is not active. Check the token or buy Plus."; }
     } catch { result!.textContent = "The license service could not be reached. Try again when online."; }
   });
+}
+
+async function verifyStoredLicense(token: string, result: HTMLElement): Promise<void> {
+  result.textContent = "Checking your returned license…";
+  try {
+    const response = await fetch(`${API}/verify?license=${encodeURIComponent(token)}`);
+    const verdict = await response.json() as { valid: boolean };
+    if (verdict.valid) {
+      localStorage.setItem(`${LICENSE_KEY}:verified`, String(Date.now()));
+      result.textContent = "Plus is active on this browser.";
+    } else {
+      localStorage.removeItem(LICENSE_KEY);
+      localStorage.removeItem(`${LICENSE_KEY}:verified`);
+      result.textContent = "This license is not active. Check the token or buy Plus.";
+    }
+  } catch {
+    result.textContent = "The license service could not be reached. Plus will be checked when you try again online.";
+  }
 }
 
 function render(): void {
@@ -194,11 +219,12 @@ async function renderDesktop(): Promise<void> {
   let consent = false;
   let lines: CaptionLine[] = [];
   let captureTimer = 0;
+  let desktopError = "";
   const cachedAt = Number(localStorage.getItem(`${LICENSE_KEY}:verified`) || 0);
   let plusActive = Boolean(localStorage.getItem(LICENSE_KEY)) && Date.now() - cachedAt < 86_400_000;
   const draw = (screen: "setup" | "caption" = "setup") => {
-    if (screen === "setup") app.innerHTML = `<main id="main" class="desktop-setup"><header class="app-brand"><span class="capture-orb"></span><strong>Local Live Captions</strong><span>Audio never leaves this computer</span></header><section><p class="eyebrow">Ready when the room is</p><h1>Caption audio on this computer</h1><p>Choose a source and model. Ask everyone before you start.</p><div id="desktop-error" role="alert"></div><label>Audio source<select id="audio-device"><option>Loading audio sources…</option></select></label><label>Speech model<select id="model"><option value="tiny.en">English · Tiny · free</option><option value="base.en" ${plusActive ? "" : "disabled"}>English · Base · Plus</option><option value="base" ${plusActive ? "" : "disabled"}>English + German · Base · Plus</option></select></label><label class="consent"><input id="consent" type="checkbox"> Everyone has agreed to captions</label><div class="app-actions"><button class="button primary" id="start" disabled>Start captions</button><button class="button secondary" id="sample">Load sample project</button></div><p class="model-note"><button class="text-button" id="download-model">Download the selected model</button>. The free English model is 75 MB. Whisper models use the MIT License.</p><details class="app-license"><summary>${plusActive ? "Plus is active" : "Add or restore Plus"}</summary><p>Plus costs $24 once and adds German and larger models. <a href="${API}/checkout" target="_blank" rel="external">Buy Plus</a></p><form id="app-license-form"><label for="app-license">License token</label><input id="app-license" value="${escapeHtml(localStorage.getItem(LICENSE_KEY) || "")}" autocomplete="off"><button class="button secondary" type="submit">Verify license</button><p id="app-license-result" role="status"></p></form></details></section></main>`;
-    else app.innerHTML = `<main id="main" class="desktop-caption"><header class="overlay-bar"><span class="capture-state"><i></i>${demo ? "Sample captions" : "Capturing"}</span><span>${demo ? "Bundled sample" : "Audio stays local"}</span><button id="pin" aria-pressed="true">Keep on top</button></header><section class="live-words" aria-live="polite" style="--caption-size:28px">${lines.length ? lines.slice(-3).reverse().map((line, i) => `<p class="${i ? "older" : ""}">${escapeHtml(line.text)}</p>`).join("") : `<p>Listening… Speech will appear here.</p>`}</section><footer class="overlay-controls"><button id="stop" class="stop-button">Stop captions</button><label>Size <input id="app-size" type="range" min="20" max="48" value="28"><output>28 px</output></label><button id="app-export">Export transcript</button></footer></main>`;
+    if (screen === "setup") app.innerHTML = `<main id="main" class="desktop-setup"><header class="app-brand"><span class="capture-orb"></span><strong>Local Live Captions</strong><span>Audio never leaves this computer</span></header><section><p class="eyebrow">Ready when the room is</p><h1>Caption audio on this computer</h1><p>Choose a source and model. Ask everyone before you start.</p><div id="desktop-error" role="alert">${escapeHtml(desktopError)}</div><label>Audio source<select id="audio-device"><option>Loading audio sources…</option></select></label><label>Speech model<select id="model"><option value="tiny.en">English · Tiny · free</option><option value="base.en" ${plusActive ? "" : "disabled"}>English · Base · Plus</option><option value="base" ${plusActive ? "" : "disabled"}>English + German · Base · Plus</option></select></label><label class="consent"><input id="consent" type="checkbox"> Everyone has agreed to captions</label><div class="app-actions"><button class="button primary" id="start" disabled>Start captions</button><button class="button secondary" id="sample">Load sample project</button></div><p class="model-note"><button class="text-button" id="download-model">Download the selected model</button>. The free English model is 75 MB. Whisper models use the MIT License.</p><details class="app-license"><summary>${plusActive ? "Plus is active" : "Add or restore Plus"}</summary><p>Plus costs $24 once and adds German and larger models. <a href="${API}/checkout" target="_blank" rel="external">Buy Plus</a></p><form id="app-license-form"><label for="app-license">License token</label><input id="app-license" value="${escapeHtml(localStorage.getItem(LICENSE_KEY) || "")}" autocomplete="off"><button class="button secondary" type="submit">Verify license</button><p id="app-license-result" role="status"></p></form></details></section></main>`;
+    else app.innerHTML = `<main id="main" class="desktop-caption"><h1 class="sr-only">Live captions</h1><header class="overlay-bar"><span class="capture-state"><i></i>${demo ? "Sample captions" : "Capturing"}</span><span>${demo ? "Bundled sample" : "Audio stays local"}</span><button id="pin" aria-pressed="true">Keep on top</button></header><section class="live-words" aria-live="polite" style="--caption-size:28px">${lines.length ? lines.slice(-3).reverse().map((line, i) => `<p class="${i ? "older" : ""}">${escapeHtml(line.text)}</p>`).join("") : `<p>Listening… Speech will appear here.</p>`}</section><footer class="overlay-controls"><button id="stop" class="stop-button">Stop captions</button><label>Size <input id="app-size" type="range" min="20" max="48" value="28"><output>28 px</output></label><button id="app-export">Export transcript</button></footer></main>`;
   };
   draw();
   const wireSetup = async () => {
@@ -209,7 +235,7 @@ async function renderDesktop(): Promise<void> {
     document.querySelector("#sample")!.addEventListener("click", () => { demo = true; lines = SAMPLE_LINES; draw("caption"); wireCaption(); });
     document.querySelector("#download-model")!.addEventListener("click", async () => { const note = document.querySelector<HTMLElement>(".model-note")!; const model = document.querySelector<HTMLSelectElement>("#model")!.value; note.textContent = "Downloading the selected model…"; try { const path = await invoke<string>("download_model", { model, license: localStorage.getItem(LICENSE_KEY) }); note.textContent = `The selected model is ready at ${path}.`; } catch (error) { note.textContent = `The model could not be downloaded. Check your connection or Plus license, then try again. ${String(error)}`; } });
     document.querySelector<HTMLFormElement>("#app-license-form")!.addEventListener("submit", async (event) => { event.preventDefault(); const token = document.querySelector<HTMLInputElement>("#app-license")!.value.trim(); const result = document.querySelector<HTMLElement>("#app-license-result")!; if (!token) { result.textContent = "Enter the token from your receipt."; return; } result.textContent = "Checking your license…"; try { plusActive = await invoke<boolean>("verify_license", { license: token }); if (plusActive) { localStorage.setItem(LICENSE_KEY, token); localStorage.setItem(`${LICENSE_KEY}:verified`, String(Date.now())); draw(); void wireSetup(); } else result.textContent = "This license is not active. Check the token or buy Plus."; } catch { result.textContent = "The license service could not be reached. Try again when online."; } });
-    document.querySelector("#start")!.addEventListener("click", async () => { const error = document.querySelector<HTMLElement>("#desktop-error")!; error.textContent = "Starting local captions…"; try { await invoke("start_capture", { deviceName: select.value, model: document.querySelector<HTMLSelectElement>("#model")!.value, consent }); draw("caption"); wireCaption(); } catch (reason) { error.textContent = `Captions did not start. ${String(reason)} Choose another audio source or download the model.`; } });
+    document.querySelector("#start")!.addEventListener("click", async () => { const error = document.querySelector<HTMLElement>("#desktop-error")!; error.textContent = "Starting local captions…"; try { await invoke("start_capture", { deviceName: select.value, model: document.querySelector<HTMLSelectElement>("#model")!.value, consent }); desktopError = ""; draw("caption"); wireCaption(); } catch (reason) { error.textContent = `Captions did not start. ${String(reason)} Choose another audio source or download the model.`; } });
   };
   const wireCaption = () => {
     document.querySelector<HTMLInputElement>("#app-size")!.addEventListener("input", (event) => { const value = (event.target as HTMLInputElement).value; document.querySelector<HTMLElement>(".live-words")!.style.setProperty("--caption-size", `${value}px`); document.querySelector("output")!.textContent = `${value} px`; });
@@ -218,10 +244,21 @@ async function renderDesktop(): Promise<void> {
     document.querySelector("#stop")!.addEventListener("click", async () => { window.clearInterval(captureTimer); captureTimer = 0; if (!demo) { try { lines = await invoke<CaptionLine[]>("stop_capture"); } catch {} } demo = false; draw(); void wireSetup(); });
     if (!demo && !captureTimer) captureTimer = window.setInterval(async () => {
       try {
+        const status = await invoke<{ active: boolean; error: string | null }>("capture_status");
+        if (!status.active) {
+          window.clearInterval(captureTimer); captureTimer = 0;
+          desktopError = `Captions stopped. ${status.error || "The audio source is no longer available."} Choose another source and try again.`;
+          draw(); void wireSetup();
+          return;
+        }
         lines = await invoke<CaptionLine[]>("get_transcript");
         const words = document.querySelector<HTMLElement>(".live-words");
         if (words) words.innerHTML = lines.length ? lines.slice(-3).reverse().map((line, i) => `<p class="${i ? "older" : ""}">${escapeHtml(line.text)}</p>`).join("") : `<p>Listening… Speech will appear here.</p>`;
-      } catch {}
+      } catch (reason) {
+        window.clearInterval(captureTimer); captureTimer = 0;
+        desktopError = `Captions stopped. ${String(reason)} Choose another source and try again.`;
+        draw(); void wireSetup();
+      }
     }, 1500);
   };
   await wireSetup();

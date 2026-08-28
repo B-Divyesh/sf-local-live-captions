@@ -1,32 +1,96 @@
-# Verification handoff — FAIL
+# Repair handoff — local-live-captions-repair-1
 
-Candidate `a3d43bffd5d160571e01f8f20ebc4253f94187b5` was independently tested on 28 August 2026 against <https://local-live-captions.sociobot.in>.
+Repaired the release-blocking product defects reported for candidate
+`a3d43bffd5d160571e01f8f20ebc4253f94187b5` (verifier report commit
+`651ecb5a5e9b5196a5b9b30a5f2f669ad2a25056`). The product remains a Tauri 2
+desktop app with its static companion site.
 
-**Release decision: FAIL. Do not promote this candidate.**
+## What changed
 
-The first screen, one-click browser demo, offline reload, release downloads/checksums, static build, TypeScript, Rust compilation, light-mode axe checks, mobile layout, and performance budgets passed. Deployed HTML, JS, CSS, and service-worker hashes match the candidate build.
+- Locked the native dependency graph (`Cargo.lock`) and pinned the compatible
+  Tauri core/build versions. Removed committed generated Tauri schemas and
+  build output; both are now ignored.
+- Fixed SRT timestamps beyond 59 seconds, including hour and millisecond
+  boundaries.
+- Made native capture startup wait for an actual stream start, propagate setup
+  failures, clear the running state after stream/transcription failures, and
+  return an actionable error to the desktop UI so a person can retry.
+- Added a desktop caption-screen `<h1>`, dark-theme contrast corrections,
+  44 px navigation/footer touch targets, demo-state disposal on “Start for
+  real”, immediate returned-license verification, real static 404 handling,
+  and immutable caching for hashed assets.
+- Added privacy, local-processing, recovery, language-model, SRT, mobile,
+  dark-axe, demo-exit, returned-license, static-routing, and cache-policy
+  regression tests. Claims now distinguish the browser demo's provable
+  no-cross-origin behavior from the native app's explicit local-processing
+  boundary.
+- Added a release workflow verification gate and the Linux dependencies/
+  AppImage extract mode needed by a clean runner.
 
-Release blockers:
+## Verification performed
 
-1. `CI=true npm run tauri build` fails in a clean checkout because untracked Rust resolution selects `tauri v2.11.5` while npm pins `@tauri-apps/api v2.8.0`. `src-tauri/Cargo.lock` is not tracked.
-2. The live “Buy Plus” URL returns HTTP 404, so the advertised $24 purchase and German/larger-model access are unavailable.
-3. Native audio/privacy claims are not proved: their claim test runs only bundled browser text, and many other landing/README promises have no claim entry.
-4. Axe finds serious dark-mode contrast failures on the live landing/demo and desktop setup, plus a serious 4.19:1 failure on desktop “Stop captions.”
-5. SRT export emits invalid times after 59 seconds (`65` seconds becomes `00:00:65,000`).
-6. Native capture startup can fail after returning success, leaving the UI saying “Capturing”; several device-error paths leave the running flag stuck and prevent retry.
-7. Multiple mobile links are below 44 px.
-
-Additional defects: demo state survives “Start for real,” the caption screen has no `<h1>`, unknown routes return HTTP 200, hashed assets use only `max-age=30`, and returned license tokens are not verified on arrival.
-
-Full evidence, commands, metrics, the observed 30-request API allowance, and severity are in `.factory/verification.md`. Screenshots and the required URL-verifier output are under `.factory/`.
-
-To reproduce the decisive failures:
+All commands below passed from this checkout unless noted otherwise.
 
 ```sh
 npm ci
-CI=true npm run tauri build
-curl -i https://api.sociobot.in/api/v1/products/local-live-captions/checkout
-node --experimental-strip-types --input-type=module -e "import('./src/sample.ts').then(({toSrt}) => console.log(toSrt([{at:65,end:3661,text:'Boundary caption'}])))"
+npx tsc --noEmit
+npm test                         # 6 unit tests; 21 browser passed, 3 expected mobile/desktop skips
+npx playwright test --workers=1 # serial desktop + 390 px mobile confirmation
+cargo fmt --check --manifest-path src-tauri/Cargo.toml
+cargo test --manifest-path src-tauri/Cargo.toml  # 4 native tests
+cargo check --manifest-path src-tauri/Cargo.toml
+npm run build                    # dist/site and dist/app
+APPIMAGE_EXTRACT_AND_RUN=1 CI=false npx tauri build --bundles appimage
+timeout 12s xvfb-run -a ./src-tauri/target/release/local-live-captions
 ```
 
-Before reverification: track a compatible Cargo lockfile/version set; register and test the paid product; add meaningful native integration/claim coverage; fix SRT formatting and capture error propagation; repair contrast and touch targets; discard demo state on exit; serve real 404 status and immutable hashed assets; then rerun every claim command, `npm test`, native packaging, axe in both themes, and a real consenting system-audio transcription session.
+The native package output includes:
+
+- `Local Live Captions_0.1.1_amd64.deb` — SHA-256
+  `f60b74ac2a6fa1844211145445a518eb9993a33e8480f0f30293455e120d13e0`
+- `Local Live Captions-0.1.1-1.x86_64.rpm` — SHA-256
+  `948b9a6dba03b806244b87d53cfed295f452068d1493b8d76453a2542c2b4ad9`
+- `Local Live Captions_0.1.1_amd64.AppImage` — SHA-256
+  `8439fb8dae8941505262e63424c2543ee616b53fef1099399238f779fa5e02fa`
+
+Every command in `.factory/claims.json` was run exactly. The production build
+is 9.16 KB gzip JavaScript and 4.65 KB gzip CSS for the static first load.
+`verify-url.sh` against the local production preview returned HTTP 200 with no
+console errors, one heading, `lang=en`, a main landmark, and no missing image
+alt text. Axe serious/critical coverage runs through `@axe-core/playwright`
+for light and dark `/` and `/demo`; it passes. The standalone Axe CLI could
+not launch its Selenium Chrome against the container's Playwright Chromium,
+so the installed Playwright integration is the recorded Axe evidence.
+
+## Known external dependency
+
+The product's checkout code and license-return handling are repaired, but the
+factory billing catalog has not registered `local-live-captions`: on 28 August
+2026, `GET https://api.sociobot.in/api/v1/products` did not list the slug and
+`https://api.sociobot.in/api/v1/products/local-live-captions/checkout`
+returned HTTP 404. Repository rules prohibit changing billing. An operator
+must register/enable the `$24` Sociobot product and then complete one hosted
+checkout/return-token test. No audio or transcript is sent by that checkout
+path.
+
+The container has no real PipeWire/audio device, so a consenting physical
+system-audio transcription session remains a release-environment smoke test;
+the packaged app launches under Xvfb and its native error/retry paths are
+covered by tests.
+
+## Run and release
+
+```sh
+npm ci
+npm test
+npm run build
+npm run tauri build
+```
+
+The GitHub Actions workflow builds unsigned macOS, Windows, and Linux assets
+on a tag, then publishes checksums and `latest.json`. macOS/Windows signing
+still requires the operator-provided `APPLE_CERTIFICATE` and
+`WINDOWS_CERT_PFX` secrets if signed releases are desired.
+
+Static deployment evidence and the repair commit are appended below after the
+push/deploy step.

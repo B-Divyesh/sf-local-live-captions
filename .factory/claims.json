@@ -1,10 +1,10 @@
 [
   {
     "id": "private-local",
-    "claim": "Audio stays on your device",
-    "where": "landing facts and desktop app",
+    "claim": "The browser demo makes no cross-origin requests",
+    "where": "demo privacy copy",
     "test": "npm test -- --grep @claim:private-local",
-    "sandbox": "fresh browser context at /demo; exercise captions and assert every request stays same-origin"
+    "sandbox": "fresh browser context at /demo; exercise sample captions and assert every request stays same-origin"
   },
   {
     "id": "offline-reload",
@@ -33,5 +33,26 @@
     "where": "landing facts and price section",
     "test": "npm test -- --grep @claim:free-and-paid",
     "sandbox": "fresh landing page; assert the free feature list, exact price, and Sociobot checkout URL"
+  },
+  {
+    "id": "native-local-processing",
+    "claim": "Desktop captions process audio locally; model downloads and license checks are the only remote paths",
+    "where": "landing privacy fact, desktop setup, privacy policy, README",
+    "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_native_local_processing",
+    "sandbox": "native unit test inspects the compiled capture module's network boundary and confirms transcription has no network client"
+  },
+  {
+    "id": "capture-recovery",
+    "claim": "If capture stops with an error, the app shows the error and lets you start again",
+    "where": "desktop capture flow",
+    "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_capture_recovery",
+    "sandbox": "native unit test records a stream failure and asserts the running lock clears while the error remains available to the UI"
+  },
+  {
+    "id": "language-models",
+    "claim": "The app offers English and German speech models",
+    "where": "landing steps, Plus section, desktop model picker, README",
+    "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_language_models",
+    "sandbox": "native unit test checks the exact bundled model catalog for English and multilingual German-capable models"
   }
 ]

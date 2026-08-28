@@ -6,3 +6,6 @@ graphify-out/
 test-results/
 playwright-report/
 .DS_Store
+
+src-tauri/target/
+src-tauri/gen/

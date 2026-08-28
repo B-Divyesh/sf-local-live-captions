@@ -30,6 +30,8 @@ npm run tauri dev    # desktop app
 
 The desktop build needs the platform packages listed in [the release workflow](.github/workflows/release.yml). Speech models download on demand from the official `ggerganov/whisper.cpp` Hugging Face repository. OpenAI Whisper and whisper.cpp publish their code and converted models under the MIT License.
 
+`src-tauri/Cargo.lock` is committed on purpose. It pins the Rust Tauri stack to the compatible 2.8 release used by the desktop JavaScript API. Do not commit `src-tauri/target/` or `src-tauri/gen/`; both are generated during native builds.
+
 ## Test and build
 
 The factory build command is:
@@ -44,6 +46,9 @@ The static output lands in `dist/site`, with `index.html` at its root.
 npm test             # Vitest + Playwright claims and accessibility checks
 npm run build        # site in dist/site; desktop frontend in dist/app
 cargo fmt --check --manifest-path src-tauri/Cargo.toml
+cargo test --manifest-path src-tauri/Cargo.toml
+cargo check --manifest-path src-tauri/Cargo.toml
+CI=true npm run tauri build
 ```
 
 Desktop installers are built only in GitHub Actions. Tag a `v*` release or run the release workflow. It creates unsigned macOS, Windows, and Linux packages, then publishes `SHA256SUMS` and `latest.json`.

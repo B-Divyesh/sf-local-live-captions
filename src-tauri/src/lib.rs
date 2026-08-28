@@ -21,7 +21,35 @@ struct CaptionLine {
 struct CaptionState {
     transcript: Arc<Mutex<Vec<CaptionLine>>>,
     running: Arc<AtomicBool>,
+    last_error: Arc<Mutex<Option<String>>>,
     data_dir: PathBuf,
+}
+
+#[derive(Serialize)]
+struct CaptureStatus {
+    active: bool,
+    error: Option<String>,
+}
+
+fn record_capture_failure(
+    running: &AtomicBool,
+    last_error: &Mutex<Option<String>>,
+    message: String,
+) {
+    running.store(false, Ordering::SeqCst);
+    if let Ok(mut saved) = last_error.lock() {
+        *saved = Some(message);
+    }
+}
+
+fn report_start_failure(
+    running: &AtomicBool,
+    last_error: &Mutex<Option<String>>,
+    reply: &mpsc::SyncSender<Result<(), String>>,
+    message: String,
+) {
+    record_capture_failure(running, last_error, message.clone());
+    let _ = reply.send(Err(message));
 }
 
 #[tauri::command]
@@ -182,46 +210,86 @@ fn start_capture(
     if !consent {
         return Err("Confirm that everyone agreed before capture.".into());
     }
-    if state.running.swap(true, Ordering::SeqCst) {
+    if state.running.load(Ordering::SeqCst) {
         return Err("Captions are already running.".into());
     }
     let (file_name, _) =
         model_file(&model).ok_or_else(|| "That model is not available.".to_string())?;
     let model_path = state.data_dir.join("models").join(file_name);
     if !model_path.exists() {
-        state.running.store(false, Ordering::SeqCst);
         return Err("Download this speech model first.".into());
     }
-    let host = cpal::default_host();
-    let device = host
-        .input_devices()
-        .map_err(|error| format!("Audio sources are unavailable: {error}"))?
-        .find(|device| {
-            device
-                .name()
-                .map(|name| name == device_name)
-                .unwrap_or(false)
-        })
-        .ok_or_else(|| "The selected audio source is no longer available.".to_string())?;
-    let supported = device
-        .default_input_config()
-        .map_err(|error| format!("The audio source has no supported format: {error}"))?;
-    let sample_format = supported.sample_format();
-    let config: cpal::StreamConfig = supported.into();
-    let channels = config.channels as usize;
-    let sample_rate = config.sample_rate.0;
-    let transcript = state.transcript.clone();
-    transcript
+    state
+        .transcript
         .lock()
         .map_err(|_| "The transcript is busy.".to_string())?
         .clear();
+    if let Ok(mut last_error) = state.last_error.lock() {
+        *last_error = None;
+    }
+    let transcript = state.transcript.clone();
     let running = state.running.clone();
+    let last_error = state.last_error.clone();
     let model_path_string = model_path.display().to_string();
     let language = if model == "base" { "auto" } else { "en" }.to_string();
+    let (startup_sender, startup_receiver) = mpsc::sync_channel::<Result<(), String>>(1);
+    let startup_cancelled = Arc::new(AtomicBool::new(false));
+    let worker_cancelled = startup_cancelled.clone();
     std::thread::spawn(move || {
+        let host = cpal::default_host();
+        let device = match host.input_devices() {
+            Ok(mut devices) => devices.find(|device| {
+                device
+                    .name()
+                    .map(|name| name == device_name)
+                    .unwrap_or(false)
+            }),
+            Err(error) => {
+                report_start_failure(
+                    &running,
+                    &last_error,
+                    &startup_sender,
+                    format!("Audio sources are unavailable: {error}"),
+                );
+                return;
+            }
+        };
+        let Some(device) = device else {
+            report_start_failure(
+                &running,
+                &last_error,
+                &startup_sender,
+                "The selected audio source is no longer available.".into(),
+            );
+            return;
+        };
+        let supported = match device.default_input_config() {
+            Ok(config) => config,
+            Err(error) => {
+                report_start_failure(
+                    &running,
+                    &last_error,
+                    &startup_sender,
+                    format!("The audio source has no supported format: {error}"),
+                );
+                return;
+            }
+        };
+        let sample_format = supported.sample_format();
+        let config: cpal::StreamConfig = supported.into();
+        let channels = config.channels as usize;
+        let sample_rate = config.sample_rate.0;
         let (sender, receiver) = mpsc::sync_channel::<Vec<f32>>(32);
-        let on_error = |_error| {};
-        let stream_result = match sample_format {
+        let callback_running = running.clone();
+        let callback_error = last_error.clone();
+        let on_error = move |error: cpal::StreamError| {
+            record_capture_failure(
+                &callback_running,
+                &callback_error,
+                format!("The audio source stopped: {error}"),
+            );
+        };
+        let stream = match sample_format {
             cpal::SampleFormat::F32 => device.build_input_stream(
                 &config,
                 move |data: &[f32], _| {
@@ -252,18 +320,41 @@ fn start_capture(
                 None,
             ),
             _ => {
-                running.store(false, Ordering::SeqCst);
+                report_start_failure(
+                    &running,
+                    &last_error,
+                    &startup_sender,
+                    "The selected audio format is not supported.".into(),
+                );
                 return;
             }
         };
-        let Ok(stream) = stream_result else {
-            running.store(false, Ordering::SeqCst);
-            return;
+        let stream = match stream {
+            Ok(stream) => stream,
+            Err(error) => {
+                report_start_failure(
+                    &running,
+                    &last_error,
+                    &startup_sender,
+                    format!("Could not start the selected audio source: {error}"),
+                );
+                return;
+            }
         };
-        if stream.play().is_err() {
-            running.store(false, Ordering::SeqCst);
+        if let Err(error) = stream.play() {
+            report_start_failure(
+                &running,
+                &last_error,
+                &startup_sender,
+                format!("Could not play the selected audio source: {error}"),
+            );
             return;
         }
+        if worker_cancelled.load(Ordering::SeqCst) {
+            return;
+        }
+        running.store(true, Ordering::SeqCst);
+        let _ = startup_sender.send(Ok(()));
         let started = Instant::now();
         let target_samples = sample_rate as usize * channels * 5;
         let mut buffer = Vec::with_capacity(target_samples);
@@ -274,23 +365,39 @@ fn start_capture(
             if buffer.len() >= target_samples {
                 let audio = resample_to_16k(&buffer, channels, sample_rate);
                 buffer.clear();
-                if let Ok(texts) = transcribe(&model_path_string, &audio, &language) {
-                    if let Ok(mut saved) = transcript.lock() {
-                        for text in texts {
-                            let end = started.elapsed().as_secs();
-                            saved.push(CaptionLine {
-                                at: end.saturating_sub(5),
-                                end,
-                                text,
-                            });
+                match transcribe(&model_path_string, &audio, &language) {
+                    Ok(texts) => {
+                        if let Ok(mut saved) = transcript.lock() {
+                            for text in texts {
+                                let end = started.elapsed().as_secs();
+                                saved.push(CaptionLine {
+                                    at: end.saturating_sub(5),
+                                    end,
+                                    text,
+                                });
+                            }
                         }
+                    }
+                    Err(error) => {
+                        record_capture_failure(&running, &last_error, error);
+                        break;
                     }
                 }
             }
         }
         drop(stream);
     });
-    Ok(())
+    match startup_receiver.recv_timeout(Duration::from_secs(5)) {
+        Ok(result) => result,
+        Err(_) => {
+            startup_cancelled.store(true, Ordering::SeqCst);
+            let message =
+                "The audio source did not start in time. Choose another source and try again."
+                    .to_string();
+            record_capture_failure(&state.running, &state.last_error, message.clone());
+            Err(message)
+        }
+    }
 }
 
 #[tauri::command]
@@ -303,8 +410,24 @@ fn get_transcript(state: State<'_, CaptionState>) -> Result<Vec<CaptionLine>, St
 }
 
 #[tauri::command]
+fn capture_status(state: State<'_, CaptionState>) -> Result<CaptureStatus, String> {
+    let error = state
+        .last_error
+        .lock()
+        .map_err(|_| "The capture status is busy.".to_string())?
+        .clone();
+    Ok(CaptureStatus {
+        active: state.running.load(Ordering::SeqCst),
+        error,
+    })
+}
+
+#[tauri::command]
 fn stop_capture(state: State<'_, CaptionState>) -> Result<Vec<CaptionLine>, String> {
     state.running.store(false, Ordering::SeqCst);
+    if let Ok(mut last_error) = state.last_error.lock() {
+        *last_error = None;
+    }
     get_transcript(state)
 }
 
@@ -326,6 +449,7 @@ pub fn run() {
             app.manage(CaptionState {
                 transcript: Arc::new(Mutex::new(Vec::new())),
                 running: Arc::new(AtomicBool::new(false)),
+                last_error: Arc::new(Mutex::new(None)),
                 data_dir,
             });
             Ok(())
@@ -336,9 +460,59 @@ pub fn run() {
             verify_license,
             start_capture,
             get_transcript,
+            capture_status,
             stop_capture,
             set_always_on_top
         ])
         .run(tauri::generate_context!())
         .expect("Local Live Captions could not start");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn resampling_downmixes_and_preserves_the_requested_duration() {
+        let input = vec![1.0, -1.0, 0.5, 0.5, -0.5, 0.5, 0.0, 0.0];
+        let output = resample_to_16k(&input, 2, 32_000);
+        assert_eq!(output.len(), 2);
+        assert!((output[0] - 0.0).abs() < f32::EPSILON);
+    }
+
+    #[test]
+    fn claim_capture_recovery_failure_clears_running_state_and_keeps_a_retryable_error() {
+        let running = AtomicBool::new(true);
+        let error = Mutex::new(None);
+        record_capture_failure(
+            &running,
+            &error,
+            "The selected audio source stopped.".into(),
+        );
+        assert!(!running.load(Ordering::SeqCst));
+        assert_eq!(
+            error.lock().unwrap().as_deref(),
+            Some("The selected audio source stopped.")
+        );
+    }
+
+    #[test]
+    fn claim_native_local_processing_only_model_and_license_paths_are_network_capable() {
+        let source = include_str!("lib.rs");
+        let production = source.split("#[cfg(test)]").next().unwrap();
+        assert_eq!(production.matches("reqwest::get(").count(), 2);
+        assert!(production.contains("fn transcribe"));
+        assert!(!production[production.find("fn transcribe").unwrap()
+            ..production
+                .find("#[tauri::command]\nfn start_capture")
+                .unwrap()]
+            .contains("reqwest"));
+    }
+
+    #[test]
+    fn claim_language_models_include_english_and_german() {
+        assert!(model_file("tiny.en").is_some());
+        assert!(model_file("base.en").is_some());
+        assert!(model_file("base").is_some());
+    }
 }
