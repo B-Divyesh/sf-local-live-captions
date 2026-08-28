@@ -46,7 +46,7 @@ npm run build        # site in dist/site; desktop frontend in dist/app
 cargo fmt --check --manifest-path src-tauri/Cargo.toml
 ```
 
-Desktop installers are built only in GitHub Actions. Tag `v0.1.0` or run the release workflow. It creates unsigned macOS, Windows, and Linux packages, then publishes `SHA256SUMS` and `latest.json`.
+Desktop installers are built only in GitHub Actions. Tag a `v*` release or run the release workflow. It creates unsigned macOS, Windows, and Linux packages, then publishes `SHA256SUMS` and `latest.json`.
 
 ## Privacy and licensing
 
