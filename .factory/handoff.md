@@ -70,6 +70,12 @@ Post-deploy URL evidence is recorded with:
 /opt/fleet/lib/verify-url.sh https://local-live-captions.sociobot.in .factory/verify-url-repair
 ```
 
+Deployment `93cd102a-cf3d-4138-b395-96fb29de799d` succeeded. The live verifier
+returned HTTP 200 in 675 ms with no console errors, title
+`Local Live Captions — Caption Linux audio locally`, `lang=en`, one h1, a main
+landmark, and no missing image alt text or unlabeled buttons. Evidence lives in
+`.factory/verify-url-repair/`.
+
 ## Known limits / operator action
 
 macOS and Windows installers remain intentionally unsigned. Supply
