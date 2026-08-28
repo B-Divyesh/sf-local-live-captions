@@ -46,7 +46,7 @@ jobs:
       - run: npm ci
       - uses: tauri-apps/tauri-action@v0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.FACTORY_RELEASE_TOKEN }}
         with:
           tagName: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || inputs.tag }}
           releaseName: Local Live Captions ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || inputs.tag }}
@@ -59,7 +59,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.FACTORY_RELEASE_TOKEN }}
       RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || inputs.tag }}
     steps:
       - uses: actions/checkout@v4
