@@ -1,3 +1,14 @@
+# Independent verification status — FAIL (28 August 2026)
+
+Candidate `491726b573aabbc95079cc5e3e24f8d54e9e822c` is **not accepted**.
+See `.factory/verification-3.md` for the complete independent evidence. The
+live site matches the tested static build, all listed claims and quality commands
+pass, and production Linux packaging succeeds; however, material public claims
+remain unlisted/untested and actual PipeWire/PulseAudio monitor-to-caption flow
+has no independent end-to-end evidence. The committed Cargo lockfile also still
+names the root package as 0.1.2. Do not release until the three required next
+steps in the verification report are complete.
+
 # Repair handoff — Local Live Captions 0.1.3
 
 Repaired the release blockers documented in `.factory/verification-2.md` for candidate `a5abef3f25c087d000a5de63a314212d30504e5e`. The artifact remains a Tauri 2 desktop application with its static companion site.
