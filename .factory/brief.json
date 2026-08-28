@@ -1,0 +1,11 @@
+{
+  "slug": "local-live-captions",
+  "title": "Local Live Captions",
+  "summary": "Caption Linux calls and recordings on your device",
+  "artifact_class": "desktop-app",
+  "user": "Deaf and hard-of-hearing students on Linux who need captions for lectures, video calls, and recordings when hosts did not enable captions.",
+  "smallest_useful_product": "An offline Linux desktop overlay for selected system-audio input with downloadable speech models, English/German first, adjustable caption size, and transcript export.",
+  "monetization": "one-time",
+  "success_measure": "At least 75% of 20-minute pilot recordings yield captions users keep enabled through the session, with no audio uploaded off-device.",
+  "constraints": "Obtain consent before captioning calls; make capture state obvious; model licenses and multilingual accuracy must be verified; avoid storing audio by default."
+}
