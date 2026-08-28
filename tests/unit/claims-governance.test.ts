@@ -21,4 +21,20 @@ describe("claim governance", () => {
       expect(source.split(tag).length - 1, tag).toBe(1);
     }
   });
+
+  it("inventories the public privacy, consent, capture, and installer promises", async () => {
+    const claims = JSON.parse(await readFile(".factory/claims.json", "utf8")) as { id: string }[];
+    const ids = new Set(claims.map((claim) => claim.id));
+    for (const id of [
+      "no-audio-storage",
+      "session-transcript",
+      "no-telemetry-trackers",
+      "consent-before-capture",
+      "local-model-storage",
+      "source-start-validation",
+      "call-speaker-boundaries",
+      "unsigned-installers",
+      "linux-monitor-end-to-end",
+    ]) expect(ids, `missing public claim ${id}`).toContain(id);
+  });
 });

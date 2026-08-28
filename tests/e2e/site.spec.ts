@@ -66,6 +66,16 @@ test("@claim:private-local demo sends no data elsewhere", async ({ page }) => {
   expect(external).toEqual([]);
 });
 
+test("@claim:no-telemetry-trackers privacy page makes no advertising or telemetry request", async ({ page }) => {
+  const external: string[] = [];
+  page.on("request", (request) => {
+    if (new URL(request.url()).origin !== "http://127.0.0.1:4173") external.push(request.url());
+  });
+  await page.goto("/privacy");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Your audio stays with you");
+  expect(external).toEqual([]);
+});
+
 test("@claim:offline-reload sample remains usable offline", async ({ page, context }) => {
   await page.goto("/demo");
   await page.evaluate(() => navigator.serviceWorker.ready);

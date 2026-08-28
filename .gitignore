@@ -9,3 +9,4 @@ playwright-report/
 
 src-tauri/target/
 src-tauri/gen/
+/.cache/

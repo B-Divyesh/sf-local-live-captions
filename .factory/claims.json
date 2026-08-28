@@ -68,5 +68,68 @@
     "where": "landing overlay section and desktop caption controls",
     "test": "npm test -- --grep @claim:desktop-overlay",
     "sandbox": "native configuration and command source assert a resizable window and the always-on-top control"
+  },
+  {
+    "id": "no-audio-storage",
+    "claim": "The app does not save raw audio.",
+    "where": "landing, privacy policy, README",
+    "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_no_audio_storage",
+    "sandbox": "native source-policy test proves the only file write is the temporary model download and capture samples stay in memory"
+  },
+  {
+    "id": "session-transcript",
+    "claim": "Transcript text stays in memory until export or the session closes.",
+    "where": "landing and privacy policy",
+    "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_session_transcript",
+    "sandbox": "native source-policy test checks transcript runtime state, fresh-session clearing, and no transcript file path"
+  },
+  {
+    "id": "no-telemetry-trackers",
+    "claim": "The app has no telemetry and the site has no advertising trackers.",
+    "where": "privacy policy and README",
+    "test": "npm test -- --grep @claim:no-telemetry-trackers",
+    "sandbox": "site-source regression test rejects common telemetry endpoints and permits only the documented release API"
+  },
+  {
+    "id": "consent-before-capture",
+    "claim": "The app starts capture only after you confirm consent.",
+    "where": "landing, terms, README, desktop setup",
+    "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_consent_is_required",
+    "sandbox": "native command test verifies the consent guard precedes capture startup"
+  },
+  {
+    "id": "local-model-storage",
+    "claim": "Downloaded speech models stay on this computer.",
+    "where": "landing and privacy policy",
+    "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_models_are_downloaded",
+    "sandbox": "native unit test resolves a selected model below the local app data models directory"
+  },
+  {
+    "id": "source-start-validation",
+    "claim": "The app checks that a selected PipeWire or PulseAudio monitor is still available before capture.",
+    "where": "landing",
+    "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_linux_monitor_must_still_be_exposed",
+    "sandbox": "native test checks monitor discovery and the unavailable-monitor guard"
+  },
+  {
+    "id": "call-speaker-boundaries",
+    "claim": "The app does not join calls or name speakers.",
+    "where": "landing",
+    "test": "npm test -- --grep @claim:call-speaker-boundaries",
+    "sandbox": "native command source is checked for capture/transcription only and rejects call-service and speaker-identification integrations"
+  },
+  {
+    "id": "unsigned-installers",
+    "claim": "Current desktop builds are unsigned.",
+    "where": "landing and README",
+    "test": "npm test -- --grep @claim:unsigned-installers",
+    "sandbox": "release workflow regression test checks that no signing credentials or signing commands are configured"
+  },
+  {
+    "id": "linux-monitor-end-to-end",
+    "claim": "On Linux, a PipeWire or PulseAudio monitor can caption local speech, export SRT, and start again after stopping.",
+    "where": "README Linux system audio section",
+    "test": "npm run test:linux-audio",
+    "sandbox": "isolated PulseAudio null sink plays the shipped public-domain speech fixture through a monitor; the real tiny.en model is downloaded, captions are asserted, SRT is formatted, and a second monitor capture opens"
   }
 ]

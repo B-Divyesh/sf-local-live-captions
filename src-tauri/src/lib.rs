@@ -50,6 +50,14 @@ fn record_capture_failure(
     }
 }
 
+fn require_consent(consent: bool) -> Result<(), String> {
+    if consent {
+        Ok(())
+    } else {
+        Err("Confirm that everyone agreed before capture.".into())
+    }
+}
+
 fn report_start_failure(
     running: &AtomicBool,
     last_error: &Mutex<Option<String>>,
@@ -102,6 +110,11 @@ fn pulse_monitor_sources() -> Vec<String> {
     }
 }
 
+#[cfg(target_os = "linux")]
+fn pulse_monitor_is_available(device_name: &str, available: &[String]) -> bool {
+    device_name.starts_with("pulse:") && available.iter().any(|source| source == device_name)
+}
+
 fn model_file(model: &str) -> Option<(&'static str, &'static str)> {
     match model {
         "tiny.en" => Some((
@@ -120,28 +133,22 @@ fn model_file(model: &str) -> Option<(&'static str, &'static str)> {
     }
 }
 
-fn language_for_model(model: &str) -> String {
-    if model == "base" { "auto" } else { "en" }.to_string()
+fn model_destination(data_dir: &std::path::Path, model: &str) -> Result<PathBuf, String> {
+    let (file_name, _) =
+        model_file(model).ok_or_else(|| "That model is not available.".to_string())?;
+    Ok(data_dir.join("models").join(file_name))
 }
 
-#[tauri::command]
-async fn download_model(
-    model: String,
-    license: Option<String>,
-    state: State<'_, CaptionState>,
-) -> Result<String, String> {
-    let (file_name, url) =
-        model_file(&model).ok_or_else(|| "That model is not available.".to_string())?;
-    // All speech models, including multilingual German-capable `base`, remain
-    // free. Captions are an accessibility behavior and must never be paywalled.
-    let _ = license;
-    let models = state.data_dir.join("models");
-    std::fs::create_dir_all(&models)
-        .map_err(|error| format!("Could not create the model folder: {error}"))?;
-    let destination = models.join(file_name);
+async fn download_model_file(model: &str, destination: &std::path::Path) -> Result<(), String> {
+    let (_, url) = model_file(model).ok_or_else(|| "That model is not available.".to_string())?;
     if destination.exists() {
-        return Ok(destination.display().to_string());
+        return Ok(());
     }
+    let parent = destination
+        .parent()
+        .ok_or_else(|| "The model folder is unavailable.".to_string())?;
+    std::fs::create_dir_all(parent)
+        .map_err(|error| format!("Could not create the model folder: {error}"))?;
     let bytes = reqwest::get(url)
         .await
         .map_err(|error| format!("Download failed: {error}"))?
@@ -156,8 +163,25 @@ async fn download_model(
     let temporary = destination.with_extension("download");
     std::fs::write(&temporary, bytes)
         .map_err(|error| format!("Could not save the model: {error}"))?;
-    std::fs::rename(&temporary, &destination)
-        .map_err(|error| format!("Could not finish the model download: {error}"))?;
+    std::fs::rename(&temporary, destination)
+        .map_err(|error| format!("Could not finish the model download: {error}"))
+}
+
+fn language_for_model(model: &str) -> String {
+    if model == "base" { "auto" } else { "en" }.to_string()
+}
+
+#[tauri::command]
+async fn download_model(
+    model: String,
+    license: Option<String>,
+    state: State<'_, CaptionState>,
+) -> Result<String, String> {
+    // All speech models, including multilingual German-capable `base`, remain
+    // free. Captions are an accessibility behavior and must never be paywalled.
+    let _ = license;
+    let destination = model_destination(&state.data_dir, &model)?;
+    download_model_file(&model, &destination).await?;
     Ok(destination.display().to_string())
 }
 
@@ -235,6 +259,31 @@ fn transcribe(model_path: &str, audio: &[f32], language: &str) -> Result<Vec<Str
         .map(|segment| segment.to_string().trim().to_string())
         .filter(|text| !text.is_empty())
         .collect())
+}
+
+#[cfg(test)]
+fn format_srt(lines: &[CaptionLine]) -> String {
+    fn timestamp(seconds: u64) -> String {
+        format!(
+            "{:02}:{:02}:{:02},000",
+            seconds / 3600,
+            (seconds / 60) % 60,
+            seconds % 60
+        )
+    }
+    lines
+        .iter()
+        .enumerate()
+        .map(|(index, line)| {
+            format!(
+                "{}\n{} --> {}\n{}\n",
+                index + 1,
+                timestamp(line.at),
+                timestamp(line.end),
+                line.text
+            )
+        })
+        .collect()
 }
 
 #[cfg(target_os = "linux")]
@@ -344,9 +393,7 @@ fn start_capture(
     consent: bool,
     state: State<'_, CaptionState>,
 ) -> Result<(), String> {
-    if !consent {
-        return Err("Confirm that everyone agreed before capture.".into());
-    }
+    require_consent(consent)?;
     if state.running.load(Ordering::SeqCst) {
         return Err("Captions are already running.".into());
     }
@@ -358,6 +405,11 @@ fn start_capture(
     }
     #[cfg(target_os = "linux")]
     if let Some(source) = device_name.strip_prefix("pulse:") {
+        if !pulse_monitor_is_available(&device_name, &pulse_monitor_sources()) {
+            return Err(
+                "The selected PipeWire or PulseAudio monitor is no longer available.".into(),
+            );
+        }
         return start_pulse_capture(source, model_path, language_for_model(&model), state);
     }
     state
@@ -642,7 +694,7 @@ mod tests {
     // @claim:native-local-processing
     fn claim_native_local_processing_only_model_and_license_paths_are_network_capable() {
         let source = include_str!("lib.rs");
-        let production = source.split("#[cfg(test)]").next().unwrap();
+        let production = source.split("#[cfg(test)]\nmod tests").next().unwrap();
         assert_eq!(production.matches("reqwest::get(").count(), 2);
         assert!(production.contains("fn transcribe"));
         assert!(!production[production.find("fn transcribe").unwrap()
@@ -650,6 +702,47 @@ mod tests {
                 .find("#[tauri::command]\nfn start_capture")
                 .unwrap()]
             .contains("reqwest"));
+    }
+
+    #[test]
+    // @claim:no-audio-storage
+    fn claim_no_audio_storage_keeps_capture_samples_out_of_the_file_system() {
+        let source = include_str!("lib.rs");
+        let production = source.split("#[cfg(test)]\nmod tests").next().unwrap();
+        assert_eq!(production.matches("std::fs::write(").count(), 1);
+        assert!(production.contains("let temporary = destination.with_extension(\"download\")"));
+        assert!(production.contains("let mut audio = Vec::with_capacity"));
+    }
+
+    #[test]
+    // @claim:session-transcript
+    fn claim_session_transcript_is_runtime_state_and_is_cleared_for_each_capture() {
+        let source = include_str!("lib.rs");
+        let production = source.split("#[cfg(test)]\nmod tests").next().unwrap();
+        assert!(production.contains("transcript: Arc<Mutex<Vec<CaptionLine>>>,"));
+        assert!(production.matches(".clear();").count() >= 2);
+        assert!(!production.contains("transcript.json"));
+    }
+
+    #[test]
+    // @claim:consent-before-capture
+    fn claim_consent_is_required_before_any_capture_can_start() {
+        assert!(require_consent(true).is_ok());
+        assert_eq!(
+            require_consent(false).unwrap_err(),
+            "Confirm that everyone agreed before capture."
+        );
+    }
+
+    #[test]
+    // @claim:local-model-storage
+    fn claim_models_are_downloaded_to_the_app_data_folder() {
+        let destination =
+            model_destination(std::path::Path::new("/private/app-data"), "base").unwrap();
+        assert_eq!(
+            destination,
+            PathBuf::from("/private/app-data/models/ggml-base.bin")
+        );
     }
 
     #[test]
@@ -672,5 +765,100 @@ mod tests {
             sources,
             vec!["pulse:alsa_output.pci-0000_00_1f.3.analog-stereo.monitor"]
         );
+    }
+
+    #[cfg(target_os = "linux")]
+    #[test]
+    // @claim:source-start-validation
+    fn claim_linux_monitor_must_still_be_exposed_when_capture_starts() {
+        let sources = pulse_monitor_sources_from_pactl(
+            "42\tllc_test.monitor\tPipeWire\ts16le 1ch 16000Hz\tIDLE\n",
+        );
+        assert!(pulse_monitor_is_available(
+            "pulse:llc_test.monitor",
+            &sources
+        ));
+        assert!(!pulse_monitor_is_available(
+            "pulse:missing.monitor",
+            &sources
+        ));
+        let source = include_str!("lib.rs");
+        assert!(
+            source.contains("The selected PipeWire or PulseAudio monitor is no longer available.")
+        );
+    }
+
+    #[cfg(target_os = "linux")]
+    fn capture_fixture_from_monitor(source: &str, seconds: usize) -> Result<Vec<f32>, String> {
+        let sample_spec = Spec {
+            format: Format::S16NE,
+            channels: 1,
+            rate: 16_000,
+        };
+        let capture = PulseSimple::new(
+            None,
+            "Local Live Captions acceptance test",
+            Direction::Record,
+            Some(source),
+            "Consented public-domain speech fixture",
+            &sample_spec,
+            None,
+            None,
+        )
+        .map_err(|error| format!("Could not open monitor {source}: {error}"))?;
+        let mut bytes = vec![0_u8; 16_000 * seconds * 2];
+        capture
+            .read(&mut bytes)
+            .map_err(|error| format!("Could not read monitor audio: {error}"))?;
+        Ok(bytes
+            .chunks_exact(2)
+            .map(|sample| i16::from_ne_bytes([sample[0], sample[1]]) as f32 / i16::MAX as f32)
+            .collect())
+    }
+
+    #[cfg(target_os = "linux")]
+    #[test]
+    #[ignore = "requires scripts/linux-audio-acceptance.sh to provide an isolated PulseAudio monitor"]
+    // @claim:linux-monitor-end-to-end
+    fn claim_linux_monitor_end_to_end_captions_speech_and_restarts() {
+        let cache = std::env::var("LLC_AUDIO_TEST_CACHE")
+            .expect("run through scripts/linux-audio-acceptance.sh");
+        let source = std::env::var("LLC_TEST_PULSE_SOURCE")
+            .expect("the acceptance script must expose a monitor source");
+        let fixture = std::env::var("LLC_TEST_SPEECH_FIXTURE")
+            .expect("the acceptance script must provide the consented speech fixture");
+        let destination = model_destination(std::path::Path::new(&cache), "tiny.en").unwrap();
+        tauri::async_runtime::block_on(download_model_file("tiny.en", &destination))
+            .expect("the real model download must complete");
+
+        let mut player = std::process::Command::new("paplay")
+            .arg(&fixture)
+            .spawn()
+            .expect("paplay must play the public-domain fixture into the null sink");
+        let audio = capture_fixture_from_monitor(&source, 9)
+            .expect("the selected monitor must yield fixture audio");
+        let _ = player.wait();
+        let captions = transcribe(destination.to_str().unwrap(), &audio, "en")
+            .expect("the downloaded model must caption monitor audio");
+        let joined = captions.join(" ").to_lowercase();
+        assert!(
+            joined.contains("ask not what your country"),
+            "unexpected caption output: {joined}"
+        );
+        let lines = vec![CaptionLine {
+            at: 0,
+            end: 9,
+            text: captions.join(" "),
+        }];
+        assert!(format_srt(&lines).contains("00:00:00,000 --> 00:00:09,000"));
+
+        let mut replay = std::process::Command::new("paplay")
+            .arg(&fixture)
+            .spawn()
+            .expect("paplay must replay the fixture after capture stops");
+        let restarted = capture_fixture_from_monitor(&source, 2)
+            .expect("a new capture can open after the first capture stops");
+        let _ = replay.wait();
+        assert!(restarted.iter().any(|sample| sample.abs() > 0.01));
     }
 }

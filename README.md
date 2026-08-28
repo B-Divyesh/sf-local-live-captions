@@ -44,6 +44,7 @@ The static output lands in `dist/site`, with `index.html` at its root.
 
 ```sh
 npm test             # Vitest + Playwright claims and accessibility checks
+npm run test:linux-audio # isolated PulseAudio monitor → real speech caption acceptance test
 npm run build        # site in dist/site; desktop frontend in dist/app
 cargo fmt --check --manifest-path src-tauri/Cargo.toml
 cargo test --manifest-path src-tauri/Cargo.toml
@@ -59,6 +60,8 @@ There is no telemetry. Settings and the optional supporter-license token stay on
 
 ## Linux system audio
 
-The app now opens PipeWire or PulseAudio monitor sources through the local PulseAudio-compatible server, rather than relying only on ALSA device enumeration. A monitor source must exist and be visible to `pactl list short sources`; normal microphones are still listed through the operating system's native input list. The automated native test covers the monitor-source parsing and direct capture setup boundary. A physical loopback session still depends on the user's running sound server, monitor routing, downloaded model, and consented audio; it is not simulated as a successful speech transcript in CI.
+The app opens PipeWire or PulseAudio monitor sources through the local PulseAudio-compatible server, rather than relying only on ALSA device enumeration. A monitor source must exist and be visible to `pactl list short sources`; normal microphones are still listed through the operating system's native input list. Before a monitor starts, the app confirms that it is still exposed by the sound server.
+
+`npm run test:linux-audio` is the reproducible Linux acceptance run. It starts an isolated PulseAudio null sink, plays the shipped public-domain JFK speech fixture into its monitor, downloads the real `tiny.en` model if needed, asserts the caption text, checks SRT formatting, and opens a second capture after stopping. It needs `pulseaudio`, `pulseaudio-utils`, and the Linux development packages in the release workflow. The fixture is local only and is never uploaded.
 
 The source is available under the [MIT License](LICENSE). Read the site [privacy policy](https://local-live-captions.sociobot.in/privacy) and [terms](https://local-live-captions.sociobot.in/terms).

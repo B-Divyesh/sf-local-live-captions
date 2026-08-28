@@ -24,7 +24,7 @@ jobs:
           cache: npm
       - uses: dtolnay/rust-toolchain@stable
       - name: Install native test dependencies
-        run: sudo apt-get update && sudo apt-get install -y build-essential cmake file libclang-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libasound2-dev libpulse-dev pulseaudio-utils
+        run: sudo apt-get update && sudo apt-get install -y build-essential cmake file libclang-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libasound2-dev libpulse-dev pulseaudio pulseaudio-utils
       - run: npm ci
       - name: Install the pinned Playwright browser
         run: npx playwright install --with-deps chromium
@@ -32,6 +32,7 @@ jobs:
       - run: npm test
       - run: cargo fmt --check --manifest-path src-tauri/Cargo.toml
       - run: cargo test --manifest-path src-tauri/Cargo.toml
+      - run: npm run test:linux-audio
       - run: cargo check --manifest-path src-tauri/Cargo.toml
 
   build:
