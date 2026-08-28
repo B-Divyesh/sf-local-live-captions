@@ -2,7 +2,7 @@
 
 Caption Linux calls, lectures, and recordings on your device.
 
-Local Live Captions is a Tauri 2 desktop overlay for deaf and hard-of-hearing students. It captures a selected audio input, runs a downloadable Whisper model locally, and exports transcript text as TXT or SRT. Raw audio is held in memory and is not saved.
+Local Live Captions is a Tauri 2 desktop overlay for deaf and hard-of-hearing students. It captures a selected audio input, runs a downloadable Whisper model locally, and exports transcript text as SRT. Raw audio is held in memory and is not saved.
 
 The public site is at <https://local-live-captions.sociobot.in>. Open the isolated sample at <https://local-live-captions.sociobot.in/demo>.
 
@@ -28,7 +28,7 @@ npm run dev          # website
 npm run tauri dev    # desktop app
 ```
 
-The desktop build needs the platform packages listed in [the release workflow](.github/workflows/release.yml). Speech models download on demand from the official `ggerganov/whisper.cpp` Hugging Face repository. Model weights follow their published license.
+The desktop build needs the platform packages listed in [the release workflow](.github/workflows/release.yml). Speech models download on demand from the official `ggerganov/whisper.cpp` Hugging Face repository. OpenAI Whisper and whisper.cpp publish their code and converted models under the MIT License.
 
 ## Test and build
 
