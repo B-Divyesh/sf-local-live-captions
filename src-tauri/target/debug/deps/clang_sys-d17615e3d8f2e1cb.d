@@ -1,0 +1,12 @@
+/work/repo/src-tauri/target/debug/deps/clang_sys-d17615e3d8f2e1cb.d: /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/lib.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/support.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/link.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/../build/macros.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/../build/common.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/../build/dynamic.rs
+
+/work/repo/src-tauri/target/debug/deps/libclang_sys-d17615e3d8f2e1cb.rlib: /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/lib.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/support.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/link.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/../build/macros.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/../build/common.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/../build/dynamic.rs
+
+/work/repo/src-tauri/target/debug/deps/libclang_sys-d17615e3d8f2e1cb.rmeta: /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/lib.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/support.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/link.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/../build/macros.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/../build/common.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/../build/dynamic.rs
+
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/lib.rs:
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/support.rs:
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/link.rs:
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/../build/macros.rs:
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/../build/common.rs:
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/clang-sys-1.9.1/src/../build/dynamic.rs:
