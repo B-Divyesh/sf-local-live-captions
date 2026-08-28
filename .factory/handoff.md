@@ -31,7 +31,7 @@ APPIMAGE_EXTRACT_AND_RUN=1 CI=true npm run tauri build
 
 Every exact command in `.factory/claims.json` passed. The checkout test asserted a live HTTP 303 to `checkout.dodopayments.com`; no payment was made.
 
-The local Tauri package build produced:
+The local Tauri package build produced before the final workflow-only browser-provisioning update:
 
 - `Local Live Captions_0.1.2_amd64.AppImage` — SHA-256 `ede08e9b44580c09db5fc3c8d3138c7e96defa5340a9f4f809cb5856d77dddf0`
 - `Local Live Captions_0.1.2_amd64.deb` — SHA-256 `36591aa6af39ae4ba4fc0d9f73b1587d266d39529952e85ae9fafdb836f16186`
@@ -45,6 +45,10 @@ The native code now uses the direct local PulseAudio protocol for a selected mon
 
 ## Release and deploy
 
-The GitHub release workflow installs the pinned Playwright Chromium before its test gate, then creates unsigned macOS, Windows, and Linux assets, checksums, and `latest.json` after a `v0.1.3` tag. The static site is deployed from `dist/site` with `/opt/fleet/lib/deploy-static.sh local-live-captions dist/site`. After publishing, verify the release API's `target_commitish`, `SHA256SUMS`, and live detected-platform button point at this repair commit.
+GitHub Actions run `33212013462` passed verification, universal macOS, Linux, Windows, and manifest publication for release [`v0.1.3`](https://github.com/B-Divyesh/sf-local-live-captions/releases/tag/v0.1.3). Its `target_commitish` is `7e0f003eda0105dd1d3082e668e933e6ba155908`.
+
+Published release assets include AppImage, DEB, RPM, universal DMG, macOS app archive, Windows EXE/MSI, `SHA256SUMS`, and valid `latest.json`. The published AppImage SHA-256 is `1c355e35a3d36a0987a84076e4670863a9cae34777ec4a275ed273b946e67895`; `public/install.sh` installed that exact 80 MB artifact into an isolated consumer directory after checksum verification.
+
+The static site was deployed with `/opt/fleet/lib/deploy-static.sh local-live-captions dist/site`. The live URL is <https://local-live-captions.sociobot.in>; it byte-matches the final `dist/site/index.html`, loads in 714 ms with no browser console errors, and has title/lang/one-h1/main/alt checks passing. The live hashed JS has `Cache-Control: public, max-age=31536000, immutable`; an unknown route returns HTTP 404.
 
 macOS/Windows signing remains optional operator work: provide `APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` only if signed installers are required.
