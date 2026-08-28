@@ -1,0 +1,37 @@
+[
+  {
+    "id": "private-local",
+    "claim": "Audio stays on your device",
+    "where": "landing facts and desktop app",
+    "test": "npm test -- --grep @claim:private-local",
+    "sandbox": "fresh browser context at /demo; exercise captions and assert every request stays same-origin"
+  },
+  {
+    "id": "offline-reload",
+    "claim": "Works after the model download without internet",
+    "where": "landing facts",
+    "test": "npm test -- --grep @claim:offline-reload",
+    "sandbox": "load /demo once, wait for its service worker, set the browser offline, reload, and operate captions"
+  },
+  {
+    "id": "srt-export",
+    "claim": "Exports transcript text as SRT",
+    "where": "overlay and demo",
+    "test": "npm test -- --grep @claim:srt-export",
+    "sandbox": "fresh /demo sample; download SRT and assert four timed cues and sample speech"
+  },
+  {
+    "id": "demo-isolated",
+    "claim": "Demo sample data is separate and nothing is saved to real data",
+    "where": "landing action and demo banner",
+    "test": "npm test -- --grep @claim:demo-isolated",
+    "sandbox": "set real and demo keys, reset demo, and assert the real key remains while demo settings clear"
+  },
+  {
+    "id": "free-and-paid",
+    "claim": "English captions, size controls, and transcript export are free; Plus costs $24 once",
+    "where": "landing facts and price section",
+    "test": "npm test -- --grep @claim:free-and-paid",
+    "sandbox": "fresh landing page; assert the free feature list, exact price, and Sociobot checkout URL"
+  }
+]
