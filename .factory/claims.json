@@ -8,36 +8,36 @@
   },
   {
     "id": "offline-reload",
-    "claim": "Works after the model download without internet",
+    "claim": "The bundled browser sample works without internet after its first visit",
     "where": "landing facts",
     "test": "npm test -- --grep @claim:offline-reload",
     "sandbox": "load /demo once, wait for its service worker, set the browser offline, reload, and operate captions"
   },
   {
     "id": "srt-export",
-    "claim": "Exports transcript text as SRT",
+    "claim": "Exports transcript text as valid SRT",
     "where": "overlay and demo",
     "test": "npm test -- --grep @claim:srt-export",
-    "sandbox": "fresh /demo sample; download SRT and assert four timed cues and sample speech"
+    "sandbox": "format a cue beyond one minute and one hour and assert valid padded SRT timestamps"
   },
   {
     "id": "demo-isolated",
     "claim": "Demo sample data is separate and nothing is saved to real data",
     "where": "landing action and demo banner",
     "test": "npm test -- --grep @claim:demo-isolated",
-    "sandbox": "set real and demo keys, reset demo, and assert the real key remains while demo settings clear"
+    "sandbox": "set real and demo keys, reset and leave the demo, and assert real data remains while demo settings clear"
   },
   {
     "id": "free-and-paid",
-    "claim": "English captions, size controls, and transcript export are free; Plus costs $24 once",
-    "where": "landing facts and price section",
+    "claim": "English and German captions are free; a $24 supporter license has a live checkout",
+    "where": "landing facts and supporter section",
     "test": "npm test -- --grep @claim:free-and-paid",
-    "sandbox": "fresh landing page; assert the free feature list, exact price, and Sociobot checkout URL"
+    "sandbox": "fresh landing page; assert free feature copy, price, checkout URL, and its live Dodo redirect"
   },
   {
     "id": "native-local-processing",
     "claim": "Desktop captions process audio locally; model downloads and license checks are the only remote paths",
-    "where": "landing privacy fact, desktop setup, privacy policy, README",
+    "where": "landing privacy fact, privacy policy, README",
     "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_native_local_processing",
     "sandbox": "native unit test inspects the compiled capture module's network boundary and confirms transcription has no network client"
   },
@@ -50,9 +50,23 @@
   },
   {
     "id": "language-models",
-    "claim": "The app offers English and German speech models",
-    "where": "landing steps, Plus section, desktop model picker, README",
+    "claim": "The app offers free English and German speech models",
+    "where": "landing steps and desktop model picker",
     "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_language_models",
-    "sandbox": "native unit test checks the exact bundled model catalog for English and multilingual German-capable models"
+    "sandbox": "native unit test checks the exact bundled model catalog and multilingual language setting"
+  },
+  {
+    "id": "linux-system-audio",
+    "claim": "On Linux, the app lists PipeWire or PulseAudio monitor sources when the sound server exposes them",
+    "where": "landing steps and README",
+    "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_linux_system_audio",
+    "sandbox": "native unit test parses a representative pactl monitor listing into a direct PulseAudio capture source"
+  },
+  {
+    "id": "desktop-overlay",
+    "claim": "The desktop caption overlay is resizable and can be kept on top",
+    "where": "landing overlay section and desktop caption controls",
+    "test": "npm test -- --grep @claim:desktop-overlay",
+    "sandbox": "native configuration and command source assert a resizable window and the always-on-top control"
   }
 ]

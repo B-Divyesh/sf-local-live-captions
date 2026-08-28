@@ -11,6 +11,14 @@ use std::{
 use tauri::{Manager, State, Window};
 use whisper_rs::{FullParams, SamplingStrategy, WhisperContext, WhisperContextParameters};
 
+#[cfg(target_os = "linux")]
+use libpulse_binding::{
+    sample::{Format, Spec},
+    stream::Direction,
+};
+#[cfg(target_os = "linux")]
+use libpulse_simple_binding::Simple as PulseSimple;
+
 #[derive(Clone, Serialize)]
 struct CaptionLine {
     at: u64,
@@ -62,7 +70,36 @@ fn list_audio_devices() -> Result<Vec<String>, String> {
         .collect();
     names.sort();
     names.dedup();
+    #[cfg(target_os = "linux")]
+    names.extend(pulse_monitor_sources());
+    names.sort();
+    names.dedup();
     Ok(names)
+}
+
+/// PipeWire exposes its PulseAudio compatibility server through `pactl`; a
+/// monitor source is the desktop-output stream a caption user needs.
+#[cfg(target_os = "linux")]
+fn pulse_monitor_sources_from_pactl(output: &str) -> Vec<String> {
+    output
+        .lines()
+        .filter_map(|line| line.split_whitespace().nth(1))
+        .filter(|source| source.ends_with(".monitor"))
+        .map(|source| format!("pulse:{source}"))
+        .collect()
+}
+
+#[cfg(target_os = "linux")]
+fn pulse_monitor_sources() -> Vec<String> {
+    let output = std::process::Command::new("pactl")
+        .args(["list", "short", "sources"])
+        .output();
+    match output {
+        Ok(result) if result.status.success() => {
+            pulse_monitor_sources_from_pactl(&String::from_utf8_lossy(&result.stdout))
+        }
+        _ => vec![],
+    }
 }
 
 fn model_file(model: &str) -> Option<(&'static str, &'static str)> {
@@ -83,6 +120,10 @@ fn model_file(model: &str) -> Option<(&'static str, &'static str)> {
     }
 }
 
+fn language_for_model(model: &str) -> String {
+    if model == "base" { "auto" } else { "en" }.to_string()
+}
+
 #[tauri::command]
 async fn download_model(
     model: String,
@@ -91,13 +132,9 @@ async fn download_model(
 ) -> Result<String, String> {
     let (file_name, url) =
         model_file(&model).ok_or_else(|| "That model is not available.".to_string())?;
-    if model != "tiny.en" {
-        let token =
-            license.ok_or_else(|| "A Plus license is required for this model.".to_string())?;
-        if !verify_license(token).await? {
-            return Err("This Plus license is not active.".into());
-        }
-    }
+    // All speech models, including multilingual German-capable `base`, remain
+    // free. Captions are an accessibility behavior and must never be paywalled.
+    let _ = license;
     let models = state.data_dir.join("models");
     std::fs::create_dir_all(&models)
         .map_err(|error| format!("Could not create the model folder: {error}"))?;
@@ -200,6 +237,106 @@ fn transcribe(model_path: &str, audio: &[f32], language: &str) -> Result<Vec<Str
         .collect())
 }
 
+#[cfg(target_os = "linux")]
+fn start_pulse_capture(
+    source: &str,
+    model_path: PathBuf,
+    language: String,
+    state: State<'_, CaptionState>,
+) -> Result<(), String> {
+    state
+        .transcript
+        .lock()
+        .map_err(|_| "The transcript is busy.".to_string())?
+        .clear();
+    if let Ok(mut last_error) = state.last_error.lock() {
+        *last_error = None;
+    }
+    let transcript = state.transcript.clone();
+    let running = state.running.clone();
+    let last_error = state.last_error.clone();
+    let source = source.to_string();
+    let model_path = model_path.display().to_string();
+    let (startup_sender, startup_receiver) = mpsc::sync_channel::<Result<(), String>>(1);
+    std::thread::spawn(move || {
+        let sample_spec = Spec {
+            format: Format::S16NE,
+            channels: 1,
+            rate: 16_000,
+        };
+        let capture = match PulseSimple::new(
+            None,
+            "Local Live Captions",
+            Direction::Record,
+            Some(&source),
+            "Desktop caption audio",
+            &sample_spec,
+            None,
+            None,
+        ) {
+            Ok(capture) => capture,
+            Err(error) => {
+                report_start_failure(
+                    &running,
+                    &last_error,
+                    &startup_sender,
+                    format!("Could not open the PipeWire or PulseAudio monitor: {error}"),
+                );
+                return;
+            }
+        };
+        running.store(true, Ordering::SeqCst);
+        let _ = startup_sender.send(Ok(()));
+        let started = Instant::now();
+        let mut audio = Vec::with_capacity(16_000 * 5);
+        let mut bytes = vec![0_u8; 16_000 * 2];
+        while running.load(Ordering::SeqCst) {
+            if let Err(error) = capture.read(&mut bytes) {
+                record_capture_failure(
+                    &running,
+                    &last_error,
+                    format!("The PipeWire or PulseAudio monitor stopped: {error}"),
+                );
+                break;
+            }
+            audio.extend(
+                bytes.chunks_exact(2).map(|sample| {
+                    i16::from_ne_bytes([sample[0], sample[1]]) as f32 / i16::MAX as f32
+                }),
+            );
+            if audio.len() >= 16_000 * 5 {
+                match transcribe(&model_path, &audio, &language) {
+                    Ok(texts) => {
+                        if let Ok(mut saved) = transcript.lock() {
+                            for text in texts {
+                                let end = started.elapsed().as_secs();
+                                saved.push(CaptionLine {
+                                    at: end.saturating_sub(5),
+                                    end,
+                                    text,
+                                });
+                            }
+                        }
+                    }
+                    Err(error) => {
+                        record_capture_failure(&running, &last_error, error);
+                        break;
+                    }
+                }
+                audio.clear();
+            }
+        }
+    });
+    match startup_receiver.recv_timeout(Duration::from_secs(5)) {
+        Ok(result) => result,
+        Err(_) => {
+            let message = "The PipeWire or PulseAudio monitor did not start in time. Choose another source and try again.".to_string();
+            record_capture_failure(&state.running, &state.last_error, message.clone());
+            Err(message)
+        }
+    }
+}
+
 #[tauri::command]
 fn start_capture(
     device_name: String,
@@ -219,6 +356,10 @@ fn start_capture(
     if !model_path.exists() {
         return Err("Download this speech model first.".into());
     }
+    #[cfg(target_os = "linux")]
+    if let Some(source) = device_name.strip_prefix("pulse:") {
+        return start_pulse_capture(source, model_path, language_for_model(&model), state);
+    }
     state
         .transcript
         .lock()
@@ -231,7 +372,7 @@ fn start_capture(
     let running = state.running.clone();
     let last_error = state.last_error.clone();
     let model_path_string = model_path.display().to_string();
-    let language = if model == "base" { "auto" } else { "en" }.to_string();
+    let language = language_for_model(&model);
     let (startup_sender, startup_receiver) = mpsc::sync_channel::<Result<(), String>>(1);
     let startup_cancelled = Arc::new(AtomicBool::new(false));
     let worker_cancelled = startup_cancelled.clone();
@@ -481,6 +622,7 @@ mod tests {
     }
 
     #[test]
+    // @claim:capture-recovery
     fn claim_capture_recovery_failure_clears_running_state_and_keeps_a_retryable_error() {
         let running = AtomicBool::new(true);
         let error = Mutex::new(None);
@@ -497,6 +639,7 @@ mod tests {
     }
 
     #[test]
+    // @claim:native-local-processing
     fn claim_native_local_processing_only_model_and_license_paths_are_network_capable() {
         let source = include_str!("lib.rs");
         let production = source.split("#[cfg(test)]").next().unwrap();
@@ -510,9 +653,24 @@ mod tests {
     }
 
     #[test]
+    // @claim:language-models
     fn claim_language_models_include_english_and_german() {
         assert!(model_file("tiny.en").is_some());
         assert!(model_file("base.en").is_some());
         assert!(model_file("base").is_some());
+        assert_eq!(language_for_model("base"), "auto");
+    }
+
+    #[cfg(target_os = "linux")]
+    #[test]
+    // @claim:linux-system-audio
+    fn claim_linux_system_audio_lists_pipewire_or_pulseaudio_monitor_sources() {
+        let sources = pulse_monitor_sources_from_pactl(
+            "42\talsa_output.pci-0000_00_1f.3.analog-stereo.monitor\tPipeWire\ts16le 2ch 48000Hz\tIDLE\n43\talsa_input.pci-0000_00_1f.3.analog-stereo\tPipeWire\ts16le 2ch 48000Hz\tIDLE\n",
+        );
+        assert_eq!(
+            sources,
+            vec!["pulse:alsa_output.pci-0000_00_1f.3.analog-stereo.monitor"]
+        );
     }
 }

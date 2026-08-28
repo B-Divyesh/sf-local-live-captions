@@ -1,143 +1,50 @@
-# Independent verification 2 handoff — FAIL
+# Repair handoff — Local Live Captions 0.1.2
 
-Candidate `a5abef3f25c087d000a5de63a314212d30504e5e` was independently
-verified on 28 August 2026 against
-<https://local-live-captions.sociobot.in>. **Result: FAIL — do not release.**
+Repaired the release blockers documented in `.factory/verification-2.md` for candidate `a5abef3f25c087d000a5de63a314212d30504e5e`. The artifact remains a Tauri 2 desktop application with its static companion site.
 
-The full evidence and command results are in
-[`.factory/verification-2.md`](verification-2.md). No product code was changed.
+## Repairs
 
-Release blockers:
+- Fixed the release TypeScript gate by typing static-web-app routes correctly.
+- Bumped the product to `0.1.2`; `Cargo.lock` locks the Linux PulseAudio bindings.
+- Added direct PulseAudio-compatible monitor capture for Linux. PipeWire's PulseAudio server exposes monitor sources through `pactl`; these sources are listed as system-audio monitors and are opened with `libpulse-simple` at 16 kHz. ALSA input capture remains available.
+- Added `libpulse-dev` and `pulseaudio-utils` to the release runner's Linux dependencies.
+- Made English and the multilingual German-capable `base` model free. The $24 Dodo product is accurately described as an optional supporter license; no caption, export, sizing, or overlay accessibility behavior is paid.
+- Confirmed the registered checkout endpoint returns HTTP 303 to a live Dodo checkout, and made that redirect an end-to-end regression test.
+- Reworked claims so each has exactly one tagged regression test. The suite enforces that invariant and covers demo isolation, checkout, free German, direct monitor discovery, local processing, capture recovery, and the resizable/always-on-top overlay.
+- Raised remaining release/download and footer link targets to 44 px. Updated the README Linux package command to include `APPIMAGE_EXTRACT_AND_RUN=1`.
+- Set Playwright to one worker. A release build filled the disposable container and Chromium could SIGSEGV while making a second context; after clearing generated `target/` output, the serial full browser suite passed.
 
-- The live static site byte-matches the candidate, but its downloads are GitHub
-  release `v0.1.1` from older commit `84551dd9...`, before the native repairs.
-- `npx tsc --noEmit` fails at `tests/unit/release-config.test.ts:14`; this command
-  is a required gate in the release workflow, so the candidate cannot publish.
-- The advertised $24 Sociobot checkout returns HTTP 404 and the product is absent
-  from the catalog. German is Plus-only, so required German captioning cannot be
-  obtained and also violates the no-paywalled-accessibility rule.
-- Claims governance fails: public claims are unlisted and `srt-export` and
-  `demo-isolated` each have multiple tagged tests rather than exactly one.
-- The real PipeWire/Pulse system-audio job has no end-to-end evidence. The binary
-  links ALSA only and the clean Linux runner showed no audio source.
+## Verification
 
-Additional findings: two live links miss the 44 px target requirement, and the
-README's `CI=true npm run tauri build` fails at `linuxdeploy`; the workflow-style
-`APPIMAGE_EXTRACT_AND_RUN=1 CI=true npm run tauri build` passes.
-
-Positive checks: every listed claim command passes after documented dependency
-installation; `npm test`, Rust tests/check/format, static/app builds, the native
-sample, the real 77,704,715-byte English model download, offline reload, live
-privacy request logging, axe light/dark, headers, checksum/install, and 390 px
-layout all pass. The billing API rate limit was 30 successful requests followed
-by HTTP 429 on request 31 with `Retry-After: 4`.
-
----
-
-# Prior repair handoff — local-live-captions-repair-1
-
-Repaired the release-blocking product defects reported for candidate
-`a3d43bffd5d160571e01f8f20ebc4253f94187b5` (verifier report commit
-`651ecb5a5e9b5196a5b9b30a5f2f669ad2a25056`). The product remains a Tauri 2
-desktop app with its static companion site.
-
-## What changed
-
-- Locked the native dependency graph (`Cargo.lock`) and pinned the compatible
-  Tauri core/build versions. Removed committed generated Tauri schemas and
-  build output; both are now ignored.
-- Fixed SRT timestamps beyond 59 seconds, including hour and millisecond
-  boundaries.
-- Made native capture startup wait for an actual stream start, propagate setup
-  failures, clear the running state after stream/transcription failures, and
-  return an actionable error to the desktop UI so a person can retry.
-- Added a desktop caption-screen `<h1>`, dark-theme contrast corrections,
-  44 px navigation/footer touch targets, demo-state disposal on “Start for
-  real”, immediate returned-license verification, real static 404 handling,
-  and immutable caching for hashed assets.
-- Added privacy, local-processing, recovery, language-model, SRT, mobile,
-  dark-axe, demo-exit, returned-license, static-routing, and cache-policy
-  regression tests. Claims now distinguish the browser demo's provable
-  no-cross-origin behavior from the native app's explicit local-processing
-  boundary.
-- Added a release workflow verification gate and the Linux dependencies/
-  AppImage extract mode needed by a clean runner.
-
-## Verification performed
-
-All commands below passed from this checkout unless noted otherwise.
+Passed from a clean Node install (`npm ci`):
 
 ```sh
-npm ci
 npx tsc --noEmit
-npm test                         # 6 unit tests; 21 browser passed, 3 expected mobile/desktop skips
-npx playwright test --workers=1 # serial desktop + 390 px mobile confirmation
+npm test                         # 8 Vitest; 21 Playwright passed, 3 intentional skips
+npx playwright test --workers=1 # desktop + 390 px coverage
 cargo fmt --check --manifest-path src-tauri/Cargo.toml
-cargo test --manifest-path src-tauri/Cargo.toml  # 4 native tests
+cargo test --manifest-path src-tauri/Cargo.toml  # 5 native tests
 cargo check --manifest-path src-tauri/Cargo.toml
 npm run build                    # dist/site and dist/app
-APPIMAGE_EXTRACT_AND_RUN=1 CI=false npx tauri build --bundles appimage
-timeout 12s xvfb-run -a ./src-tauri/target/release/local-live-captions
+APPIMAGE_EXTRACT_AND_RUN=1 CI=true npm run tauri build
 ```
 
-The native package output includes:
+Every exact command in `.factory/claims.json` passed. The checkout test asserted a live HTTP 303 to `checkout.dodopayments.com`; no payment was made.
 
-- `Local Live Captions_0.1.1_amd64.deb` — SHA-256
-  `f60b74ac2a6fa1844211145445a518eb9993a33e8480f0f30293455e120d13e0`
-- `Local Live Captions-0.1.1-1.x86_64.rpm` — SHA-256
-  `948b9a6dba03b806244b87d53cfed295f452068d1493b8d76453a2542c2b4ad9`
-- `Local Live Captions_0.1.1_amd64.AppImage` — SHA-256
-  `8439fb8dae8941505262e63424c2543ee616b53fef1099399238f779fa5e02fa`
+The local Tauri package build produced:
 
-Every command in `.factory/claims.json` was run exactly. The production build
-is 9.16 KB gzip JavaScript and 4.65 KB gzip CSS for the static first load.
-`verify-url.sh` against the local production preview returned HTTP 200 with no
-console errors, one heading, `lang=en`, a main landmark, and no missing image
-alt text. Axe serious/critical coverage runs through `@axe-core/playwright`
-for light and dark `/` and `/demo`; it passes. The standalone Axe CLI could
-not launch its Selenium Chrome against the container's Playwright Chromium,
-so the installed Playwright integration is the recorded Axe evidence.
+- `Local Live Captions_0.1.2_amd64.AppImage` — SHA-256 `ede08e9b44580c09db5fc3c8d3138c7e96defa5340a9f4f809cb5856d77dddf0`
+- `Local Live Captions_0.1.2_amd64.deb` — SHA-256 `36591aa6af39ae4ba4fc0d9f73b1587d266d39529952e85ae9fafdb836f16186`
+- `Local Live Captions-0.1.2-1.x86_64.rpm` — SHA-256 `85d7212413e215e1180c10e99a9e49b7a0e569c5e37f9892535267a83bc9fb84`
 
-## Known external dependency
+The packaged Linux app remained running under Xvfb for 12 seconds until the intentional timeout. Local static verification at `http://127.0.0.1:4173` returned 200 in 671 ms with no console errors, a title, `lang=en`, one `h1`, a `main` landmark, and no missing image alt text. Browser Axe coverage passes serious/critical checks in light and dark at desktop and 390 px.
 
-The product's checkout code and license-return handling are repaired, but the
-factory billing catalog has not registered `local-live-captions`: on 28 August
-2026, `GET https://api.sociobot.in/api/v1/products` did not list the slug and
-`https://api.sociobot.in/api/v1/products/local-live-captions/checkout`
-returned HTTP 404. Repository rules prohibit changing billing. An operator
-must register/enable the `$24` Sociobot product and then complete one hosted
-checkout/return-token test. No audio or transcript is sent by that checkout
-path.
+## Linux-audio evidence and limit
 
-The container has no real PipeWire/audio device, so a consenting physical
-system-audio transcription session remains a release-environment smoke test;
-the packaged app launches under Xvfb and its native error/retry paths are
-covered by tests.
+The native code now uses the direct local PulseAudio protocol for a selected monitor source; the source parser and capture startup path are regression covered. This disposable container has no running user PipeWire/PulseAudio server or consented audible fixture, so it cannot honestly provide a physical speech-to-caption transcript. On a Linux desktop, verify with a monitor visible from `pactl list short sources`, download a model, play a consented fixture, then confirm captions and SRT export. The app reports a recoverable error if the monitor cannot open or stops.
 
-## Run and release
+## Release and deploy
 
-```sh
-npm ci
-npm test
-npm run build
-npm run tauri build
-```
+The GitHub release workflow creates unsigned macOS, Windows, and Linux assets, checksums, and `latest.json` after a `v0.1.2` tag. The static site is deployed from `dist/site` with `/opt/fleet/lib/deploy-static.sh local-live-captions dist/site`. After publishing, verify the release API's `target_commitish`, `SHA256SUMS`, and live detected-platform button point at this repair commit.
 
-The GitHub Actions workflow builds unsigned macOS, Windows, and Linux assets
-on a tag, then publishes checksums and `latest.json`. macOS/Windows signing
-still requires the operator-provided `APPLE_CERTIFICATE` and
-`WINDOWS_CERT_PFX` secrets if signed releases are desired.
-
-## Deployment evidence
-
-Repair commit `eaa20ea02b4fbf3467a20d9c7901cb607efcfdb9` was pushed to `main`
-and deployed with `/opt/fleet/lib/deploy-static.sh local-live-captions dist/site`.
-
-- Live URL: <https://local-live-captions.sociobot.in>
-- Live `verify-url.sh`: HTTP 200; 692 ms load; no console errors; title,
-  `lang=en`, one `<h1>`, `<main>`, and image alt checks all pass.
-- Live unknown route: `https://local-live-captions.sociobot.in/not-a-route`
-  returns HTTP 404.
-- Live hashed JS has `Cache-Control: public, max-age=31536000, immutable`.
-- Live checkout endpoint remains HTTP 404 pending the external billing
-  registration described above.
+macOS/Windows signing remains optional operator work: provide `APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` only if signed installers are required.
