@@ -39,8 +39,13 @@ Verified on 28 August 2026:
 - Lighthouse lab metrics: LCP 1.7 s, CLS 0.044, total blocking time 0 ms.
 - `npm audit`: 0 vulnerabilities.
 - Rust formatting and Cargo manifest metadata passed. Platform binaries are intentionally built by GitHub Actions, per the installer contract.
+- GitHub Actions: Linux, Windows, macOS, and final manifest jobs passed.
+- Release checksum: the published Debian package matched `SHA256SUMS`.
+- Release manifest: valid JSON for v0.1.0 with seven platform assets.
 
-Release workflow: <https://github.com/B-Divyesh/sf-local-live-captions/actions/runs/33192206313>
+Release workflow: <https://github.com/B-Divyesh/sf-local-live-captions/actions/runs/33192826059>
+
+Release: <https://github.com/B-Divyesh/sf-local-live-captions/releases/tag/v0.1.0>
 
 ## Known gaps
 
