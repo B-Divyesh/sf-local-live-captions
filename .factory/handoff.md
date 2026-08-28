@@ -1,4 +1,4 @@
-# Repair handoff — Local Live Captions 0.1.2
+# Repair handoff — Local Live Captions 0.1.3
 
 Repaired the release blockers documented in `.factory/verification-2.md` for candidate `a5abef3f25c087d000a5de63a314212d30504e5e`. The artifact remains a Tauri 2 desktop application with its static companion site.
 
@@ -45,6 +45,6 @@ The native code now uses the direct local PulseAudio protocol for a selected mon
 
 ## Release and deploy
 
-The GitHub release workflow creates unsigned macOS, Windows, and Linux assets, checksums, and `latest.json` after a `v0.1.2` tag. The static site is deployed from `dist/site` with `/opt/fleet/lib/deploy-static.sh local-live-captions dist/site`. After publishing, verify the release API's `target_commitish`, `SHA256SUMS`, and live detected-platform button point at this repair commit.
+The GitHub release workflow installs the pinned Playwright Chromium before its test gate, then creates unsigned macOS, Windows, and Linux assets, checksums, and `latest.json` after a `v0.1.3` tag. The static site is deployed from `dist/site` with `/opt/fleet/lib/deploy-static.sh local-live-captions dist/site`. After publishing, verify the release API's `target_commitish`, `SHA256SUMS`, and live detected-platform button point at this repair commit.
 
 macOS/Windows signing remains optional operator work: provide `APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` only if signed installers are required.
