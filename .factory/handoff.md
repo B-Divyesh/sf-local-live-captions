@@ -1,4 +1,4 @@
-# Local Live Captions 0.1.6 — polish round 1
+# Local Live Captions 0.1.7 — polish round 1
 
 ## Outcome
 
@@ -19,7 +19,7 @@ on 29 August 2026. Finding-by-finding closure is in `.factory/polish-1.md`.
 - Added visible desktop setup controls for deleting a downloaded model and
   removing the local supporter-license keys.
 - Added route metadata updates, accurate checkout disclosure, real 404 copy,
-  and version alignment at 0.1.6.
+  and version alignment at 0.1.7.
 - Updated the 24-entry claims inventory, demo documentation, catalog sentence,
   copy audit, and fixture provenance.
 

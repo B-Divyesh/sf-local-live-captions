@@ -929,13 +929,16 @@ mod tests {
         let captions = transcribe(destination.to_str().unwrap(), &audio, "auto")
             .expect("the multilingual model must caption German monitor audio");
         let joined = captions.join(" ").to_lowercase();
-        let german_markers = ["die", "der", "und", "wie", "zu", "sprechen", "planeten"];
+        let german_markers = [
+            "ich", "die", "der", "und", "wie", "zu", "sprechen", "planeten", "nicht", "mehr",
+            "habe", "bühne", "wäsche", "folie", "folgen", "näch",
+        ];
         let marker_count = german_markers
             .iter()
             .filter(|marker| joined.contains(**marker))
             .count();
         assert!(
-            marker_count >= 2,
+            marker_count >= 3,
             "unexpected German caption output: {joined}"
         );
     }
