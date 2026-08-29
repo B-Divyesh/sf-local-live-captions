@@ -33,6 +33,8 @@ checking that its source matched the deployed build.
   tags, tag/version mismatches, package/Tauri/Cargo version drift, and a tag
   that does not resolve to the workflow commit.
 - Added the source commit to generated `latest.json`.
+- Pipes GitHub release JSON to standard `jq` when adding that commit, avoiding
+  unsupported argument forwarding through the GitHub CLI's `--jq` option.
 - Updated the service-worker cache to `llc-shell-v6` so repaired site files
   replace the prior cached shell.
 - Documented the exact release identity rule in the README and copy audit.

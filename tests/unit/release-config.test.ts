@@ -88,6 +88,8 @@ describe("release configuration regressions", () => {
     expect(workflow).toContain("sha256sum * > SHA256SUMS");
     expect(workflow).toContain("latest.json");
     expect(workflow).toContain("npm run verify:release-source");
+    expect(workflow).toContain('--json tagName,assets | jq --arg commit "$GITHUB_SHA"');
+    expect(workflow).not.toContain("--jq --arg");
     expect(workflow).toContain("commit:$commit");
     expect(shellInstaller).toContain("release-identity.json");
     expect(shellInstaller).toContain('release_commit" != "$expected_commit');

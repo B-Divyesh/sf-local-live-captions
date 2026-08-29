@@ -107,5 +107,5 @@ jobs:
         run: |
           rm -f SHA256SUMS latest.json
           sha256sum * > SHA256SUMS
-          gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json tagName,assets --jq --arg commit "$GITHUB_SHA" '{version:.tagName,commit:$commit,assets:[.assets[]|{name:.name,url:.url}]}' > latest.json
+          gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json tagName,assets | jq --arg commit "$GITHUB_SHA" '{version:.tagName,commit:$commit,assets:[.assets[]|{name:.name,url:.url}]}' > latest.json
           gh release upload "$RELEASE_TAG" SHA256SUMS latest.json --repo "$GITHUB_REPOSITORY" --clobber
