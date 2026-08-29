@@ -1,6 +1,9 @@
 import { test, expect } from "./fixtures";
 import AxeBuilder from "@axe-core/playwright";
+import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
+
+const buildSha = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 
 test("landing page states the job and has one heading", async ({ page }) => {
   await page.route("https://api.github.com/**", (route) => route.fulfill({ status: 404, body: "{}" }));
@@ -39,6 +42,32 @@ test("mobile first screen keeps the three plain facts visible", async ({ page },
     expect(box).not.toBeNull();
     expect(box!.y + box!.height).toBeLessThanOrEqual(844);
   }
+});
+
+test("download refuses a stale release and selects the exact site build", async ({ page }) => {
+  await page.addInitScript(() => { Reflect.deleteProperty(Navigator.prototype, "serviceWorker"); });
+  const assets = [
+    { name: "Local.Live.Captions_0.1.8_amd64.AppImage", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.8/Local.Live.Captions_0.1.8_amd64.AppImage" },
+    { name: "Local.Live.Captions_0.1.8_x64_en-US.msi", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.8/Local.Live.Captions_0.1.8_x64_en-US.msi" },
+  ];
+  let release = { tag_name: "v0.1.7", target_commitish: "older-sha", assets };
+  await page.route("https://api.github.com/**", (route) => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify([release]),
+  }));
+  await page.goto("/");
+  await expect(page.getByText("Downloads are being published.")).toBeVisible();
+  await expect(page.getByRole("link", { name: /^Download for/ })).toHaveCount(0);
+
+  release = { tag_name: "v0.1.8", target_commitish: "older-sha", assets };
+  await page.reload();
+  await expect(page.getByText("Downloads are being published.")).toBeVisible();
+  await expect(page.getByRole("link", { name: /^Download for/ })).toHaveCount(0);
+
+  release = { tag_name: "v0.1.8", target_commitish: buildSha, assets };
+  await page.reload();
+  await expect(page.getByRole("link", { name: /^Download for/ })).toHaveAttribute("href", /\/releases\/download\/v0\.1\.8\//);
 });
 
 test("dark pages have no serious or critical contrast violations", async ({ page }) => {

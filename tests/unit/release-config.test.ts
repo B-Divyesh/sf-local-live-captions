@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
+import { releaseSourceErrors } from "../../scripts/verify-release-source.mjs";
 
 type StaticRoute = { route: string; headers?: Record<string, string>; rewrite?: string };
 
@@ -66,18 +67,43 @@ describe("release configuration regressions", () => {
   });
 
   it("@claim:release-artifacts publishes the documented desktop packages and integrity files", async () => {
-    const [workflow, fixture] = await Promise.all([
+    const [workflow, fixture, packageText, tauriText, cargoText] = await Promise.all([
       readFile(".github/workflows/release.yml", "utf8"),
-      readFile("tests/fixtures/release-v0.1.7.json", "utf8"),
+      readFile("tests/fixtures/release-v0.1.8.json", "utf8"),
+      readFile("package.json", "utf8"),
+      readFile("src-tauri/tauri.conf.json", "utf8"),
+      readFile("src-tauri/Cargo.toml", "utf8"),
     ]);
     const assets = JSON.parse(fixture).assets as string[];
+    const packageVersion = JSON.parse(packageText).version as string;
+    const tauriVersion = JSON.parse(tauriText).version as string;
+    const cargoVersion = cargoText.match(/^version = "([^"]+)"$/m)?.[1];
     expect(workflow).toContain("tauri-apps/tauri-action@v0");
     expect(workflow).toContain("tags: [\"v*\"]");
     expect(workflow).toContain("workflow_dispatch");
     expect(workflow).toContain("sha256sum * > SHA256SUMS");
     expect(workflow).toContain("latest.json");
+    expect(workflow).toContain("npm run verify:release-source");
+    expect(workflow).toContain("commit:$commit");
+    expect(JSON.parse(fixture).tag_name).toBe(`v${packageVersion}`);
+    expect(tauriVersion).toBe(packageVersion);
+    expect(cargoVersion).toBe(packageVersion);
     for (const pattern of [/\.dmg$/i, /\.(msi|exe)$/i, /\.(AppImage|deb)$/i, /^SHA256SUMS$/, /^latest\.json$/]) {
       expect(assets.some((asset) => pattern.test(asset)), String(pattern)).toBe(true);
     }
+  });
+
+  it("rejects stale release tags and source commits before packaging", () => {
+    const valid = {
+      releaseTag: "v0.1.8",
+      expectedSha: "candidate-sha",
+      tagCommit: "candidate-sha",
+      packageVersion: "0.1.8",
+      tauriVersion: "0.1.8",
+      cargoVersion: "0.1.8",
+    };
+    expect(releaseSourceErrors(valid)).toEqual([]);
+    expect(releaseSourceErrors({ ...valid, releaseTag: "v0.1.7" })).toContain("Release tag v0.1.7 does not match package version 0.1.8.");
+    expect(releaseSourceErrors({ ...valid, tagCommit: "older-sha" })).toContain("Tag v0.1.8 resolves to older-sha, but this workflow is building candidate-sha.");
   });
 });

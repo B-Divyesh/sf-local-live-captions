@@ -9,6 +9,8 @@ const isDesktop = __DESKTOP__ || Boolean(window.__TAURI_INTERNALS__) || Boolean(
 const SITE = "https://local-live-captions.sociobot.in";
 const API = "https://api.sociobot.in/api/v1/products/local-live-captions";
 const LICENSE_KEY = "sb_license:local-live-captions";
+const RELEASE_TAG = `v${__APP_VERSION__}`;
+const RELEASE_CACHE_KEY = `llc:release:${RELEASE_TAG}:${__BUILD_SHA__}`;
 
 type Route = "/" | "/demo" | "/privacy" | "/terms" | "/404";
 
@@ -31,7 +33,7 @@ function header(): string {
 }
 
 function footer(): string {
-  return `<footer><div><strong>Local Live Captions</strong><p>Caption Linux calls and recordings on your device.</p></div><div class="footer-links"><a class="nav-link" href="/privacy">Privacy</a><a class="nav-link" href="/terms">Terms</a><a href="https://hello-factory.sociobot.in" rel="external">Built by Param Factory <span class="sr-only">(external)</span></a></div><p class="build">v0.1.7 · build 2026.08.29<br>Generated artwork disclosed in the <a href="https://github.com/B-Divyesh/sf-local-live-captions/blob/main/.factory/design.md" rel="external">design notes <span class="sr-only">(external)</span></a>.</p></footer>`;
+  return `<footer><div><strong>Local Live Captions</strong><p>Caption Linux calls and recordings on your device.</p></div><div class="footer-links"><a class="nav-link" href="/privacy">Privacy</a><a class="nav-link" href="/terms">Terms</a><a href="https://hello-factory.sociobot.in" rel="external">Built by Param Factory <span class="sr-only">(external)</span></a></div><p class="build">v${__APP_VERSION__} · build ${escapeHtml(__BUILD_SHA__.slice(0, 7))}<br>Generated artwork disclosed in the <a href="https://github.com/B-Divyesh/sf-local-live-captions/blob/main/.factory/design.md" rel="external">design notes <span class="sr-only">(external)</span></a>.</p></footer>`;
 }
 
 function shell(content: string): string {
@@ -147,10 +149,11 @@ async function setupDownloads(): Promise<void> {
   const releasePage = "https://github.com/B-Divyesh/sf-local-live-captions/releases";
   const platform = /Windows/i.test(navigator.userAgent) ? "windows" : /Mac/i.test(navigator.userAgent) ? "macos" : "linux";
   try {
-    const cached = localStorage.getItem("llc:release");
+    localStorage.removeItem("llc:release");
+    const cached = localStorage.getItem(RELEASE_CACHE_KEY);
     const parsed = cached ? JSON.parse(cached) as { at: number; data: Release } : null;
     let data: Release;
-    if (parsed && Date.now() - parsed.at < 3_600_000) data = parsed.data;
+    if (parsed && Date.now() - parsed.at < 3_600_000 && releaseMatchesBuild(parsed.data)) data = parsed.data;
     else {
       // The list endpoint stays a clean 200 with an empty array before the
       // first release exists. `/releases/latest` instead returns a noisy 404.
@@ -159,7 +162,8 @@ async function setupDownloads(): Promise<void> {
       const releases = await response.json() as Release[];
       data = releases[0];
       if (!data) throw new Error("release unavailable");
-      localStorage.setItem("llc:release", JSON.stringify({ at: Date.now(), data }));
+      if (!releaseMatchesBuild(data)) throw new Error("release source does not match this build");
+      localStorage.setItem(RELEASE_CACHE_KEY, JSON.stringify({ at: Date.now(), data }));
     }
     const patterns = platform === "windows" ? [/\.msi$/i, /\.exe$/i] : platform === "macos" ? [/\.dmg$/i] : [/\.AppImage$/i, /\.deb$/i];
     const asset = data.assets.find((item) => patterns.some((pattern) => pattern.test(item.name)));
@@ -170,7 +174,11 @@ async function setupDownloads(): Promise<void> {
   }
 }
 
-type Release = { assets: { name: string; browser_download_url: string }[] };
+type Release = { tag_name: string; target_commitish: string; assets: { name: string; browser_download_url: string }[] };
+
+function releaseMatchesBuild(release: Release): boolean {
+  return release.tag_name === RELEASE_TAG && release.target_commitish === __BUILD_SHA__;
+}
 
 function setupLicense(): void {
   const params = new URLSearchParams(location.search);

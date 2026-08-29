@@ -69,6 +69,13 @@ word. Decorative text is absent from the landing page.
 | The multilingual `base` model must return recognizable German caption text. | 10 |
 | Speech model downloads use the listed `ggerganov/whisper.cpp` Hugging Face repository. | 10 |
 | The bundled upstream MIT license copy is pinned in `third_party/whisper.cpp-LICENSE`. | 9 |
+| Desktop installers are built only in GitHub Actions. | 8 |
+| Tag the exact commit with the version from `package.json`, such as `v0.1.8`. | 12 |
+| To rebuild, run the workflow for that tag. | 8 |
+| The workflow rejects a tag or commit mismatch. | 8 |
+| It creates unsigned packages for macOS, Windows, and Linux. | 9 |
+| It also publishes `SHA256SUMS` and `latest.json` with the source commit. | 10 |
+| The site offers packages only when the release and deployed site use the same tag and commit. | 15 |
 
 ## Terminology
 

@@ -8,7 +8,6 @@ on:
       tag:
         description: Release tag
         required: true
-        default: v0.1.0
 
 permissions:
   contents: write
@@ -18,12 +17,17 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       CI: 1
+      RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || inputs.tag }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+      - name: Verify tag, source commit, and package versions
+        run: npm run verify:release-source
       - uses: dtolnay/rust-toolchain@stable
       - name: Install native test dependencies
         run: sudo apt-get update && sudo apt-get install -y build-essential cmake file libclang-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libasound2-dev libpulse-dev pulseaudio pulseaudio-utils
@@ -54,6 +58,8 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -90,6 +96,10 @@ jobs:
       RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || inputs.tag }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify manifest source identity
+        run: npm run verify:release-source
       - name: Download release assets
         run: gh release download "$RELEASE_TAG" --dir release-assets
       - name: Make checksums and update manifest
@@ -97,5 +107,5 @@ jobs:
         run: |
           rm -f SHA256SUMS latest.json
           sha256sum * > SHA256SUMS
-          gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json tagName,assets --jq '{version:.tagName,assets:[.assets[]|{name:.name,url:.url}]}' > latest.json
+          gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json tagName,assets --jq --arg commit "$GITHUB_SHA" '{version:.tagName,commit:$commit,assets:[.assets[]|{name:.name,url:.url}]}' > latest.json
           gh release upload "$RELEASE_TAG" SHA256SUMS latest.json --repo "$GITHUB_REPOSITORY" --clobber
