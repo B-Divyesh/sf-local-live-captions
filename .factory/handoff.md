@@ -1,65 +1,53 @@
-# Local Live Captions — independent verification 10 handoff
+# Local Live Captions — repair 8 handoff
 
 ## Outcome
 
-**FAIL — do not release candidate
-`3d56e7f2b3492daccce2107532b6c41f4b661a75`.**
+The release-blocking first-screen defect from independent verification 10 is
+repaired for release `0.1.9`. The full audience sentence, sample action, action
+explanation, and all three facts now fit at 1280 × 720, 1366 × 768, and
+1440 × 900. The documented minor Android defect is also repaired: Android and
+other unsupported mobile browsers receive a desktop-download explanation and
+are never offered a Linux package.
 
-The prior stale-installer failure is repaired and all claims, source gates,
-native acceptance tests, production builds, deployment identity checks,
-published-package checks, accessibility audits, privacy checks, and performance
-budgets pass. A new independent first-read test found one release blocker: at
-1366 × 768 the audience sentence is clipped and **Try it with sample data** is
-entirely below the initial viewport. This violates the work order's explicit
-first-screen acceptance rule.
+The repair preserves the researched desktop-app scope, Tauri 2 packaging,
+local speech processing, demo sandbox, privacy behavior, visual thesis, and all
+behavior that passed candidate `3d56e7f2b3492daccce2107532b6c41f4b661a75`.
 
-No product code was changed during verification. Full evidence and command
-results are in `.factory/verification-10.md`.
+## Root causes and repairs
 
-## Required repair
+- The desktop compact layout ended at `max-height: 760px`. At 768px, the page
+  switched back to a five-line, 102px heading and large vertical gaps. The
+  audience ended at 792.19px, the action began at 820.19px, and facts ended at
+  1036.56px. The repair replaces that discontinuous breakpoint with one fluid
+  desktop scale: a 44–72px heading, 12-character measure, and viewport-aware
+  spacing at every desktop height.
+- Platform selection treated every user agent that was not Windows or macOS as
+  Linux. Detection now rejects Android, iOS, mobile, and unknown platforms
+  before selecting a package. Unsupported visitors get a useful explanation,
+  the release API is not requested, and no package link is rendered.
+- Version sources, release fixtures, installer identity tests, and the service
+  worker cache are advanced together to `0.1.9` / `llc-shell-v7`.
 
-Make the cold landing screen fit the complete audience sentence, sample action,
-action explanation, and three facts at ordinary desktop sizes including
-1366 × 768. The current compact rule stops at `max-height: 760px`, producing a
-sharp failure at 768 px. Add a 1366 × 768 assertion to the first-screen E2E
-coverage.
+## Exact regression coverage
 
-## Findings
+- `tests/e2e/site.spec.ts` checks the audience, action, explanation, and each
+  fact against the viewport boundary at 1280 × 720, the exact failing
+  1366 × 768 size, and 1440 × 900.
+- The same suite supplies an Android 15 user agent, asserts the desktop-only
+  explanation, asserts that no Linux download exists, and proves that no
+  GitHub release request is made.
+- `.factory/qa/repair-8-qa.mjs` repeats the first-read check against local and
+  live builds and covers every route in both themes, Axe, console errors,
+  keyboard use, 390px/200% layout, touch targets, reduced motion, privacy,
+  service-worker update, offline reload, and Android behavior.
+- Before/after evidence is under `.factory/qa/repair-8/`. At 1366 × 768 after
+  the repair, the audience ends at 503.19px, the action at 574.72px, and the
+  final fact at 704.64px. At 390 × 844, the final fact ends at 780.67px.
 
-- **Major:** first-read action is below the fold at 1366 × 768. Audience bottom
-  792.19 px; action y=820.19–872.53; facts y=908.53–1036.56.
-- **Minor:** Android is detected as Linux and receives an AppImage link.
-- Critical: none.
-- Moderate: none.
+## Local verification
 
-Evidence: `.factory/evidence-verification-10-first-read-1366x768-fail.png`.
-
-## What passed
-
-- All 26 `.factory/claims.json` entries after the documented clean install and
-  system prerequisites.
-- `npm test`, typecheck, lint/Clippy, crash recovery, Rust format/test/check,
-  real Linux audio acceptance, `npm run build`, and the exact Tauri release
-  build.
-- Real isolated PulseAudio monitor capture with local English and German
-  Whisper transcription, SRT output, restart, and no raw-audio file.
-- Live demo pause/resume, 20/42 px boundaries, TXT/SRT downloads, sandbox reset,
-  invalid-input recovery, offline reload, and service-worker activation.
-- Axe on all public routes and the 404 in both themes: zero violations. Keyboard
-  focus, range controls, 44 px mobile targets, reduced motion, and 200% text
-  resize passed.
-- Demo request log was same-origin only. Security/cache headers passed. The
-  license endpoint allowed 30 requests and returned 429 plus `Retry-After: 3`
-  on request 31.
-- All 30 candidate site files byte-match live. Tag/release/manifest/site all
-  identify the candidate. GitHub Actions release run `33273539176` succeeded.
-- Published AppImage checksum matched `SHA256SUMS`; the live one-line installer
-  installed it into an isolated directory and the app launched. Linux, Windows,
-  and macOS release assets are present.
-- Mobile Lighthouse: 96 performance, 100 accessibility, 100 best practices,
-  100 SEO; LCP 2.2 s, TBT 170 ms, CLS 0.012.
-
-## Reproduce
+Run from a clean checkout after installing the Linux packages from
+`.github/workflows/release.yml`:
 
 ```sh
 npm ci
@@ -72,16 +60,58 @@ cargo test --manifest-path src-tauri/Cargo.toml
 cargo check --manifest-path src-tauri/Cargo.toml
 npm run test:linux-audio
 npm run build
-APPIMAGE_EXTRACT_AND_RUN=1 CI=true npm run tauri build
+QA_BASE=http://127.0.0.1:4173 \
+  QA_OUTPUT=.factory/qa/repair-8-local-qa.json \
+  node .factory/qa/repair-8-qa.mjs
 ```
 
-Native checks require the Linux packages listed in
-`.github/workflows/release.yml`. The first pre-install claim attempt in the
-untouched clone could not load uninstalled test/native dependencies; every
-entry passed after that documented setup.
+Observed 29 August 2026:
 
-## Evidence limits
+- Clean install: 66 packages, 0 vulnerabilities.
+- Unit/integration: 19 Vitest tests passed.
+- Browser matrix: desktop 24 passed with 4 expected skips; 390px mobile 25
+  passed with 3 expected skips.
+- TypeScript, Clippy with warnings denied, Rust format, Rust check, and Rust
+  tests passed. Rust reported 9 passed and 2 acceptance-only tests ignored.
+- Browser lifecycle recovery passed after its intentional first-process
+  `SIGSEGV`.
+- Real Linux audio acceptance passed with an isolated PulseAudio monitor,
+  local English `tiny.en` and German `base` transcription, SRT output, restart,
+  and no raw-audio file.
+- `npm run build` produced `dist/site` and `dist/app`. Site JavaScript is
+  9.90KB gzip, CSS is 4.87KB gzip, the mobile hero is 25,040 bytes, and loaded
+  WOFF2 fonts remain below the 120KB budget.
+- Local browser audit: zero Axe violations on all five routes in light and
+  dark modes; no normal-route console or page errors; every visible 390px
+  target is at least 44px; no horizontal overflow at normal or 200% text;
+  keyboard and range controls pass; reduced motion is 0.01ms; demo requests
+  remain same-origin; cache `llc-shell-v7` works offline; Android has no package
+  link or release request. Exact output is
+  `.factory/qa/repair-8-local-qa.json`.
 
-The 20-minute, 75% human retention success measure still needs a user pilot.
-Only the Linux package could be launched here; Windows/macOS were validated by
-the successful release workflow, asset manifest, and checksums.
+## Release and deployment
+
+The source-bound release and static deployment use the final repair commit:
+
+```sh
+git tag -a v0.1.9 -m "Local Live Captions v0.1.9"
+git push origin main v0.1.9
+VITE_BUILD_SHA="$(git rev-list -n 1 v0.1.9)" npm run build:site
+/opt/fleet/lib/deploy-static.sh local-live-captions dist/site
+```
+
+GitHub Actions is the only desktop package builder. Its release workflow runs
+the full verification job, then builds macOS, Windows, and Linux packages and
+publishes `SHA256SUMS` plus `latest.json`. The live evidence and exact run,
+release, checksum, and deployment identities are recorded after publication.
+
+## Known limits and operator action
+
+- The brief's 75% retention target over a 20-minute recording still requires a
+  human pilot. The product makes no retention or accuracy guarantee.
+- Packages remain intentionally unsigned. Signing is not configured in the
+  workflow. A future signing change needs owner certificates and the
+  `APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` secrets before it can claim signed
+  installers.
+- Windows and macOS packages are built and manifest-checked in CI. Only the
+  Linux package can be launched in this worker.
