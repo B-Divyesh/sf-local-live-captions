@@ -35,4 +35,20 @@ describe("release configuration regressions", () => {
     expect(config.app.windows[0]).toMatchObject({ resizable: true, alwaysOnTop: false });
     expect(source).toContain("set_always_on_top");
   });
+
+  it("isolates desktop, mobile, and per-test browser lifecycles", async () => {
+    const packageJson = JSON.parse(await readFile("package.json", "utf8"));
+    const runner = await readFile("scripts/run-e2e.mjs", "utf8");
+    const fixtures = await readFile("tests/e2e/fixtures.ts", "utf8");
+    const config = await readFile("playwright.config.ts", "utf8");
+
+    expect(packageJson.scripts.test).toContain("node scripts/run-e2e.mjs");
+    expect(packageJson.scripts["test:browser-lifecycle"]).toContain("crash-recovery");
+    expect(runner).toContain('projects = requestedProject ? [requestedProject] : ["chromium", "mobile"]');
+    expect(runner).toContain('`--project=${project}`');
+    expect(fixtures).toContain("playwright[browserName].launch");
+    expect(fixtures).toContain("The previous test browser is still connected");
+    expect(config).toContain('retries: process.env.CI === "1" ? 1 : 0');
+    expect(config).toContain('reuseExistingServer: process.env.CI !== "1"');
+  });
 });

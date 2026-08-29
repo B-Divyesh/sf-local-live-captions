@@ -16,6 +16,8 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-22.04
+    env:
+      CI: 1
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -29,6 +31,7 @@ jobs:
       - name: Install the pinned Playwright browser
         run: npx playwright install --with-deps chromium
       - run: npx tsc --noEmit
+      - run: npm run test:browser-lifecycle
       - run: npm test
       - run: cargo fmt --check --manifest-path src-tauri/Cargo.toml
       - run: cargo test --manifest-path src-tauri/Cargo.toml

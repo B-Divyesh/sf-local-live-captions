@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 import AxeBuilder from "@axe-core/playwright";
 import { readFile } from "node:fs/promises";
 
@@ -47,6 +47,27 @@ test("mobile navigation and footer links meet the 44px target", async ({ page },
   }));
   expect(sizes).not.toHaveLength(0);
   expect(sizes.every((size) => size.width >= 44 && size.height >= 44)).toBe(true);
+});
+
+test("keyboard users can skip, pause, and resize captions with visible focus", async ({ page }) => {
+  await page.goto("/demo");
+  const skipLink = page.getByRole("link", { name: "Skip to content" });
+  await skipLink.focus();
+  await expect(skipLink).toBeVisible();
+  await skipLink.press("Enter");
+  await expect(page.locator("#main")).toBeFocused();
+
+  const pause = page.getByRole("button", { name: "Pause captions" });
+  await pause.focus();
+  const focusStyle = await pause.evaluate((element) => getComputedStyle(element).outlineStyle);
+  expect(focusStyle).not.toBe("none");
+  await pause.press("Space");
+  await expect(page.getByRole("button", { name: "Resume captions" })).toBeVisible();
+
+  const size = page.getByLabel("Caption size");
+  await size.focus();
+  await size.press("End");
+  await expect(size).toHaveValue("42");
 });
 
 test("@claim:desktop-overlay ships a resizable caption overlay with an always-on-top control", async ({ page }) => {

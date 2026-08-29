@@ -27,7 +27,6 @@ if [ "$(id -u)" = "0" ]; then
   # Disposable containers commonly run as root; PulseAudio's system mode gives
   # the test process one private server without touching a host sound service.
   export LLC_PULSE_SYSTEM=1
-  export LLC_PULSE_SYSTEM=1
   export PULSE_SERVER="unix:$runtime_dir/native"
   chmod 777 "$runtime_dir"
   pulseaudio --system --daemonize=no --disallow-exit --exit-idle-time=-1 --log-target=stderr --log-level=warning --load="module-native-protocol-unix auth-anonymous=1 socket=$runtime_dir/native" &

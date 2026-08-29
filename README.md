@@ -43,7 +43,8 @@ npm ci && npm test && npm run build:site
 The static output lands in `dist/site`, with `index.html` at its root.
 
 ```sh
-npm test             # Vitest + Playwright claims and accessibility checks
+npm test             # Vitest + isolated desktop/mobile Playwright checks
+npm run test:browser-lifecycle # inject a mobile Chromium SIGSEGV and prove clean retry
 npm run test:linux-audio # isolated PulseAudio monitor → real speech caption acceptance test
 npm run build        # site in dist/site; desktop frontend in dist/app
 cargo fmt --check --manifest-path src-tauri/Cargo.toml
@@ -51,6 +52,10 @@ cargo test --manifest-path src-tauri/Cargo.toml
 cargo check --manifest-path src-tauri/Cargo.toml
 APPIMAGE_EXTRACT_AND_RUN=1 CI=true npm run tauri build
 ```
+
+Release verification sets `CI=1`. Desktop and 390 px mobile tests run in
+separate Playwright processes, and every test receives a newly launched browser
+and context. An unexpected Chromium exit gets one clean retry in CI.
 
 Desktop installers are built only in GitHub Actions. Tag a `v*` release or run the release workflow. It creates unsigned macOS, Windows, and Linux packages, then publishes `SHA256SUMS` and `latest.json`.
 

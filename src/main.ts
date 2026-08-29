@@ -100,6 +100,12 @@ function downloadFile(name: string, text: string, type: string): void {
 }
 
 function wireShared(): void {
+  document.querySelector<HTMLAnchorElement>(".skip-link")?.addEventListener("click", (event) => {
+    event.preventDefault();
+    const main = document.querySelector<HTMLElement>("#main");
+    main?.focus();
+    main?.scrollIntoView();
+  });
   document.querySelectorAll<HTMLAnchorElement>("a.nav-link").forEach((link) => link.addEventListener("click", (event) => {
     if (link.origin !== location.origin || event.metaKey || event.ctrlKey || event.shiftKey) return;
     event.preventDefault();
