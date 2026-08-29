@@ -1,6 +1,6 @@
 {
   "name": "local-live-captions",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "type": "module",
   "scripts": {
@@ -17,6 +17,8 @@
     "test:e2e:mobile": "node scripts/run-e2e.mjs mobile",
     "test:browser-lifecycle": "node scripts/run-e2e.mjs crash-recovery",
     "test:linux-audio": "bash scripts/linux-audio-acceptance.sh",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit && cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings",
     "tauri": "tauri"
   },
   "dependencies": {

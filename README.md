@@ -44,6 +44,8 @@ The static output lands in `dist/site`, with `index.html` at its root.
 
 ```sh
 npm test             # Vitest + isolated desktop/mobile Playwright checks
+npm run typecheck    # TypeScript type check
+npm run lint         # TypeScript type check + Rust Clippy with warnings denied
 npm run test:browser-lifecycle # inject a mobile Chromium SIGSEGV and prove clean retry
 npm run test:linux-audio # isolated PulseAudio monitor → real speech caption acceptance test
 npm run build        # site in dist/site; desktop frontend in dist/app

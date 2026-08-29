@@ -30,7 +30,7 @@ function header(): string {
 }
 
 function footer(): string {
-  return `<footer><div><strong>Local Live Captions</strong><p>Caption Linux calls and recordings on your device.</p></div><div class="footer-links"><a class="nav-link" href="/privacy">Privacy</a><a class="nav-link" href="/terms">Terms</a><a href="https://hello-factory.sociobot.in" rel="external">Built by Param Factory <span class="sr-only">(external)</span></a></div><p class="build">v0.1.4 · build 2026.08.29<br>Generated artwork disclosed in the <a href="https://github.com/B-Divyesh/sf-local-live-captions/blob/main/.factory/design.md" rel="external">design notes <span class="sr-only">(external)</span></a>.</p></footer>`;
+  return `<footer><div><strong>Local Live Captions</strong><p>Caption Linux calls and recordings on your device.</p></div><div class="footer-links"><a class="nav-link" href="/privacy">Privacy</a><a class="nav-link" href="/terms">Terms</a><a href="https://hello-factory.sociobot.in" rel="external">Built by Param Factory <span class="sr-only">(external)</span></a></div><p class="build">v0.1.5 · build 2026.08.29<br>Generated artwork disclosed in the <a href="https://github.com/B-Divyesh/sf-local-live-captions/blob/main/.factory/design.md" rel="external">design notes <span class="sr-only">(external)</span></a>.</p></footer>`;
 }
 
 function shell(content: string): string {
@@ -110,7 +110,7 @@ function wireShared(): void {
     if (link.origin !== location.origin || event.metaKey || event.ctrlKey || event.shiftKey) return;
     event.preventDefault();
     if (link.dataset.action === "exit-demo") discardDemo();
-    history.pushState({}, "", link.pathname + link.search); render();
+    history.pushState({}, "", link.pathname + link.search); render(true);
   }));
   document.querySelectorAll<HTMLInputElement>("[data-caption-size]").forEach((input) => input.addEventListener("input", () => {
     const stage = input.closest<HTMLElement>(".caption-stage")!;
@@ -206,7 +206,7 @@ async function verifyStoredLicense(token: string, result: HTMLElement): Promise<
   }
 }
 
-function render(): void {
+function render(focusHeading = false): void {
   if (isDesktop) { void renderDesktop(); return; }
   const route = routeFromPath();
   app.innerHTML = route === "/" ? landing() : route === "/demo" ? demoPage() : route === "/privacy" || route === "/terms" ? legalPage(route) : notFound();
@@ -214,10 +214,16 @@ function render(): void {
   document.title = titles[route];
   document.querySelector<HTMLLinkElement>("link[rel='canonical']")?.setAttribute("href", `${SITE}${route === "/" ? "/" : route}`);
   wireShared(); if (route === "/demo") wireDemo(); if (route === "/") { void setupDownloads(); setupLicense(); }
-  requestAnimationFrame(() => { document.querySelector<HTMLElement>("h1")?.focus({ preventScroll: true }); document.querySelector<HTMLElement>("#route-status")!.textContent = document.querySelector("h1")?.textContent || "Page loaded"; window.scrollTo(0, 0); });
+  requestAnimationFrame(() => {
+    if (focusHeading) {
+      document.querySelector<HTMLElement>("h1")?.focus({ preventScroll: true });
+      document.querySelector<HTMLElement>("#route-status")!.textContent = document.querySelector("h1")?.textContent || "Page loaded";
+    }
+    window.scrollTo(0, 0);
+  });
 }
 
-window.addEventListener("popstate", render);
+window.addEventListener("popstate", () => render(true));
 
 async function renderDesktop(): Promise<void> {
   const { invoke } = await import("@tauri-apps/api/core");

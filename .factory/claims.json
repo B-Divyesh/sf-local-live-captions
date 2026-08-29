@@ -21,6 +21,20 @@
     "sandbox": "format a cue beyond one minute and one hour and assert valid padded SRT timestamps"
   },
   {
+    "id": "txt-export",
+    "claim": "Exports every sample caption as plain text",
+    "where": "demo export action and demo documentation",
+    "test": "npm test -- --grep @claim:txt-export",
+    "sandbox": "fresh browser context at /demo; download TXT and assert its filename, four lines, and sample content"
+  },
+  {
+    "id": "live-caption-sizing",
+    "claim": "Caption size can change while captions keep running",
+    "where": "landing overlay copy, README, and demo size control",
+    "test": "npm test -- --grep @claim:live-caption-sizing",
+    "sandbox": "fresh browser context at /demo; set the size to 42 px and assert the live text changes while capture remains active"
+  },
+  {
     "id": "demo-isolated",
     "claim": "Demo sample data is separate and nothing is saved to real data",
     "where": "landing action and demo banner",
@@ -33,6 +47,13 @@
     "where": "landing facts and supporter section",
     "test": "npm test -- --grep @claim:free-and-paid",
     "sandbox": "fresh landing page; assert free feature copy, price, checkout URL, and its live Dodo redirect"
+  },
+  {
+    "id": "supporter-license-restore",
+    "claim": "A supporter license can be restored and verified with Sociobot",
+    "where": "landing supporter-license form",
+    "test": "npm test -- --grep @claim:supporter-license-restore",
+    "sandbox": "fresh landing page with a recorded Sociobot verification response; paste a token and assert one verification request, active status, and local storage"
   },
   {
     "id": "native-local-processing",

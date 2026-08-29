@@ -13,6 +13,18 @@ test("landing page states the job and has one heading", async ({ page }) => {
   expect(accessibility.violations.filter((item) => ["serious", "critical"].includes(item.impact || ""))).toEqual([]);
 });
 
+test("desktop first screen keeps the primary sample action fully visible", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "chromium", "desktop Chromium only");
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.route("https://api.github.com/**", (route) => route.fulfill({ status: 404, body: "{}" }));
+  await page.goto("/");
+  const action = page.getByRole("link", { name: /Try it with sample data/ });
+  const box = await action.boundingBox();
+  expect(box).not.toBeNull();
+  expect(box!.y).toBeGreaterThanOrEqual(0);
+  expect(box!.y + box!.height).toBeLessThanOrEqual(720);
+});
+
 test("dark pages have no serious or critical contrast violations", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   for (const route of ["/", "/demo"]) {
@@ -52,10 +64,22 @@ test("mobile navigation and footer links meet the 44px target", async ({ page },
   expect(sizes.every((size) => size.width >= 44 && size.height >= 44)).toBe(true);
 });
 
-test("keyboard users can skip, pause, and resize captions with visible focus", async ({ page }) => {
+test("mobile demo banner actions meet the 44px touch target", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "mobile project only");
+  await page.goto("/demo");
+  for (const name of ["Reset demo", "Start for real"]) {
+    const box = await page.getByRole(name === "Reset demo" ? "button" : "link", { name }).boundingBox();
+    expect(box, name).not.toBeNull();
+    expect(box!.width, name).toBeGreaterThanOrEqual(44);
+    expect(box!.height, name).toBeGreaterThanOrEqual(44);
+  }
+});
+
+test("keyboard users reach the skip link first, then pause and resize captions", async ({ page }) => {
   await page.goto("/demo");
   const skipLink = page.getByRole("link", { name: "Skip to content" });
-  await skipLink.focus();
+  await page.keyboard.press("Tab");
+  await expect(skipLink).toBeFocused();
   await expect(skipLink).toBeVisible();
   await skipLink.press("Enter");
   await expect(page.locator("#main")).toBeFocused();
@@ -71,6 +95,12 @@ test("keyboard users can skip, pause, and resize captions with visible focus", a
   await size.focus();
   await size.press("End");
   await expect(size).toHaveValue("42");
+});
+
+test("client-side route changes move focus to the new heading", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("link", { name: "Demo", exact: true }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
 });
 
 test("reduced motion removes interface transitions", async ({ page }) => {
@@ -132,6 +162,29 @@ test("@claim:srt-export exports every sample caption", async ({ page }, testInfo
   expect(body).toContain("Gravity pulls the cloud inward");
 });
 
+test("@claim:txt-export exports every sample caption as plain text", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === "mobile", "download path is covered in desktop Chromium");
+  await page.goto("/demo");
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Export TXT" }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toBe("sample-transcript.txt");
+  const path = await download.path();
+  const body = await readFile(path!, "utf8");
+  expect(body.trim().split("\n")).toHaveLength(4);
+  expect(body).toContain("Gravity pulls the cloud inward");
+});
+
+test("@claim:live-caption-sizing changes running captions without stopping them", async ({ page }) => {
+  await page.goto("/demo");
+  const size = page.getByLabel("Caption size");
+  await size.fill("42");
+  await expect(size).toHaveValue("42");
+  await expect(page.locator(".caption-stack")).toHaveCSS("font-size", "42px");
+  await expect(page.getByText("Capturing sample", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Pause captions" })).toBeVisible();
+});
+
 test("@claim:demo-isolated reset and exit clear only demo settings", async ({ page }) => {
   await page.goto("/demo");
   await page.evaluate(() => { localStorage.setItem("real:keep", "yes"); sessionStorage.setItem("demo:caption-size", "40"); });
@@ -146,9 +199,10 @@ test("@claim:demo-isolated reset and exit clear only demo settings", async ({ pa
 });
 
 test("returned licenses are verified immediately", async ({ page }) => {
+  await page.addInitScript(() => { Reflect.deleteProperty(Navigator.prototype, "serviceWorker"); });
   await page.route("https://api.github.com/**", (route) => route.fulfill({ status: 404, body: "{}" }));
   let verifyRequests = 0;
-  await page.route("https://api.sociobot.in/api/v1/products/local-live-captions/verify?license=returned-token", (route) => {
+  await page.route(/https:\/\/api\.sociobot\.in\/api\/v1\/products\/local-live-captions\/verify\?license=returned-token/, (route) => {
     verifyRequests += 1;
     return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ valid: true }) });
   });
@@ -157,6 +211,23 @@ test("returned licenses are verified immediately", async ({ page }) => {
   expect(verifyRequests).toBe(1);
   await expect(page).toHaveURL(/\/$/);
   await expect.poll(() => page.evaluate(() => localStorage.getItem("sb_license:local-live-captions:verified"))).not.toBeNull();
+});
+
+test("@claim:supporter-license-restore verifies and stores a pasted license", async ({ page }) => {
+  await page.addInitScript(() => { Reflect.deleteProperty(Navigator.prototype, "serviceWorker"); });
+  await page.route("https://api.github.com/**", (route) => route.fulfill({ status: 404, body: "{}" }));
+  let verifyRequests = 0;
+  await page.route(/https:\/\/api\.sociobot\.in\/api\/v1\/products\/local-live-captions\/verify\?license=restored-token/, (route) => {
+    verifyRequests += 1;
+    return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ valid: true }) });
+  });
+  await page.goto("/");
+  await page.getByLabel("License token").fill("restored-token");
+  await page.getByRole("button", { name: "Verify license" }).click();
+  await expect(page.getByText("Supporter license is active on this browser.")).toBeVisible();
+  expect(verifyRequests).toBe(1);
+  await expect.poll(() => page.evaluate(() => localStorage.getItem("sb_license:local-live-captions"))).toBe("restored-token");
+  await expect.poll(() => page.evaluate(() => Number(localStorage.getItem("sb_license:local-live-captions:verified")))).toBeGreaterThan(0);
 });
 
 test("@claim:free-and-paid supporter checkout is live and caption features stay free", async ({ page, request }) => {

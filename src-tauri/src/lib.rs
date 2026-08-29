@@ -349,7 +349,7 @@ fn start_pulse_capture(
                 break;
             }
             audio.extend(
-                bytes.chunks_exact(2).map(|sample| {
+                bytes.as_chunks::<2>().0.iter().map(|sample| {
                     i16::from_ne_bytes([sample[0], sample[1]]) as f32 / i16::MAX as f32
                 }),
             );
@@ -811,7 +811,9 @@ mod tests {
             .read(&mut bytes)
             .map_err(|error| format!("Could not read monitor audio: {error}"))?;
         Ok(bytes
-            .chunks_exact(2)
+            .as_chunks::<2>()
+            .0
+            .iter()
             .map(|sample| i16::from_ne_bytes([sample[0], sample[1]]) as f32 / i16::MAX as f32)
             .collect())
     }

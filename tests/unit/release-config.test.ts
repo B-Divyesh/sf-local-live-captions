@@ -29,6 +29,19 @@ describe("release configuration regressions", () => {
     expect(source).toContain('<h1 class="sr-only">Live captions</h1>');
   });
 
+  it("keeps the desktop stop action above the WCAG text contrast threshold", async () => {
+    const styles = await readFile("src/styles.css", "utf8");
+    expect(styles).toContain(".stop-button { background: var(--danger) !important; color: var(--cream) !important;");
+    const luminance = (hex: string) => {
+      const channels = hex.match(/[a-f\d]{2}/gi)!.map((value) => parseInt(value, 16) / 255)
+        .map((value) => value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+      return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+    };
+    const foreground = luminance("#fffaf0");
+    const background = luminance("#a52d25");
+    expect((foreground + 0.05) / (background + 0.05)).toBeGreaterThanOrEqual(4.5);
+  });
+
   it("keeps the native overlay resizable and able to stay on top", async () => {
     const config = JSON.parse(await readFile("src-tauri/tauri.conf.json", "utf8"));
     const source = await readFile("src-tauri/src/lib.rs", "utf8");

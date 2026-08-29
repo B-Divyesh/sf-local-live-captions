@@ -35,6 +35,9 @@ describe("claim governance", () => {
       "call-speaker-boundaries",
       "unsigned-installers",
       "linux-monitor-end-to-end",
+      "txt-export",
+      "live-caption-sizing",
+      "supporter-license-restore",
     ]) expect(ids, `missing public claim ${id}`).toContain(id);
   });
 
