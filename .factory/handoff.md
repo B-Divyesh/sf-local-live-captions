@@ -84,6 +84,19 @@ Results from the final local build:
   Screenshots: `.factory/qa/polish-1-live-first-read.png`,
   `.factory/qa/polish-1-live-demo-desktop.png`, and
   `.factory/qa/polish-1-live-demo-mobile.png`.
+- GitHub Actions run
+  [`33259117240`](https://github.com/B-Divyesh/sf-local-live-captions/actions/runs/33259117240)
+  passed its fresh Linux verifier, macOS universal build, Windows build,
+  Linux build, and manifest job. The published
+  [`v0.1.7` release](https://github.com/B-Divyesh/sf-local-live-captions/releases/tag/v0.1.7)
+  contains `.dmg`, `.msi`, `.exe`, `.deb`, `.rpm`, AppImage,
+  `SHA256SUMS`, and `latest.json`.
+- `latest.json` reported `v0.1.7` with seven installer assets. Downloading
+  `Local.Live.Captions_0.1.7_amd64.deb` and checking it against
+  `SHA256SUMS` produced
+  `78b80ee0d5df3f28aa6dafac05b25471ead387886e1ec21e7e9a02b2434c4cef`.
+  A fresh Linux browser resolved the live download button to the v0.1.7
+  AppImage and reported no console errors.
 
 ## Known limits
 
