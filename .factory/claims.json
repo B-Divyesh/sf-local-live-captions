@@ -115,14 +115,14 @@
     "id": "call-speaker-boundaries",
     "claim": "The app does not join calls or name speakers.",
     "where": "landing",
-    "test": "npm test -- --grep @claim:call-speaker-boundaries",
+    "test": "npm run test:unit -- --testNamePattern @claim:call-speaker-boundaries",
     "sandbox": "native command source is checked for capture/transcription only and rejects call-service and speaker-identification integrations"
   },
   {
     "id": "unsigned-installers",
     "claim": "Current desktop builds are unsigned.",
     "where": "landing and README",
-    "test": "npm test -- --grep @claim:unsigned-installers",
+    "test": "npm run test:unit -- --testNamePattern @claim:unsigned-installers",
     "sandbox": "release workflow regression test checks that no signing credentials or signing commands are configured"
   },
   {

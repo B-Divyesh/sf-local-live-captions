@@ -37,4 +37,12 @@ describe("claim governance", () => {
       "linux-monitor-end-to-end",
     ]) expect(ids, `missing public claim ${id}`).toContain(id);
   });
+
+  it("runs unit-policy claims through Vitest instead of the browser-only claim filter", async () => {
+    const claims = JSON.parse(await readFile(".factory/claims.json", "utf8")) as { id: string; test: string }[];
+    const commandFor = (id: string) => claims.find((claim) => claim.id === id)?.test;
+    for (const id of ["call-speaker-boundaries", "unsigned-installers"]) {
+      expect(commandFor(id)).toBe(`npm run test:unit -- --testNamePattern @claim:${id}`);
+    }
+  });
 });

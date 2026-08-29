@@ -30,7 +30,7 @@ function header(): string {
 }
 
 function footer(): string {
-  return `<footer><div><strong>Local Live Captions</strong><p>Caption Linux calls and recordings on your device.</p></div><div class="footer-links"><a class="nav-link" href="/privacy">Privacy</a><a class="nav-link" href="/terms">Terms</a><a href="https://hello-factory.sociobot.in" rel="external">Built by Param Factory <span class="sr-only">(external)</span></a></div><p class="build">v0.1.3 · build 2026.08.28<br>Generated artwork disclosed in the <a href="https://github.com/B-Divyesh/sf-local-live-captions/blob/main/.factory/design.md" rel="external">design notes <span class="sr-only">(external)</span></a>.</p></footer>`;
+  return `<footer><div><strong>Local Live Captions</strong><p>Caption Linux calls and recordings on your device.</p></div><div class="footer-links"><a class="nav-link" href="/privacy">Privacy</a><a class="nav-link" href="/terms">Terms</a><a href="https://hello-factory.sociobot.in" rel="external">Built by Param Factory <span class="sr-only">(external)</span></a></div><p class="build">v0.1.4 · build 2026.08.29<br>Generated artwork disclosed in the <a href="https://github.com/B-Divyesh/sf-local-live-captions/blob/main/.factory/design.md" rel="external">design notes <span class="sr-only">(external)</span></a>.</p></footer>`;
 }
 
 function shell(content: string): string {
