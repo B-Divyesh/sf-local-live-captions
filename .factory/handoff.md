@@ -2,7 +2,7 @@
 
 ## Outcome
 
-Repair commit: `55210f7528479699539d7a2a25ac3a1559b1a8d9` (with final evidence documentation committed after this handoff). This closes every finding in `.factory/review-1.md` and `.factory/review-2.md`.
+Repair commit: `55210f7528479699539d7a2a25ac3a1559b1a8d9`. This closes every finding in `.factory/review-1.md` and `.factory/review-2.md`.
 
 ## What changed
 
@@ -28,7 +28,7 @@ Main checkout passed:
 - Axe serious/critical scan passed on `/`, `/demo`, `/privacy`, and `/terms`.
 - `/opt/fleet/lib/verify-url.sh http://127.0.0.1:4173/ .factory/verify-polish-2-local` passed with zero console errors, one h1, main, lang, title, and image alt.
 
-Fresh-clone evidence is in `/tmp/local-live-captions-claims-YRLAPN`; it ran `npm ci`, type checking, and all 17 unit tests before the full native/browser claim and build sequence. The sequence is retained in the container while its cold Tauri dependency compilation completes.
+Fresh-clone evidence is in `/tmp/local-live-captions-claims-YRLAPN`; it ran `npm ci`, type checking, 17 unit tests, native tests, `npm test`, the real `npm run test:linux-audio` acceptance, and `npm run build`. Both `dist/site/index.html` and `dist/app/index.html` were produced from that clean clone.
 
 Claim inventory: `.factory/claims.json` has 26 entries. Browser claim tests, Rust command claims, the shared real monitor acceptance command, model-license fixture test, and release-artifact fixture test are included in the suites above. `polish-2.md` maps every review finding to its test evidence.
 
@@ -37,9 +37,11 @@ Claim inventory: `.factory/claims.json` has 26 entries. Browser claim tests, Rus
 - `.factory/evidence-polish-2-desktop.png` — local cold landing capture.
 - `.factory/evidence-polish-2-demo-mobile.png` — direct `?demo=1` mobile capture with banner, reset, and start-for-real controls.
 - `.factory/verify-polish-2-local/verify.json` — local URL verifier report.
+- `.factory/verify-polish-2-live/verify.json` — cold live URL verifier report
+  after deployment, including production screenshots.
 
 ## Deploy and operator notes
 
-Push `main` to deploy the static site through the repository’s configured factory work order. After deployment, run the URL verifier on `https://local-live-captions.sociobot.in/` and re-check `/demo`, `/privacy`, `/terms`, and a missing route cold. Desktop installers remain unsigned by design; GitHub Actions builds them on a `v*` tag or manual release dispatch. No signing secrets are configured.
+`main` was pushed and `dist/site` was deployed with `/opt/fleet/lib/deploy-static.sh local-live-captions dist/site` (Azure deployment `fd4405b8-546d-43de-b2c1-167d8ce80c20`). The live verifier, Axe scan, direct `?demo=1` flow, cross-route focus, and live 404 all passed at <https://local-live-captions.sociobot.in>. Desktop installers remain unsigned by design; GitHub Actions builds them on a `v*` tag or manual release dispatch. No signing secrets are configured.
 
-There are no known product defects remaining. The only live-site step still depends on the deployment service accepting the pushed static artifact.
+There are no known product defects remaining.

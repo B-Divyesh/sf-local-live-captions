@@ -30,4 +30,11 @@ Repair commit: `55210f7528479699539d7a2a25ac3a1559b1a8d9`. Verification date: 29
 | F-2-7 | Replaced “Ask, then start” with “Confirm consent and start captions.” | Landing copy audit. |
 | F-2-8 | Replaced “local model” and every SRT-only action label with plain language. | Landing and demo UI assertions in `npm test`. |
 
-Local screenshots and live deployment checks are recorded in the final handoff after deployment.
+Live recheck passed after deployment at <https://local-live-captions.sociobot.in>:
+
+- `.factory/verify-polish-2-live/verify.json` records a cold 200 response,
+  no console errors, title/lang/main/alt checks, and the production screenshot.
+- Axe found no serious or critical issues on `/`, `/demo`, `/privacy`, or
+  `/terms`.
+- A fresh mobile live browser verified `?demo=1`, the banner/reset/exit flow,
+  section-link focus after cross-route navigation, and the styled live 404.
