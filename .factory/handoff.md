@@ -1,146 +1,87 @@
-# Local Live Captions — repair handoff
+# Local Live Captions — independent verification 10 handoff
 
 ## Outcome
 
-The release-blocking stale-installer defect from independent verification 9 is
-repaired. Version `0.1.8` binds the static site, release workflow, release
-manifest, and public download selection to one source commit. A release with an
-older tag or a different commit now fails closed with “Downloads are being
-published” instead of being offered to visitors.
+**FAIL — do not release candidate
+`3d56e7f2b3492daccce2107532b6c41f4b661a75`.**
 
-The repair preserves the researched desktop-app scope, Tauri 2 packaging,
-local speech processing, demo sandbox, privacy behavior, and every behavior
-that passed candidate `108dc52d41d58cd6d6e1712646e2df7e6f26d0d5`.
+The prior stale-installer failure is repaired and all claims, source gates,
+native acceptance tests, production builds, deployment identity checks,
+published-package checks, accessibility audits, privacy checks, and performance
+budgets pass. A new independent first-read test found one release blocker: at
+1366 × 768 the audience sentence is clipped and **Try it with sample data** is
+entirely below the initial viewport. This violates the work order's explicit
+first-screen acceptance rule.
 
-## Verifier finding and root cause
+No product code was changed during verification. Full evidence and command
+results are in `.factory/verification-10.md`.
 
-Independent verification 9 found one Major defect: the live site matched the
-candidate, but its primary download selected release `v0.1.7` at older commit
-`4c24e8f0d6ebf5910acbd00b8ffe7840750ba643`. The candidate was not covered by a
-release tag. The site trusted any cached or latest GitHub release without
-checking that its source matched the deployed build.
+## Required repair
 
-## Repair
+Make the cold landing screen fit the complete audience sentence, sample action,
+action explanation, and three facts at ordinary desktop sizes including
+1366 × 768. The current compact rule stops at `max-height: 760px`, producing a
+sharp failure at 768 px. Add a 1366 × 768 assertion to the first-screen E2E
+coverage.
 
-- Bumped all product version sources to `0.1.8`.
-- Embedded the product version and source SHA into the Vite site build.
-- Scoped cached release metadata to the exact version and source SHA.
-- Rejected GitHub releases whose tag or target commit differs from the site.
-- Made both one-line installers compare the latest release with the deployed
-  site's generated `release-identity.json` before downloading any package.
-- Removed the legacy unscoped `llc:release` cache entry during migration.
-- Added `scripts/verify-release-source.mjs`. The workflow now rejects malformed
-  tags, tag/version mismatches, package/Tauri/Cargo version drift, and a tag
-  that does not resolve to the workflow commit.
-- Added the source commit to generated `latest.json`.
-- Pipes GitHub release JSON to standard `jq` when adding that commit, avoiding
-  unsupported argument forwarding through the GitHub CLI's `--jq` option.
-- Updated the service-worker cache to `llc-shell-v6` so repaired site files
-  replace the prior cached shell.
-- Documented the exact release identity rule in the README and copy audit.
+## Findings
 
-## Exact regression coverage
+- **Major:** first-read action is below the fold at 1366 × 768. Audience bottom
+  792.19 px; action y=820.19–872.53; facts y=908.53–1036.56.
+- **Minor:** Android is detected as Linux and receives an AppImage link.
+- Critical: none.
+- Moderate: none.
 
-- `tests/unit/release-config.test.ts` proves the release workflow invokes the
-  source gate, writes the source commit to `latest.json`, and keeps every
-  version source aligned. It directly rejects both an older tag and the right
-  tag on the wrong commit.
-- `tests/e2e/site.spec.ts` mocks three public release states. The site rejects
-  `v0.1.7`, rejects `v0.1.8` from an older commit, and offers the platform
-  installer only for `v0.1.8` at the embedded build SHA.
-- `tests/fixtures/release-v0.1.8.json` is the manifest regression fixture.
-- `tests/unit/install-release-identity.test.ts` executes the POSIX installer
-  against a controlled release API. It rejects an older source before download,
-  then verifies the checksum and installs the exact matching source.
+Evidence: `.factory/evidence-verification-10-first-read-1366x768-fail.png`.
 
-## Local verification
+## What passed
 
-Run from a clean checkout:
+- All 26 `.factory/claims.json` entries after the documented clean install and
+  system prerequisites.
+- `npm test`, typecheck, lint/Clippy, crash recovery, Rust format/test/check,
+  real Linux audio acceptance, `npm run build`, and the exact Tauri release
+  build.
+- Real isolated PulseAudio monitor capture with local English and German
+  Whisper transcription, SRT output, restart, and no raw-audio file.
+- Live demo pause/resume, 20/42 px boundaries, TXT/SRT downloads, sandbox reset,
+  invalid-input recovery, offline reload, and service-worker activation.
+- Axe on all public routes and the 404 in both themes: zero violations. Keyboard
+  focus, range controls, 44 px mobile targets, reduced motion, and 200% text
+  resize passed.
+- Demo request log was same-origin only. Security/cache headers passed. The
+  license endpoint allowed 30 requests and returned 429 plus `Retry-After: 3`
+  on request 31.
+- All 30 candidate site files byte-match live. Tag/release/manifest/site all
+  identify the candidate. GitHub Actions release run `33273539176` succeeded.
+- Published AppImage checksum matched `SHA256SUMS`; the live one-line installer
+  installed it into an isolated directory and the app launched. Linux, Windows,
+  and macOS release assets are present.
+- Mobile Lighthouse: 96 performance, 100 accessibility, 100 best practices,
+  100 SEO; LCP 2.2 s, TBT 170 ms, CLS 0.012.
+
+## Reproduce
 
 ```sh
 npm ci
 npm test
 npm run typecheck
 npm run lint
+npm run test:browser-lifecycle
 cargo fmt --check --manifest-path src-tauri/Cargo.toml
 cargo test --manifest-path src-tauri/Cargo.toml
 cargo check --manifest-path src-tauri/Cargo.toml
-npm run test:browser-lifecycle
 npm run test:linux-audio
 npm run build
 APPIMAGE_EXTRACT_AND_RUN=1 CI=true npm run tauri build
 ```
 
-Observed results on 29 August 2026:
+Native checks require the Linux packages listed in
+`.github/workflows/release.yml`. The first pre-install claim attempt in the
+untouched clone could not load uninstalled test/native dependencies; every
+entry passed after that documented setup.
 
-- Clean install: 66 packages, 0 vulnerabilities.
-- Unit/integration: 19 Vitest tests passed.
-- Browser matrix: desktop 23 passed with 4 expected skips; 390 px mobile 24
-  passed with 3 expected skips.
-- TypeScript, ESLint, Clippy with denied warnings, Rust format, Rust check, and
-  Rust tests passed. Rust tests reported 9 passed and 2 acceptance-only tests
-  ignored as designed.
-- Browser lifecycle recovery passed. Its injected first-process crash produced
-  the expected retry marker.
-- Real Linux audio acceptance passed with isolated PulseAudio monitor capture,
-  local English `tiny.en` and German `base` transcription, SRT export, restart,
-  and unchanged model storage.
-- `npm run build` produced `dist/site` and `dist/app`. The initial site payload
-  is 9.77 KB gzip JavaScript and 4.86 KB gzip CSS.
-- The exact Tauri build produced AppImage, DEB, and RPM packages. The local
-  AppImage stayed open through the 10-second Xvfb consumer smoke test.
-- Local URL verification passed `/` and `/demo` with zero console or page
-  errors. Desktop and 390 px evidence is in
-  `.factory/qa/repair-7-verify-home/` and
-  `.factory/qa/repair-7-verify-demo/`.
-- Playwright with Axe checked `/`, `/demo`, `/privacy`, and `/terms` in light
-  and dark modes: zero violations in all eight cases. The standalone Axe CLI
-  was not used because its downloaded ChromeDriver 152 cannot drive the
-  worker's preinstalled Chromium 145; the supported Playwright Axe integration
-  exercised the same Axe engine instead.
-- All 26 claims passed through `npm test`, the focused Rust suite, and
-  `npm run test:linux-audio`. Demo isolation, no cross-origin demo traffic,
-  keyboard use, offline reload, export, reset, and update behavior remain
-  covered.
+## Evidence limits
 
-Local Linux package evidence before publication:
-
-| Package | Bytes | SHA-256 |
-| --- | ---: | --- |
-| AppImage | 81,250,808 | `69c03a3cbf12b2ad0a07b8d5deaca2a2c1c14a8c238050bd1572217d8562372f` |
-| DEB | 5,436,088 | `c758b684e4d34b4f6a8a1d7b5292c61267b860c94476f173d026766909691790` |
-| RPM | 5,435,910 | `1befddc87e9e0bd247bb4a7d7fab9a0bf059eee3bff17c38cfbb8b49dd5a2bda` |
-
-Release packages are built independently on GitHub Actions, so their public
-checksums are verified from the published `SHA256SUMS` rather than expected to
-equal these local hashes.
-
-## Release and deployment
-
-Tag `v0.1.8` points to the repair commit containing this handoff. The `Build
-desktop release` workflow must pass its source-identity gate and all QA before
-publishing AppImage, DEB, RPM, DMG, macOS archive, MSI, EXE, `SHA256SUMS`, and
-`latest.json`. The manifest records that same source commit.
-
-The static landing site is built with that repair SHA and deployed from
-`dist/site` to <https://local-live-captions.sociobot.in>. Final release checks
-confirm the GitHub release target, `latest.json` commit, site build footer,
-platform button, both installer identity guards, installer checksum, launched
-public AppImage, live routes, service worker, headers, keyboard path, 390 px
-layout, Axe results, and mobile Lighthouse scores.
-
-## Deployment command
-
-```sh
-VITE_BUILD_SHA="$(git rev-parse HEAD)" npm run build:site
-/opt/fleet/lib/deploy-static.sh local-live-captions dist/site
-```
-
-## Known non-blocking limits
-
-- Desktop packages are intentionally unsigned. macOS and Windows signing need
-  operator certificates. The workflow currently expects no signing secrets.
-- The brief's 20-minute human retention target still needs a human pilot. The
-  product makes no retention or accuracy guarantee.
-- Windows and macOS packages are built and manifest-checked in CI. Only the
-  Linux AppImage can be launched in this Linux worker.
+The 20-minute, 75% human retention success measure still needs a user pilot.
+Only the Linux package could be launched here; Windows/macOS were validated by
+the successful release workflow, asset manifest, and checksums.
