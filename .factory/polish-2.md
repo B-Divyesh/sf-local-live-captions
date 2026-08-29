@@ -1,6 +1,6 @@
 # Polish round 2 — review finding closure
 
-Repair commit: `d9e747cffbd102deb7055da41c7bda2e2e5f4def`. Verification date: 29 August 2026.
+Repair commit: `55210f7528479699539d7a2a25ac3a1559b1a8d9`. Verification date: 29 August 2026.
 
 | Finding | Change made | Evidence |
 |---|---|---|
