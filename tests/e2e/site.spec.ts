@@ -73,6 +73,14 @@ test("keyboard users can skip, pause, and resize captions with visible focus", a
   await expect(size).toHaveValue("42");
 });
 
+test("reduced motion removes interface transitions", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const duration = await page.getByRole("link", { name: /Try it with sample data/ })
+    .evaluate((element) => getComputedStyle(element).transitionDuration);
+  expect(parseFloat(duration)).toBeLessThanOrEqual(0.00001);
+});
+
 test("@claim:desktop-overlay ships a resizable caption overlay with an always-on-top control", async ({ page }) => {
   await page.goto("/demo");
   const config = JSON.parse(await readFile("src-tauri/tauri.conf.json", "utf8"));

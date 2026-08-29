@@ -1,84 +1,123 @@
 # Repair handoff — Local Live Captions 0.1.3
 
-Repaired every release blocker from `.factory/verification-3.md` for candidate
-`491726b573aabbc95079cc5e3e24f8d54e9e822c`. The artifact remains a Tauri 2
-desktop app with its static companion site and static deployment class.
+## Outcome
+
+Release blockers from verifier report commit
+`a4c3e0d981e55852bc6292ef44b4f5acaefe97d5` remain repaired, and the
+controller's later Chromium lifecycle blocker is fixed. Work started from
+candidate `eb946e6faa5e3edb33d4fa4985393a8cad00290f`. The artifact remains a
+Tauri 2 desktop app with a static companion site; the deployment class remains
+static.
+
+The final product commits are:
+
+- `6b341c3` — isolate browser lifecycle across QA specs.
+- `494058c` — preserve the 390 px layout at 200% text size.
 
 ## Repairs
 
-- Regenerated `src-tauri/Cargo.lock`; the root package is now correctly locked
-  at `0.1.3`, so normal Cargo commands leave a clean checkout.
-- Expanded `.factory/claims.json` from 10 to 19 public claims. Every claim has
-  exactly one tagged regression test. The new inventory covers raw-audio
-  storage, in-memory transcripts, telemetry/trackers, consent, local model
-  storage, monitor validation, call/speaker boundaries, unsigned installers,
-  and the full Linux monitor job.
-- Moved model downloading into a reusable local-data-directory helper and
-  added an explicit monitor-availability check immediately before PulseAudio or
-  PipeWire monitor capture starts.
-- Added `npm run test:linux-audio`: it starts an isolated PulseAudio null sink,
-  plays the shipped public-domain JFK speech fixture, downloads the real
-  `tiny.en` model into ignored test cache, captures from the monitor, asserts
-  Whisper output, validates SRT formatting, then opens a second capture after
-  the first stops. The release workflow installs PulseAudio and runs this gate.
-- Added fixture provenance in `tests/fixtures/README.md`. `jfk.wav` SHA-256:
-  `59dfb9a4acb36fe2a2affc14bacbee2920ff435cb13cc314a08c13f66ba7860e`.
+- Desktop and 390 px mobile projects now run in separate Playwright processes.
+  Every test launches and closes its own Chromium process and context. No page,
+  context, browser, service worker, local storage, or preview server is shared
+  across tests or projects.
+- Release CI explicitly uses `CI=1`, one worker, a fresh preview server, and one
+  retry after an unexpected browser exit.
+- `npm run test:browser-lifecycle` sends Linux `SIGSEGV` to the isolated mobile
+  Chromium process. Debug output showed `Received signal 11` and
+  `signal=SIGSEGV`; Playwright then launched a new PID and passed the clean
+  390 px retry. The failed-attempt trace is retained by Playwright.
+- A governance regression checks that the split runner, per-test launch
+  fixture, CI retry, and fresh-server policy cannot be removed silently.
+- Keyboard coverage exposed and fixed a real skip-link defect. Enter on
+  **Skip to content** now moves focus to `<main>`. The same test proves visible
+  focus, Space to pause captions, and End to set caption size.
+- A 200% text regression exposed 58 px of mobile overflow. Responsive grid
+  tracks now shrink correctly, heading words wrap only when necessary, and the
+  measured overflow at 390 px is zero.
+- The prior repair's 19-claim inventory, stale Rust lockfile fix, monitor
+  validation, and real PulseAudio/Whisper acceptance fixture were preserved.
 
-## Verification
+## Exact verification evidence
 
-Ran from a clean Node install with the release workflow's Linux dependencies:
+The untouched initial `CI=1 npx playwright test --workers=1` invocation passed
+23 tests with 3 expected skips, confirming the verifier's crash was transient.
+The controlled probe then reproduced the exact process failure deterministically
+and proved recovery.
 
-```sh
-npm ci
+After a clean `npm ci` (66 packages, 0 vulnerabilities), and again with a 6.6
+GiB `src-tauri/target` tree present, the final complete suite passed twice in
+succession:
+
+```text
+CI=1 npm test
+13 Vitest passed
+Desktop Chromium: 13 passed, 2 expected project skips
+390 px Chromium: 14 passed, 1 expected download skip
+```
+
+Other passing gates:
+
+```text
 npx tsc --noEmit
-npm test                         # 12 Vitest; 23 Playwright passed, 3 expected skips
-npx playwright test --project=chromium --workers=1 # 11 passed, 2 expected skips
-npx playwright test --project=mobile --workers=1   # 12 passed, 1 expected skip
 cargo fmt --check --manifest-path src-tauri/Cargo.toml
-cargo test --manifest-path src-tauri/Cargo.toml    # 10 passed, one acceptance test intentionally delegated below
+cargo test --manifest-path src-tauri/Cargo.toml
+  10 passed; 1 acceptance test intentionally delegated to the next command
 cargo check --manifest-path src-tauri/Cargo.toml
-npm run test:linux-audio          # isolated monitor → real model → captions → SRT → restart
-npm run build                      # dist/site and dist/app
+npm run test:linux-audio
+  isolated PulseAudio monitor → JFK fixture → real tiny.en captions → SRT → restart
+npm run build
 APPIMAGE_EXTRACT_AND_RUN=1 CI=true npm run tauri build
 ```
 
-The Linux audio acceptance run passed with the captured phrase “ask not what
-your country …”; it uses no host audio device. The produced installers are:
+`npm run build` produced `dist/site` and `dist/app`. Final site assets are
+26,102 bytes JavaScript and 17,814 bytes CSS, within the product budgets. Final
+Linux package SHA-256 values:
 
-- `Local Live Captions_0.1.3_amd64.AppImage` — SHA-256
-  `e02e0f7e49d551f9805edd6076ca301c43586caa96cf6ea4f8985179fda326ec`
-- `Local Live Captions_0.1.3_amd64.deb` — SHA-256
-  `374caa96ce4690fe6958fbd252eb705a4affe44e5bd1d67805ed64c548b4a629`
-- `Local Live Captions-0.1.3-1.x86_64.rpm` — SHA-256
-  `c84f7902511213013a5a090831ca6b864a53abbf80d40e06b4fadaf76bb1931e`
+- AppImage: `d6f3e32a57a23008418480c8464897625a33a8a24897b64a23b00c51f9d265bd`
+- DEB: `fd0c0f4fe4ddbd660feeda7b1986311281de4d40cfef79fb21962c14e90d7cb7`
+- RPM: `47be4c0ba157fe5932bdbec75e8f7c78655dbbbf36c424c433151a26df5aa65b`
 
-The AppImage stayed running under Xvfb for 12 seconds until the intentional
-timeout. Its audio-backend messages only reflect that Xvfb has no host audio
-device; the app emitted no application error.
+The final AppImage stayed open under Xvfb for 12 seconds until the intentional
+timeout. EGL and audio-backend warnings reflect the headless container; there
+was no application error.
+
+## Accessibility, privacy, offline, update, and response policy
+
+- Playwright axe found no serious or critical issue in light and dark modes.
+- The live dark 390 px `/demo` axe run also found none. At 200% text size it
+  has zero horizontal overflow.
+- Keyboard, focus, touch targets, offline reload, export, isolated demo state,
+  service-worker control/update, route titles, one-h1 structure, and reduced
+  motion are covered by the browser suite.
+- Live demo request capture remained same-origin only. No console or page
+  errors occurred.
+- Live response checks returned HTTP 200 for `/`, HTTP 404 for an unknown URL,
+  one-year immutable caching for hashed assets, 30-second revalidation for
+  HTML, HSTS, `nosniff`, strict-origin referrer policy, permissions policy, and
+  the expected restrictive CSP.
+- The supporter checkout returned HTTP 303 to Dodo. GitHub release identity is
+  `v0.1.3` with macOS, Windows, Linux, `SHA256SUMS`, and `latest.json` assets.
+  The live detected Linux button resolves directly to the published AppImage.
+- Final mobile Lighthouse: performance 99, accessibility 100, best practices
+  100, SEO 100; LCP 1.81 s, CLS 0.063, total blocking time 53 ms.
 
 ## Deployment
 
-The static site is deployed from `dist/site` with:
+The final static site was deployed from `dist/site` with:
 
 ```sh
 /opt/fleet/lib/deploy-static.sh local-live-captions dist/site
 ```
 
-Post-deploy URL evidence is recorded with:
-
-```sh
-/opt/fleet/lib/verify-url.sh https://local-live-captions.sociobot.in .factory/verify-url-repair
-```
-
-Deployment `93cd102a-cf3d-4138-b395-96fb29de799d` succeeded. The live verifier
-returned HTTP 200 in 675 ms with no console errors, title
-`Local Live Captions — Caption Linux audio locally`, `lang=en`, one h1, a main
-landmark, and no missing image alt text or unlabeled buttons. Evidence lives in
-`.factory/verify-url-repair/`.
+Deployment `a95f8c9c-b007-4c54-90ec-6f484f19248f` succeeded. The custom URL is
+<https://local-live-captions.sociobot.in>. Post-deploy `verify-url.sh` returned
+HTTP 200 in 694 ms with no console errors, the correct title and `lang=en`, one
+h1, a main landmark, no missing image alt text, and no unlabeled buttons.
+Evidence is in `.factory/verify-url-repair-4/`.
 
 ## Known limits / operator action
 
 macOS and Windows installers remain intentionally unsigned. Supply
-`APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` to the release workflow only if
-signed installers are required. No product behavior is gated on a supporter
-license.
+`APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` only if signed installers are required.
+No accessibility or caption feature is gated by payment. No release blocker
+remains.
