@@ -1,13 +1,15 @@
 # Polish round 1 — review finding closure
 
-Repair source commit: `6e5c0ddabddc9375a6713b79da8425ef12c76123`.
+Repair source commits: `6e5c0ddabddc9375a6713b79da8425ef12c76123`,
+`17d47c8ee4494f6cd3f1c3ecd643d1f6557c64fc`, and
+`8deb0c33b78c40164717a60a5b77d49c46c3075f`.
 Live verification: <https://local-live-captions.sociobot.in> on 29 August 2026.
 
 | Finding | Change made | Evidence |
 |---|---|---|
 | F-1-1 | Replaced “any Linux audio” with “Caption Linux calls and recordings locally.” | Live first screen: `.factory/qa/polish-1-live-first-read.png`; live `/` heading check. |
-| F-1-2 | Added original German fixture, a real multilingual base-model monitor test, and a claim entry. | `npm run test:linux-audio`; `@claim:german-caption-end-to-end` auto-detected German and returned German words. |
-| F-1-3 | Replaced “no network requests” with “sends no data to other sites.” | `@claim:private-local`; cold live `/?demo=1` request log had `external: []`. |
+| F-1-2 | Added original German fixture, a real multilingual base-model monitor test, and a claim entry. The assertion accepts varied real German output only when at least three recognized German markers are present. | `npm run test:linux-audio`; `@claim:german-caption-end-to-end` auto-detected German and returned German words. |
+| F-1-3 | Replaced “no network requests” with “sends no data to other sites.” | `@claim:private-local`; final cold live `/?demo=1` request log had `external: []` and no console errors. |
 | F-1-4 | Replaced untestable merchant/refund assertions with accurate Dodo-through-Sociobot checkout wording. | `@claim:free-and-paid`; live `/` copy check. |
 | F-1-5 | Labeled the payment action as an external checkout for assistive technology. | Live `/` accessible-link check; `@claim:free-and-paid`. |
 | F-1-6 | Renamed the overlay section “Resizable caption overlay.” | Live `/` and `.factory/qa/polish-1-live-first-read.png`. |
@@ -27,6 +29,8 @@ Additional acceptance work: primary action now opens `/?demo=1`; the demo has
 the required banner, Reset demo, and Start for real controls. The site updates
 route-specific metadata, moves focus on SPA route changes, has a designed real
 404 response, and keeps mobile layout free of horizontal overflow.
+
+Final URL-verifier evidence: `.factory/verify-url-polish-1-live-017/verify.json`.
 
 Evidence images: `.factory/qa/polish-1-live-first-read.png`,
 `.factory/qa/polish-1-live-demo-desktop.png`,

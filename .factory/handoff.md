@@ -2,10 +2,12 @@
 
 ## Outcome
 
-Repair source commit `6e5c0ddabddc9375a6713b79da8425ef12c76123` resolves all
-17 findings in `.factory/review-1.md`. The static site was deployed from its
-`dist/site` build to <https://local-live-captions.sociobot.in> and cold-checked
-on 29 August 2026. Finding-by-finding closure is in `.factory/polish-1.md`.
+Repair source commits `6e5c0ddabddc9375a6713b79da8425ef12c76123`,
+`17d47c8ee4494f6cd3f1c3ecd643d1f6557c64fc`, and
+`8deb0c33b78c40164717a60a5b77d49c46c3075f` resolve all 17 findings in
+`.factory/review-1.md`. The static site was deployed from its `dist/site`
+build to <https://local-live-captions.sociobot.in> and cold-checked on
+29 August 2026. Finding-by-finding closure is in `.factory/polish-1.md`.
 
 ## What changed
 
@@ -20,6 +22,10 @@ on 29 August 2026. Finding-by-finding closure is in `.factory/polish-1.md`.
   removing the local supporter-license keys.
 - Added route metadata updates, accurate checkout disclosure, real 404 copy,
   and version alignment at 0.1.7.
+- Stabilized the real German fixture assertion by requiring three of a broad
+  set of recognized German markers. Switched the release lookup to GitHub's
+  200-on-empty releases-list endpoint, preventing a no-release 404 console
+  error while keeping the same one-hour cache and fallback state.
 - Updated the 24-entry claims inventory, demo documentation, catalog sentence,
   copy audit, and fixture provenance.
 
@@ -52,25 +58,29 @@ Results from the final local build:
 - `npm run lint`, TypeScript, Rust formatting, and `cargo test`: passed. Rust
   ran 11 passed with two externally invoked audio tests ignored in the normal
   unit run.
-- `npm run build`: produced `dist/site` and `dist/app`. Site JavaScript is
-  27.91 KB raw / 9.46 KB gzip; CSS is 18.25 KB raw / 4.80 KB gzip.
+- `npm run build`: produced `dist/site` and `dist/app`. Final site JavaScript
+  is 27.97 KB raw / 9.47 KB gzip; CSS is 18.25 KB raw / 4.80 KB gzip.
 - Local URL verifier passed title, `lang`, one h1, main landmark, image alt,
   button names, and console checks. Evidence:
   `.factory/verify-url-polish-1/verify.json`.
 
 ## Live deployment checks
 
-- `deploy-static.sh local-live-captions dist/site` succeeded. The deployed
-  Static Web App is `sf-local-live-captions` in Central US.
+- `deploy-static.sh local-live-captions dist/site` succeeded for deployment
+  `aa5fcd78-2728-4bc4-984f-db7b425d837a`. The deployed Static Web App is
+  `sf-local-live-captions` in Central US.
 - `/`, `/?demo=1`, `/privacy`, and `/terms` returned HTTP 200. An unknown URL
   returned HTTP 404 with “Page not found.”
-- Cold `/?demo=1` had no cross-origin requests or console errors, showed the
-  demo banner and Reset demo control, and had zero mobile overflow at 390 px.
+- A fresh cold `/?demo=1` had no cross-origin requests or console errors,
+  showed the demo banner, Reset demo, and Start for real controls, and had
+  zero mobile overflow at 390 px. Landing made only its documented GitHub
+  release-metadata request and had no console errors.
 - Route titles and headings were checked live for home, privacy, terms, and
   404. Axe found zero serious or critical violations on the demo and each
   checked route. The expected failed-resource console message occurred only
   while deliberately loading the unknown route.
-- Live URL-verifier evidence: `.factory/verify-url-polish-1-live/verify.json`.
+- Live URL-verifier evidence:
+  `.factory/verify-url-polish-1-live-017/verify.json`.
   Screenshots: `.factory/qa/polish-1-live-first-read.png`,
   `.factory/qa/polish-1-live-demo-desktop.png`, and
   `.factory/qa/polish-1-live-demo-mobile.png`.
