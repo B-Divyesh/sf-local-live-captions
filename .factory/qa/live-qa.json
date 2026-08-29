@@ -1,0 +1,189 @@
+{
+  "testedAt": "2026-08-29T11:30:30.915Z",
+  "base": "https://local-live-captions.sociobot.in",
+  "scenarios": {
+    "desktop": {
+      "firstRead": {
+        "status": 200,
+        "responseHeaders": {
+          "cache-control": "public, must-revalidate, max-age=30",
+          "content-encoding": "br",
+          "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://api.sociobot.in; object-src 'none'; base-uri 'self'; form-action 'self' https://api.sociobot.in; frame-ancestors 'none'",
+          "content-type": "text/html",
+          "date": "Sat, 29 Aug 2026 11:30:31 GMT",
+          "etag": "\"62112055\"",
+          "last-modified": "Sat, 29 Aug 2026 10:45:13 GMT",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+          "vary": "Accept-Encoding",
+          "x-content-type-options": "nosniff",
+          "x-dns-prefetch-control": "off",
+          "x-xss-protection": "1; mode=block"
+        },
+        "title": "Local Live Captions — Caption Linux audio locally",
+        "h1": [
+          "Caption any Linux audio locally"
+        ],
+        "audience": "For deaf and hard-of-hearing students when lectures, calls, or recordings have no captions.",
+        "actionText": "Try it with sample data →",
+        "actionBox": {
+          "x": 64,
+          "y": 719.484375,
+          "width": 250.25,
+          "height": 52.34375
+        },
+        "actionFullyInViewport": false,
+        "mainCount": 1,
+        "htmlLang": "en",
+        "axe": []
+      },
+      "demoInitial": {
+        "url": "https://local-live-captions.sociobot.in/demo",
+        "banner": true,
+        "heading": "See live captions before installing",
+        "transcriptRows": 4
+      },
+      "paused": true,
+      "maxSize": "42",
+      "txt": {
+        "filename": "sample-transcript.txt",
+        "lines": 4,
+        "hasGravity": true
+      },
+      "srt": {
+        "filename": "sample-captions.srt",
+        "cues": 4,
+        "hasGravity": true
+      },
+      "resetState": {
+        "real": "yes",
+        "demo": null
+      },
+      "skipOutline": {
+        "style": "none",
+        "width": "0px",
+        "color": "rgb(255, 250, 240)"
+      },
+      "mainFocused": true,
+      "demoAxe": [],
+      "events": {
+        "consoleErrors": [],
+        "pageErrors": [],
+        "requests": [
+          "https://local-live-captions.sociobot.in/",
+          "https://local-live-captions.sociobot.in/assets/index-BYjYGpwe.js",
+          "https://local-live-captions.sociobot.in/assets/index-BUM5e5ek.css",
+          "https://api.github.com/repos/B-Divyesh/sf-local-live-captions/releases/latest",
+          "https://local-live-captions.sociobot.in/assets/listening-room-1120.webp",
+          "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2"
+        ]
+      }
+    },
+    "mobile": {
+      "landing": {
+        "actionBox": {
+          "x": 20,
+          "y": 493.046875,
+          "width": 245.40625,
+          "height": 50.796875
+        },
+        "actionFullyInViewport": true,
+        "overflow": 0,
+        "axe": []
+      },
+      "demoAxe": [],
+      "overflowAt200": 0,
+      "events": {
+        "consoleErrors": [],
+        "pageErrors": [],
+        "requests": [
+          "https://local-live-captions.sociobot.in/",
+          "https://local-live-captions.sociobot.in/assets/index-BYjYGpwe.js",
+          "https://local-live-captions.sociobot.in/assets/index-BUM5e5ek.css",
+          "https://api.github.com/repos/B-Divyesh/sf-local-live-captions/releases/latest",
+          "https://local-live-captions.sociobot.in/assets/listening-room-720.webp",
+          "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2"
+        ]
+      }
+    },
+    "darkReducedMotion": {
+      "transition": "1e-05s",
+      "landingAxe": [],
+      "demoAxe": [],
+      "events": {
+        "consoleErrors": [],
+        "pageErrors": [],
+        "requests": [
+          "https://local-live-captions.sociobot.in/",
+          "https://local-live-captions.sociobot.in/assets/index-BYjYGpwe.js",
+          "https://local-live-captions.sociobot.in/assets/index-BUM5e5ek.css",
+          "https://api.github.com/repos/B-Divyesh/sf-local-live-captions/releases/latest",
+          "https://local-live-captions.sociobot.in/assets/listening-room-1120.webp",
+          "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2",
+          "https://local-live-captions.sociobot.in/demo",
+          "https://local-live-captions.sociobot.in/assets/index-BYjYGpwe.js",
+          "https://local-live-captions.sociobot.in/assets/index-BUM5e5ek.css",
+          "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2"
+        ]
+      }
+    },
+    "pwa": {
+      "update": {
+        "scope": "https://local-live-captions.sociobot.in/",
+        "scriptURL": "https://local-live-captions.sociobot.in/sw.js",
+        "state": "activated"
+      },
+      "offline": {
+        "heading": "See live captions before installing",
+        "banner": true,
+        "resumeVisible": true
+      },
+      "events": {
+        "consoleErrors": [],
+        "pageErrors": [],
+        "requests": [
+          "https://local-live-captions.sociobot.in/demo",
+          "https://local-live-captions.sociobot.in/assets/index-BYjYGpwe.js",
+          "https://local-live-captions.sociobot.in/assets/index-BUM5e5ek.css",
+          "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2",
+          "https://local-live-captions.sociobot.in/demo",
+          "https://local-live-captions.sociobot.in/assets/index-BYjYGpwe.js",
+          "https://local-live-captions.sociobot.in/assets/index-BUM5e5ek.css",
+          "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2"
+        ]
+      }
+    },
+    "licenseRecovery": {
+      "blankMessage": "Enter the license token from your receipt.",
+      "invalidMessage": "This license is not active. Check the token or buy a supporter license.",
+      "events": {
+        "consoleErrors": [],
+        "pageErrors": [],
+        "requests": [
+          "https://local-live-captions.sociobot.in/",
+          "https://local-live-captions.sociobot.in/assets/index-BYjYGpwe.js",
+          "https://local-live-captions.sociobot.in/assets/index-BUM5e5ek.css",
+          "https://api.github.com/repos/B-Divyesh/sf-local-live-captions/releases/latest",
+          "https://local-live-captions.sociobot.in/assets/listening-room-1120.webp",
+          "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2",
+          "https://api.sociobot.in/api/v1/products/local-live-captions/verify?license=qa-invalid-1788003046919"
+        ]
+      }
+    }
+  }
+}
