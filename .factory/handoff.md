@@ -91,7 +91,22 @@ Observed 29 August 2026:
 
 ## Release and deployment
 
-The source-bound release and static deployment use the final repair commit:
+Repair source commit `6ec51c0352298721e6ef7905da7c1485ce526fab` is
+published as annotated tag `v0.1.9`. GitHub Actions run
+[`33279399285`](https://github.com/B-Divyesh/sf-local-live-captions/actions/runs/33279399285)
+completed successfully. Its verification, Ubuntu, Windows, universal macOS,
+and manifest jobs all passed.
+
+The release contains AppImage, DEB, RPM, DMG, universal macOS archive, MSI,
+EXE, `SHA256SUMS`, and `latest.json`. Both the release target and
+`latest.json` identify the repair source commit. The published AppImage is
+83,802,616 bytes with SHA-256
+`7fefb71ae9de933feb02a3a82ad068213476c8b26979db32016e1b0786c5fbf8`.
+It passes the published checksum. The live one-line installer downloaded that
+exact file into an isolated consumer directory, set mode 755, and the installed
+app stayed running for the 15-second Xvfb smoke window.
+
+The source-bound release and static deployment used:
 
 ```sh
 git tag -a v0.1.9 -m "Local Live Captions v0.1.9"
@@ -100,10 +115,42 @@ VITE_BUILD_SHA="$(git rev-list -n 1 v0.1.9)" npm run build:site
 /opt/fleet/lib/deploy-static.sh local-live-captions dist/site
 ```
 
-GitHub Actions is the only desktop package builder. Its release workflow runs
-the full verification job, then builds macOS, Windows, and Linux packages and
-publishes `SHA256SUMS` plus `latest.json`. The live evidence and exact run,
-release, checksum, and deployment identities are recorded after publication.
+GitHub Actions was the only desktop package builder. Static deployment
+`0d5e70e3-159d-4f11-87e2-7a654a1bce22` succeeded, and the custom domain
+returned HTTPS 200. Deployed `release-identity.json` reports `v0.1.9` and
+`6ec51c0352298721e6ef7905da7c1485ce526fab`. All 30 deployable files in
+`dist/site` byte-match the live site.
+
+## Live verification
+
+- `.factory/qa/repair-8-live-qa.json` reports no failures. The full first-read
+  content fits at 1280 × 720, 1366 × 768, and 1440 × 900. At the exact reported
+  viewport, the final fact ends at 704.64px. At 390 × 844 it ends at 780.67px.
+- Axe reports zero violations on `/`, `/demo`, `/privacy`, `/terms`, and the
+  designed 404 in both themes. Every route has one h1, one main, a header and
+  footer, a distinct title, and `lang=en`. Normal routes have no console or page
+  errors.
+- Keyboard skip, caption pause/resume, and range Home/End pass. Every visible
+  390px target is at least 44px. Normal and 200% text have zero horizontal
+  overflow. Reduced-motion transitions are 0.01ms.
+- Demo traffic is same-origin only. Service worker cache `llc-shell-v7` is
+  active and the demo remains operable after an offline reload. Android makes
+  no GitHub API request and renders no package link.
+- `/opt/fleet/lib/verify-url.sh` passes `/` and `/demo`; evidence is under
+  `.factory/verify-url-repair-8-home/` and
+  `.factory/verify-url-repair-8-demo/`.
+- Fresh mobile Lighthouse: performance 100, accessibility 100, best practices
+  100, SEO 100; FCP 1.2s, LCP 1.4s, TBT 0ms, CLS 0.012, speed index 1.2s, and
+  total transfer 111KiB. Report:
+  `.factory/qa/repair-8-lighthouse-live.json`.
+- HTML returns a 30-second revalidation policy, HSTS, `nosniff`, strict-origin
+  referrer policy, permission denial, and a CSP with header-only
+  `frame-ancestors 'none'`. Hashed assets are one-year immutable and release
+  identity is `no-cache`.
+- Linux, Windows, and macOS user agents select the published AppImage, EXE, and
+  DMG respectively. A live invalid license check returns HTTP 200,
+  `valid:false`, exact-origin CORS, and `Cache-Control: no-store`; checkout
+  returns the expected HTTP 303 to Dodo.
 
 ## Known limits and operator action
 
