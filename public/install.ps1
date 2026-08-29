@@ -1,6 +1,10 @@
 $ErrorActionPreference = "Stop"
 $repository = "B-Divyesh/sf-local-live-captions"
+$identity = Invoke-RestMethod -Uri "https://local-live-captions.sociobot.in/release-identity.json"
 $release = Invoke-RestMethod -Headers @{ Accept = "application/vnd.github+json" } -Uri "https://api.github.com/repos/$repository/releases/latest"
+if ($release.tag_name -ne $identity.tag -or $release.target_commitish -ne $identity.commit) {
+  throw "Downloads for this site build are still being published. Visit https://github.com/$repository/releases"
+}
 $asset = $release.assets | Where-Object { $_.name -match '\.(msi|exe)$' } | Select-Object -First 1
 $checksums = $release.assets | Where-Object { $_.name -eq "SHA256SUMS" } | Select-Object -First 1
 if (-not $asset -or -not $checksums) { throw "The Windows download is not published yet. Visit https://github.com/$repository/releases" }

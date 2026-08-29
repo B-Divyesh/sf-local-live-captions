@@ -4,6 +4,7 @@
     { "route": "/demo", "rewrite": "/index.html" },
     { "route": "/privacy", "rewrite": "/index.html" },
     { "route": "/terms", "rewrite": "/index.html" },
+    { "route": "/release-identity.json", "headers": { "Cache-Control": "no-cache" } },
     { "route": "/assets/*", "headers": { "Cache-Control": "public, max-age=31536000, immutable" } }
   ],
   "globalHeaders": {

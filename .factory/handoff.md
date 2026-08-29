@@ -26,6 +26,8 @@ checking that its source matched the deployed build.
 - Embedded the product version and source SHA into the Vite site build.
 - Scoped cached release metadata to the exact version and source SHA.
 - Rejected GitHub releases whose tag or target commit differs from the site.
+- Made both one-line installers compare the latest release with the deployed
+  site's generated `release-identity.json` before downloading any package.
 - Removed the legacy unscoped `llc:release` cache entry during migration.
 - Added `scripts/verify-release-source.mjs`. The workflow now rejects malformed
   tags, tag/version mismatches, package/Tauri/Cargo version drift, and a tag
@@ -45,6 +47,9 @@ checking that its source matched the deployed build.
   `v0.1.7`, rejects `v0.1.8` from an older commit, and offers the platform
   installer only for `v0.1.8` at the embedded build SHA.
 - `tests/fixtures/release-v0.1.8.json` is the manifest regression fixture.
+- `tests/unit/install-release-identity.test.ts` executes the POSIX installer
+  against a controlled release API. It rejects an older source before download,
+  then verifies the checksum and installs the exact matching source.
 
 ## Local verification
 
@@ -67,7 +72,7 @@ APPIMAGE_EXTRACT_AND_RUN=1 CI=true npm run tauri build
 Observed results on 29 August 2026:
 
 - Clean install: 66 packages, 0 vulnerabilities.
-- Unit/integration: 18 Vitest tests passed.
+- Unit/integration: 19 Vitest tests passed.
 - Browser matrix: desktop 23 passed with 4 expected skips; 390 px mobile 24
   passed with 3 expected skips.
 - TypeScript, ESLint, Clippy with denied warnings, Rust format, Rust check, and
@@ -118,9 +123,9 @@ publishing AppImage, DEB, RPM, DMG, macOS archive, MSI, EXE, `SHA256SUMS`, and
 The static landing site is built with that repair SHA and deployed from
 `dist/site` to <https://local-live-captions.sociobot.in>. Final release checks
 confirm the GitHub release target, `latest.json` commit, site build footer,
-platform button, installer checksum, launched public AppImage, live routes,
-service worker, headers, keyboard path, 390 px layout, Axe results, and mobile
-Lighthouse scores.
+platform button, both installer identity guards, installer checksum, launched
+public AppImage, live routes, service worker, headers, keyboard path, 390 px
+layout, Axe results, and mobile Lighthouse scores.
 
 ## Deployment command
 

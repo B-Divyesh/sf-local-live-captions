@@ -14,10 +14,22 @@ function buildCommit(): string {
   }
 }
 
+const buildSha = buildCommit();
+
 export default defineConfig(({ mode }) => ({
+  plugins: mode === "site" ? [{
+    name: "release-identity",
+    generateBundle() {
+      this.emitFile({
+        type: "asset",
+        fileName: "release-identity.json",
+        source: JSON.stringify({ tag: `v${packageVersion}`, commit: buildSha }),
+      });
+    },
+  }] : [],
   define: {
     __APP_VERSION__: JSON.stringify(packageVersion),
-    __BUILD_SHA__: JSON.stringify(buildCommit()),
+    __BUILD_SHA__: JSON.stringify(buildSha),
     __DESKTOP__: JSON.stringify(mode === "desktop"),
   },
   build: {

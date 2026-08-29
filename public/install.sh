@@ -3,7 +3,19 @@ set -eu
 
 repository="B-Divyesh/sf-local-live-captions"
 api="https://api.github.com/repos/$repository/releases/latest"
+site="https://local-live-captions.sociobot.in"
+identity_json="$(curl -fsSL "$site/release-identity.json")"
 release_json="$(curl -fsSL -H 'Accept: application/vnd.github+json' "$api")"
+expected_tag="$(printf '%s' "$identity_json" | sed -n 's/.*"tag":"\([^"]*\)".*/\1/p')"
+expected_commit="$(printf '%s' "$identity_json" | sed -n 's/.*"commit":"\([^"]*\)".*/\1/p')"
+release_tag="$(printf '%s' "$release_json" | sed -n 's/.*"tag_name": "\([^"]*\)".*/\1/p')"
+release_commit="$(printf '%s' "$release_json" | sed -n 's/.*"target_commitish": "\([^"]*\)".*/\1/p')"
+
+if [ -z "$expected_tag" ] || [ -z "$expected_commit" ] || [ "$release_tag" != "$expected_tag" ] || [ "$release_commit" != "$expected_commit" ]; then
+  echo "Downloads for this site build are still being published. Visit https://github.com/$repository/releases" >&2
+  exit 1
+fi
+
 asset_url="$(printf '%s' "$release_json" | sed -n 's/.*"browser_download_url": "\([^"]*\.AppImage\)".*/\1/p' | head -n 1)"
 checksums_url="$(printf '%s' "$release_json" | sed -n 's/.*"browser_download_url": "\([^"]*SHA256SUMS\)".*/\1/p' | head -n 1)"
 

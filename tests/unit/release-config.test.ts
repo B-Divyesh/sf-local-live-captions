@@ -13,6 +13,7 @@ describe("release configuration regressions", () => {
       "/demo",
       "/privacy",
       "/terms",
+      "/release-identity.json",
       "/assets/*"
     ]);
     expect(routes.some((route) => "navigationFallback" in route)).toBe(false);
@@ -67,12 +68,15 @@ describe("release configuration regressions", () => {
   });
 
   it("@claim:release-artifacts publishes the documented desktop packages and integrity files", async () => {
-    const [workflow, fixture, packageText, tauriText, cargoText] = await Promise.all([
+    const [workflow, fixture, packageText, tauriText, cargoText, shellInstaller, windowsInstaller, viteConfig] = await Promise.all([
       readFile(".github/workflows/release.yml", "utf8"),
       readFile("tests/fixtures/release-v0.1.8.json", "utf8"),
       readFile("package.json", "utf8"),
       readFile("src-tauri/tauri.conf.json", "utf8"),
       readFile("src-tauri/Cargo.toml", "utf8"),
+      readFile("public/install.sh", "utf8"),
+      readFile("public/install.ps1", "utf8"),
+      readFile("vite.config.ts", "utf8"),
     ]);
     const assets = JSON.parse(fixture).assets as string[];
     const packageVersion = JSON.parse(packageText).version as string;
@@ -85,6 +89,10 @@ describe("release configuration regressions", () => {
     expect(workflow).toContain("latest.json");
     expect(workflow).toContain("npm run verify:release-source");
     expect(workflow).toContain("commit:$commit");
+    expect(shellInstaller).toContain("release-identity.json");
+    expect(shellInstaller).toContain('release_commit" != "$expected_commit');
+    expect(windowsInstaller).toContain("$release.target_commitish -ne $identity.commit");
+    expect(viteConfig).toContain('fileName: "release-identity.json"');
     expect(JSON.parse(fixture).tag_name).toBe(`v${packageVersion}`);
     expect(tauriVersion).toBe(packageVersion);
     expect(cargoVersion).toBe(packageVersion);
