@@ -1,4 +1,4 @@
-const CACHE = "llc-shell-v6";
+const CACHE = "llc-shell-v7";
 const CORE = ["/demo", "/privacy", "/terms", "/assets/listening-room-720.webp", "/favicon.svg"];
 self.addEventListener("install", (event) => event.waitUntil((async () => {
   const cache = await caches.open(CACHE);

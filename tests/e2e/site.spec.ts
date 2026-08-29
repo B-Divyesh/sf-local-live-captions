@@ -16,20 +16,24 @@ test("landing page states the job and has one heading", async ({ page }) => {
   expect(accessibility.violations.filter((item) => ["serious", "critical"].includes(item.impact || ""))).toEqual([]);
 });
 
-test("desktop first screen keeps the primary sample action fully visible", async ({ page }, testInfo) => {
+test("desktop first screen keeps the full first-read content visible at ordinary viewport sizes", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "chromium", "desktop Chromium only");
-  await page.setViewportSize({ width: 1280, height: 720 });
   await page.route("https://api.github.com/**", (route) => route.fulfill({ status: 404, body: "{}" }));
-  await page.goto("/");
-  const action = page.getByRole("link", { name: /Try it with sample data/ });
-  const box = await action.boundingBox();
-  expect(box).not.toBeNull();
-  expect(box!.y).toBeGreaterThanOrEqual(0);
-  expect(box!.y + box!.height).toBeLessThanOrEqual(720);
-  for (const fact of await page.locator(".facts li").all()) {
-    const factBox = await fact.boundingBox();
-    expect(factBox).not.toBeNull();
-    expect(factBox!.y + factBox!.height).toBeLessThanOrEqual(720);
+
+  for (const viewport of [{ width: 1280, height: 720 }, { width: 1366, height: 768 }, { width: 1440, height: 900 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    for (const locator of [
+      page.locator(".dek"),
+      page.getByRole("link", { name: /Try it with sample data/ }),
+      page.locator(".hero-action > span"),
+      ...await page.locator(".facts li").all(),
+    ]) {
+      const box = await locator.boundingBox();
+      expect(box, `${await locator.textContent()} at ${viewport.width}x${viewport.height}`).not.toBeNull();
+      expect(box!.y, `${await locator.textContent()} starts above ${viewport.width}x${viewport.height}`).toBeGreaterThanOrEqual(0);
+      expect(box!.y + box!.height, `${await locator.textContent()} ends below ${viewport.width}x${viewport.height}`).toBeLessThanOrEqual(viewport.height);
+    }
   }
 });
 
@@ -47,8 +51,8 @@ test("mobile first screen keeps the three plain facts visible", async ({ page },
 test("download refuses a stale release and selects the exact site build", async ({ page }) => {
   await page.addInitScript(() => { Reflect.deleteProperty(Navigator.prototype, "serviceWorker"); });
   const assets = [
-    { name: "Local.Live.Captions_0.1.8_amd64.AppImage", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.8/Local.Live.Captions_0.1.8_amd64.AppImage" },
-    { name: "Local.Live.Captions_0.1.8_x64_en-US.msi", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.8/Local.Live.Captions_0.1.8_x64_en-US.msi" },
+    { name: "Local.Live.Captions_0.1.9_amd64.AppImage", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.9/Local.Live.Captions_0.1.9_amd64.AppImage" },
+    { name: "Local.Live.Captions_0.1.9_x64_en-US.msi", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.9/Local.Live.Captions_0.1.9_x64_en-US.msi" },
   ];
   let release = { tag_name: "v0.1.7", target_commitish: "older-sha", assets };
   await page.route("https://api.github.com/**", (route) => route.fulfill({
@@ -60,14 +64,30 @@ test("download refuses a stale release and selects the exact site build", async 
   await expect(page.getByText("Downloads are being published.")).toBeVisible();
   await expect(page.getByRole("link", { name: /^Download for/ })).toHaveCount(0);
 
-  release = { tag_name: "v0.1.8", target_commitish: "older-sha", assets };
+  release = { tag_name: "v0.1.9", target_commitish: "older-sha", assets };
   await page.reload();
   await expect(page.getByText("Downloads are being published.")).toBeVisible();
   await expect(page.getByRole("link", { name: /^Download for/ })).toHaveCount(0);
 
-  release = { tag_name: "v0.1.8", target_commitish: buildSha, assets };
+  release = { tag_name: "v0.1.9", target_commitish: buildSha, assets };
   await page.reload();
-  await expect(page.getByRole("link", { name: /^Download for/ })).toHaveAttribute("href", /\/releases\/download\/v0\.1\.8\//);
+  await expect(page.getByRole("link", { name: /^Download for/ })).toHaveAttribute("href", /\/releases\/download\/v0\.1\.9\//);
+});
+
+test("Android visitors get a desktop explanation instead of a Linux package", async ({ page }) => {
+  await page.addInitScript(() => Object.defineProperty(navigator, "userAgent", {
+    configurable: true,
+    value: "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 Chrome/140.0.0.0 Mobile Safari/537.36",
+  }));
+  let releaseRequests = 0;
+  await page.route("https://api.github.com/**", (route) => {
+    releaseRequests += 1;
+    return route.abort();
+  });
+  await page.goto("/");
+  await expect(page.getByText("Open this page on a Linux, macOS, or Windows computer to download the desktop app.")).toBeVisible();
+  await expect(page.getByRole("link", { name: /^Download for/ })).toHaveCount(0);
+  expect(releaseRequests).toBe(0);
 });
 
 test("dark pages have no serious or critical contrast violations", async ({ page }) => {

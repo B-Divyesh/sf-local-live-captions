@@ -207,13 +207,12 @@ footer p { color: #c8d4cc; margin-bottom: 0; }
   .demo-stage { min-height: 520px; }
 }
 
-@media (min-width: 801px) and (max-height: 760px) {
-  .hero { min-height: calc(100vh - 88px); align-items: start; gap: 40px; padding-block: 16px; }
-  .hero h1 { max-width: 12ch; font-size: clamp(2.75rem, 5vw, 4rem); }
-  .hero-art { width: min(100%, 520px); justify-self: end; }
-  .dek { margin: 14px 0; }
-  .hero-action { margin-bottom: 14px; }
-  .facts { gap: 6px; padding-top: 12px; }
+@media (min-width: 801px) {
+  .hero { gap: clamp(32px, 5vw, 72px); padding-block: clamp(32px, 6vh, 72px); }
+  .hero h1 { max-width: 12ch; font-size: clamp(2.75rem, 5vw, 4.5rem); }
+  .dek { margin: clamp(14px, 2.5vh, 24px) 0; }
+  .hero-action { margin-bottom: clamp(14px, 2.5vh, 24px); }
+  .facts { gap: clamp(6px, 1vh, 10px); padding-top: clamp(12px, 2vh, 20px); }
 }
 
 @media (max-width: 480px) {

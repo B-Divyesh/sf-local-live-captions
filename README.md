@@ -59,7 +59,7 @@ Release verification sets `CI=1`. Desktop and 390 px mobile tests run in
 separate Playwright processes, and every test receives a newly launched browser
 and context. An unexpected Chromium exit gets one clean retry in CI.
 
-Desktop installers are built only in GitHub Actions. Tag the exact commit with the version from `package.json`, such as `v0.1.8`. To rebuild, run the workflow for that tag. The workflow rejects a tag or commit mismatch. It creates unsigned packages for macOS, Windows, and Linux. It also publishes `SHA256SUMS` and `latest.json` with the source commit. The site offers packages only when the release and deployed site use the same tag and commit.
+Desktop installers are built only in GitHub Actions. Tag the exact commit with the version from `package.json`, such as `v0.1.9`. To rebuild, run the workflow for that tag. The workflow rejects a tag or commit mismatch. It creates unsigned packages for macOS, Windows, and Linux. It also publishes `SHA256SUMS` and `latest.json` with the source commit. The site offers packages only when the release and deployed site use the same tag and commit.
 
 ## Privacy and licensing
 

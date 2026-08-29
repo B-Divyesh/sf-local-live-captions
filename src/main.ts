@@ -147,7 +147,15 @@ async function setupDownloads(): Promise<void> {
   const slot = document.querySelector<HTMLElement>("#download-slot");
   if (!slot) return;
   const releasePage = "https://github.com/B-Divyesh/sf-local-live-captions/releases";
-  const platform = /Windows/i.test(navigator.userAgent) ? "windows" : /Mac/i.test(navigator.userAgent) ? "macos" : "linux";
+  const platform = downloadPlatform(navigator.userAgent);
+  const heading = document.querySelector<HTMLElement>("#download-title");
+  if (!platform) {
+    if (heading) heading.textContent = "Download on a desktop";
+    slot.innerHTML = `<p>Open this page on a Linux, macOS, or Windows computer to download the desktop app.</p><a class="button secondary" href="${releasePage}">See every desktop download <span class="sr-only">(external)</span></a>`;
+    return;
+  }
+  const platformName = platform === "macos" ? "macOS" : platform === "windows" ? "Windows" : "Linux";
+  if (heading) heading.textContent = `Download for ${platformName}`;
   try {
     localStorage.removeItem("llc:release");
     const cached = localStorage.getItem(RELEASE_CACHE_KEY);
@@ -168,10 +176,20 @@ async function setupDownloads(): Promise<void> {
     const patterns = platform === "windows" ? [/\.msi$/i, /\.exe$/i] : platform === "macos" ? [/\.dmg$/i] : [/\.AppImage$/i, /\.deb$/i];
     const asset = data.assets.find((item) => patterns.some((pattern) => pattern.test(item.name)));
     if (!asset) throw new Error("platform asset unavailable");
-    slot.innerHTML = `<a class="button primary" href="${escapeHtml(asset.browser_download_url)}">Download for ${platform === "macos" ? "macOS" : platform === "windows" ? "Windows" : "Linux"}</a><a href="${releasePage}">See every download <span class="sr-only">(external)</span></a>`;
+    slot.innerHTML = `<a class="button primary" href="${escapeHtml(asset.browser_download_url)}">Download for ${platformName}</a><a href="${releasePage}">See every download <span class="sr-only">(external)</span></a>`;
   } catch {
     slot.innerHTML = `<p>Downloads are being published.</p><a class="button secondary" href="${releasePage}">Check the release page <span class="sr-only">(external)</span></a>`;
   }
+}
+
+type DownloadPlatform = "windows" | "macos" | "linux";
+
+function downloadPlatform(userAgent: string): DownloadPlatform | null {
+  if (/Android|iPhone|iPad|iPod|Mobile/i.test(userAgent)) return null;
+  if (/Windows/i.test(userAgent)) return "windows";
+  if (/Mac/i.test(userAgent)) return "macos";
+  if (/Linux|X11/i.test(userAgent)) return "linux";
+  return null;
 }
 
 type Release = { tag_name: string; target_commitish: string; assets: { name: string; browser_download_url: string }[] };

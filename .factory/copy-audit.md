@@ -37,6 +37,7 @@ word. Decorative text is absent from the landing page.
 | Choose the package that matches your computer from the current release. | 11 |
 | Current builds are unsigned. | 4 |
 | Your system may ask you to confirm the download. | 9 |
+| Open this page on a Linux, macOS, or Windows computer to download the desktop app. | 14 |
 | Caption Linux calls and recordings on your device. | 8 |
 | Generated artwork disclosed in the design notes (external). | 8 |
 
@@ -70,7 +71,7 @@ word. Decorative text is absent from the landing page.
 | Speech model downloads use the listed `ggerganov/whisper.cpp` Hugging Face repository. | 10 |
 | The bundled upstream MIT license copy is pinned in `third_party/whisper.cpp-LICENSE`. | 9 |
 | Desktop installers are built only in GitHub Actions. | 8 |
-| Tag the exact commit with the version from `package.json`, such as `v0.1.8`. | 12 |
+| Tag the exact commit with the version from `package.json`, such as `v0.1.9`. | 12 |
 | To rebuild, run the workflow for that tag. | 8 |
 | The workflow rejects a tag or commit mismatch. | 8 |
 | It creates unsigned packages for macOS, Windows, and Linux. | 9 |
