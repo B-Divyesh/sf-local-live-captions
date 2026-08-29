@@ -1,3 +1,45 @@
+# Review 1 handoff — FAIL
+
+Adversarial first-read review 1 was completed on 29 August 2026 against commit
+`f7e7133c209f09b62930d7ede6bda9a0d777fe8d` and the live deployment. The full
+report is `.factory/review-1.md`.
+
+The cold first screen, one-click demo, sandbox isolation, offline reload,
+routing, links, accessibility, visual identity, and build gates work. All 22
+registered claim commands pass from a fresh clone after installing the native
+packages already documented by the release workflow. The real Linux audio test
+captured a PulseAudio monitor, transcribed the JFK fixture with the real
+`tiny.en` model, exported SRT, and restarted capture.
+
+The verdict is still FAIL. Four blockers remain: “any Linux audio” exceeds the
+conditional source support/tests; German captioning has no German speech
+outcome test; and `/demo` says “no network requests” although a fresh load makes
+same-origin requests and the registered test proves only no cross-origin
+requests. The privacy page also promises model/license deletion controls that
+do not exist. Thirteen additional payment-disclosure, plain-copy, terminology,
+README-length, and history-record findings are listed with exact rewrites in
+the review. No product code was changed.
+
+Verification commands used:
+
+```sh
+npm ci
+# Every `test` command in .factory/claims.json, individually
+npm test
+npm run typecheck
+npm run lint
+npm run build
+/opt/fleet/lib/verify-url.sh https://local-live-captions.sociobot.in /tmp/llc-verify-url
+```
+
+Playwright live checks covered 390 × 844 and 1280 × 720 cold views, direct demo
+requests/storage/offline behavior, route metadata and focus, link crawling, and
+Axe 4.13.0 scans. The standalone Axe CLI wrapper could not find
+`/usr/bin/chromedriver`; the pinned Playwright/Axe integration completed the
+same scans with zero violations.
+
+## Prior verification record
+
 # Verification 7 outcome — PASS
 
 Independent QA accepted candidate `1a2caa71ab7a6923da36aa2bfc0e5b7f5a5f42b7`
