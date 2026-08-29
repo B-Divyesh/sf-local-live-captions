@@ -1,0 +1,208 @@
+[
+  {
+    "viewport": "desktop",
+    "route": "/",
+    "status": 200,
+    "title": "Local Live Captions — Caption Linux audio locally",
+    "h1": 1,
+    "main": 1,
+    "overflow": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "title": "Local Live Captions — Caption Linux audio locally",
+      "htmlLang": "en"
+    },
+    "seriousCritical": [],
+    "console": [],
+    "pageErrors": [],
+    "requestOrigins": [
+      "https://local-live-captions.sociobot.in",
+      "https://api.github.com"
+    ]
+  },
+  {
+    "viewport": "desktop",
+    "route": "/demo",
+    "status": 200,
+    "title": "Demo — Local Live Captions",
+    "h1": 1,
+    "main": 1,
+    "overflow": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "title": "Demo — Local Live Captions",
+      "htmlLang": "en"
+    },
+    "seriousCritical": [],
+    "console": [],
+    "pageErrors": [],
+    "requestOrigins": [
+      "https://local-live-captions.sociobot.in"
+    ]
+  },
+  {
+    "viewport": "desktop",
+    "route": "/privacy",
+    "status": 200,
+    "title": "Privacy — Local Live Captions",
+    "h1": 1,
+    "main": 1,
+    "overflow": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "title": "Privacy — Local Live Captions",
+      "htmlLang": "en"
+    },
+    "seriousCritical": [],
+    "console": [],
+    "pageErrors": [],
+    "requestOrigins": [
+      "https://local-live-captions.sociobot.in"
+    ]
+  },
+  {
+    "viewport": "desktop",
+    "route": "/terms",
+    "status": 200,
+    "title": "Terms — Local Live Captions",
+    "h1": 1,
+    "main": 1,
+    "overflow": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "title": "Terms — Local Live Captions",
+      "htmlLang": "en"
+    },
+    "seriousCritical": [],
+    "console": [],
+    "pageErrors": [],
+    "requestOrigins": [
+      "https://local-live-captions.sociobot.in"
+    ]
+  },
+  {
+    "viewport": "desktop",
+    "route": "/not-a-real-route",
+    "status": 404,
+    "title": "Page not found — Local Live Captions",
+    "h1": 1,
+    "main": 1,
+    "overflow": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "title": "Page not found — Local Live Captions",
+      "htmlLang": "en"
+    },
+    "seriousCritical": [],
+    "console": [
+      "Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "pageErrors": [],
+    "requestOrigins": [
+      "https://local-live-captions.sociobot.in"
+    ]
+  },
+  {
+    "viewport": "mobile",
+    "route": "/",
+    "status": 200,
+    "title": "Local Live Captions — Caption Linux audio locally",
+    "h1": 1,
+    "main": 1,
+    "overflow": {
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "title": "Local Live Captions — Caption Linux audio locally",
+      "htmlLang": "en"
+    },
+    "seriousCritical": [],
+    "console": [],
+    "pageErrors": [],
+    "requestOrigins": [
+      "https://local-live-captions.sociobot.in",
+      "https://api.github.com"
+    ]
+  },
+  {
+    "viewport": "mobile",
+    "route": "/demo",
+    "status": 200,
+    "title": "Demo — Local Live Captions",
+    "h1": 1,
+    "main": 1,
+    "overflow": {
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "title": "Demo — Local Live Captions",
+      "htmlLang": "en"
+    },
+    "seriousCritical": [],
+    "console": [],
+    "pageErrors": [],
+    "requestOrigins": [
+      "https://local-live-captions.sociobot.in"
+    ]
+  },
+  {
+    "viewport": "mobile",
+    "route": "/privacy",
+    "status": 200,
+    "title": "Privacy — Local Live Captions",
+    "h1": 1,
+    "main": 1,
+    "overflow": {
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "title": "Privacy — Local Live Captions",
+      "htmlLang": "en"
+    },
+    "seriousCritical": [],
+    "console": [],
+    "pageErrors": [],
+    "requestOrigins": [
+      "https://local-live-captions.sociobot.in"
+    ]
+  },
+  {
+    "viewport": "mobile",
+    "route": "/terms",
+    "status": 200,
+    "title": "Terms — Local Live Captions",
+    "h1": 1,
+    "main": 1,
+    "overflow": {
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "title": "Terms — Local Live Captions",
+      "htmlLang": "en"
+    },
+    "seriousCritical": [],
+    "console": [],
+    "pageErrors": [],
+    "requestOrigins": [
+      "https://local-live-captions.sociobot.in"
+    ]
+  },
+  {
+    "viewport": "mobile",
+    "route": "/not-a-real-route",
+    "status": 404,
+    "title": "Page not found — Local Live Captions",
+    "h1": 1,
+    "main": 1,
+    "overflow": {
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "title": "Page not found — Local Live Captions",
+      "htmlLang": "en"
+    },
+    "seriousCritical": [],
+    "console": [
+      "Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "pageErrors": [],
+    "requestOrigins": [
+      "https://local-live-captions.sociobot.in"
+    ]
+  }
+]

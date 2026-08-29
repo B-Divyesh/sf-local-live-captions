@@ -1,0 +1,44 @@
+RUN npm test -- --grep @claim:private-local
+EXIT 0 npm test -- --grep @claim:private-local
+RUN npm test -- --grep @claim:offline-reload
+EXIT 0 npm test -- --grep @claim:offline-reload
+RUN npm test -- --grep @claim:srt-export
+EXIT 0 npm test -- --grep @claim:srt-export
+RUN npm test -- --grep @claim:txt-export
+EXIT 0 npm test -- --grep @claim:txt-export
+RUN npm test -- --grep @claim:live-caption-sizing
+EXIT 0 npm test -- --grep @claim:live-caption-sizing
+RUN npm test -- --grep @claim:demo-isolated
+EXIT 0 npm test -- --grep @claim:demo-isolated
+RUN npm test -- --grep @claim:free-and-paid
+EXIT 0 npm test -- --grep @claim:free-and-paid
+RUN npm test -- --grep @claim:supporter-license-restore
+EXIT 0 npm test -- --grep @claim:supporter-license-restore
+RUN cargo test --manifest-path src-tauri/Cargo.toml claim_native_local_processing
+EXIT 101 cargo test --manifest-path src-tauri/Cargo.toml claim_native_local_processing
+RUN cargo test --manifest-path src-tauri/Cargo.toml claim_capture_recovery
+EXIT 101 cargo test --manifest-path src-tauri/Cargo.toml claim_capture_recovery
+RUN cargo test --manifest-path src-tauri/Cargo.toml claim_language_models
+EXIT 101 cargo test --manifest-path src-tauri/Cargo.toml claim_language_models
+RUN cargo test --manifest-path src-tauri/Cargo.toml claim_linux_system_audio
+EXIT 101 cargo test --manifest-path src-tauri/Cargo.toml claim_linux_system_audio
+RUN npm test -- --grep @claim:desktop-overlay
+EXIT 0 npm test -- --grep @claim:desktop-overlay
+RUN cargo test --manifest-path src-tauri/Cargo.toml claim_no_audio_storage
+EXIT 101 cargo test --manifest-path src-tauri/Cargo.toml claim_no_audio_storage
+RUN cargo test --manifest-path src-tauri/Cargo.toml claim_session_transcript
+EXIT 101 cargo test --manifest-path src-tauri/Cargo.toml claim_session_transcript
+RUN npm test -- --grep @claim:no-telemetry-trackers
+EXIT 0 npm test -- --grep @claim:no-telemetry-trackers
+RUN cargo test --manifest-path src-tauri/Cargo.toml claim_consent_is_required
+EXIT 101 cargo test --manifest-path src-tauri/Cargo.toml claim_consent_is_required
+RUN cargo test --manifest-path src-tauri/Cargo.toml claim_models_are_downloaded
+EXIT 101 cargo test --manifest-path src-tauri/Cargo.toml claim_models_are_downloaded
+RUN cargo test --manifest-path src-tauri/Cargo.toml claim_linux_monitor_must_still_be_exposed
+EXIT 101 cargo test --manifest-path src-tauri/Cargo.toml claim_linux_monitor_must_still_be_exposed
+RUN npm run test:unit -- --testNamePattern @claim:call-speaker-boundaries
+EXIT 0 npm run test:unit -- --testNamePattern @claim:call-speaker-boundaries
+RUN npm run test:unit -- --testNamePattern @claim:unsigned-installers
+EXIT 0 npm run test:unit -- --testNamePattern @claim:unsigned-installers
+RUN npm run test:linux-audio
+EXIT 1 npm run test:linux-audio
