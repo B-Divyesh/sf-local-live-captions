@@ -5,6 +5,7 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 fixture="$repo_root/tests/fixtures/jfk.wav"
+german_fixture="$repo_root/tests/fixtures/german.wav"
 cache_root="${LLC_AUDIO_TEST_CACHE:-$repo_root/.cache/linux-audio-acceptance}"
 runtime_dir="$(mktemp -d)"
 sink_module=""
@@ -21,6 +22,7 @@ command -v pulseaudio >/dev/null || { echo "Install pulseaudio before running th
 command -v pactl >/dev/null || { echo "Install pulseaudio-utils before running this test." >&2; exit 1; }
 command -v paplay >/dev/null || { echo "Install pulseaudio-utils before running this test." >&2; exit 1; }
 test -f "$fixture" || { echo "Missing speech fixture: $fixture" >&2; exit 1; }
+test -f "$german_fixture" || { echo "Missing German speech fixture: $german_fixture" >&2; exit 1; }
 mkdir -p "$cache_root"
 
 if [ "$(id -u)" = "0" ]; then
@@ -47,7 +49,9 @@ sink_module="$(pactl load-module module-null-sink sink_name=llc_test rate=16000 
 pactl set-default-sink llc_test
 export LLC_TEST_PULSE_SOURCE="llc_test.monitor"
 export LLC_TEST_SPEECH_FIXTURE="$fixture"
+export LLC_TEST_GERMAN_FIXTURE="$german_fixture"
 export LLC_AUDIO_TEST_CACHE="$cache_root"
 
 cd "$repo_root"
 cargo test --manifest-path src-tauri/Cargo.toml claim_linux_monitor_end_to_end_captions_speech_and_restarts -- --ignored
+cargo test --manifest-path src-tauri/Cargo.toml claim_german_caption_end_to_end -- --ignored

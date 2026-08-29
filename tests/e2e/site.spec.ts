@@ -5,7 +5,7 @@ import { readFile } from "node:fs/promises";
 test("landing page states the job and has one heading", async ({ page }) => {
   await page.route("https://api.github.com/**", (route) => route.fulfill({ status: 404, body: "{}" }));
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Caption any Linux audio locally");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Caption Linux calls and recordings locally");
   await expect(page.getByRole("link", { name: /Try it with sample data/ })).toBeVisible();
   await expect(page.locator("h1")).toHaveCount(1);
   await expect(page.locator("main")).toHaveCount(1);
@@ -51,6 +51,14 @@ test("mobile layout fits 390px", async ({ page }, testInfo) => {
   await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
   const resizedOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(resizedOverflow).toBeLessThanOrEqual(1);
+});
+
+test("one click demo query opens an isolated sample with reset controls", async ({ page }) => {
+  await page.goto("/?demo=1");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("See live captions before installing");
+  await expect(page.getByText("Demo — sample data, nothing is saved")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Reset demo" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Start for real" })).toBeVisible();
 });
 
 test("mobile navigation and footer links meet the 44px target", async ({ page }, testInfo) => {
@@ -134,7 +142,7 @@ test("@claim:no-telemetry-trackers privacy page makes no advertising or telemetr
     if (new URL(request.url()).origin !== "http://127.0.0.1:4173") external.push(request.url());
   });
   await page.goto("/privacy");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Your audio stays with you");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Your audio stays on your computer");
   expect(external).toEqual([]);
 });
 
@@ -233,7 +241,7 @@ test("@claim:supporter-license-restore verifies and stores a pasted license", as
 test("@claim:free-and-paid supporter checkout is live and caption features stay free", async ({ page, request }) => {
   await page.route("https://api.github.com/**", (route) => route.fulfill({ status: 404, body: "{}" }));
   await page.goto("/");
-  await expect(page.getByText("English and German captions, size controls, and transcript export stay free.", { exact: false })).toBeVisible();
+  await expect(page.getByText("English and German speech models, size controls, and transcript export stay free.", { exact: false })).toBeVisible();
   await expect(page.getByText("$24", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: /Buy supporter license/ })).toHaveAttribute("href", /api\.sociobot\.in\/api\/v1\/products\/local-live-captions\/checkout/);
   const checkout = await request.get("https://api.sociobot.in/api/v1/products/local-live-captions/checkout", { maxRedirects: 0 });

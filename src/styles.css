@@ -161,6 +161,8 @@ footer p { color: #c8d4cc; margin-bottom: 0; }
 .app-actions { display: flex; gap: 12px; margin-top: 24px; }
 .app-actions button:disabled { opacity: .5; cursor: not-allowed; }
 .model-note { margin-top: 20px; color: var(--ink-soft); }
+.storage-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.storage-actions + #storage-result { min-height: 1.55em; margin: 8px 0 0; color: var(--ink-soft); }
 .app-license { margin-top: 24px; padding: 16px 0; border-top: 1px solid rgb(20 36 31 / 25%); }
 .app-license summary { cursor: pointer; font-weight: 700; min-height: 44px; }
 .app-license form { display: grid; gap: 8px; }
@@ -231,7 +233,7 @@ footer p { color: #c8d4cc; margin-bottom: 0; }
   .demo-heading h1 { font-size: 3rem; }
   .demo-notes { padding: 24px 18px; }
   .app-brand > span:last-child { display: none; }
-  .app-actions, .overlay-controls { align-items: stretch; flex-direction: column; }
+  .app-actions, .overlay-controls, .storage-actions { align-items: stretch; flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: reduce) {

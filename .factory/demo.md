@@ -1,6 +1,6 @@
 # Demo sandbox
 
-- URL: `https://local-live-captions.sociobot.in/demo` or local `http://127.0.0.1:4173/demo`.
+- URL: `https://local-live-captions.sociobot.in/?demo=1` (also `/demo`) or local `http://127.0.0.1:4173/?demo=1`.
 - Desktop entry: choose **Load sample project** on the first-run screen.
 - Sample: four caption lines from a 20-second astronomy lecture, with English and German reference text in `src/sample.ts`.
 - The first demo screen is already in a capture state. It supports pause, caption sizing, TXT export, and SRT export.
@@ -8,4 +8,4 @@
 - **Reset demo** deletes only `demo:` session keys and restores the bundled sample.
 - **Start for real** leaves the demo and discards its session state.
 - The service worker includes the sample and application shell, so the demo can reload after the first visit without a connection.
-- The demo makes no cross-origin requests. It never downloads a model, verifies a license, or sends audio.
+- The demo sends no data to other sites. It never downloads a model, verifies a license, or sends audio.

@@ -38,6 +38,8 @@ describe("claim governance", () => {
       "txt-export",
       "live-caption-sizing",
       "supporter-license-restore",
+      "german-caption-end-to-end",
+      "storage-controls",
     ]) expect(ids, `missing public claim ${id}`).toContain(id);
   });
 

@@ -139,6 +139,16 @@ fn model_destination(data_dir: &std::path::Path, model: &str) -> Result<PathBuf,
     Ok(data_dir.join("models").join(file_name))
 }
 
+fn delete_model_file(data_dir: &std::path::Path, model: &str) -> Result<String, String> {
+    let destination = model_destination(data_dir, model)?;
+    if !destination.exists() {
+        return Ok("The selected model is not downloaded on this computer.".into());
+    }
+    std::fs::remove_file(&destination)
+        .map_err(|error| format!("Could not delete the selected model: {error}"))?;
+    Ok("The downloaded model was deleted from this computer.".into())
+}
+
 async fn download_model_file(model: &str, destination: &std::path::Path) -> Result<(), String> {
     let (_, url) = model_file(model).ok_or_else(|| "That model is not available.".to_string())?;
     if destination.exists() {
@@ -183,6 +193,11 @@ async fn download_model(
     let destination = model_destination(&state.data_dir, &model)?;
     download_model_file(&model, &destination).await?;
     Ok(destination.display().to_string())
+}
+
+#[tauri::command]
+fn delete_model(model: String, state: State<'_, CaptionState>) -> Result<String, String> {
+    delete_model_file(&state.data_dir, &model)
 }
 
 #[derive(serde::Deserialize)]
@@ -650,6 +665,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             list_audio_devices,
             download_model,
+            delete_model,
             verify_license,
             start_capture,
             get_transcript,
@@ -743,6 +759,30 @@ mod tests {
             destination,
             PathBuf::from("/private/app-data/models/ggml-base.bin")
         );
+    }
+
+    #[test]
+    // @claim:storage-controls
+    fn claim_storage_controls_delete_the_selected_model_and_remove_the_local_license() {
+        let folder = std::env::temp_dir().join(format!(
+            "local-live-captions-storage-control-{}",
+            std::process::id()
+        ));
+        let destination = model_destination(&folder, "tiny.en").unwrap();
+        std::fs::create_dir_all(destination.parent().unwrap()).unwrap();
+        std::fs::write(&destination, b"downloaded-model").unwrap();
+        assert_eq!(
+            delete_model_file(&folder, "tiny.en").unwrap(),
+            "The downloaded model was deleted from this computer."
+        );
+        assert!(!destination.exists());
+        std::fs::remove_dir_all(&folder).unwrap();
+
+        let desktop_ui = include_str!("../../src/main.ts");
+        assert!(desktop_ui.contains("id=\"delete-model\""));
+        assert!(desktop_ui.contains("id=\"remove-license\""));
+        assert!(desktop_ui.contains("localStorage.removeItem(LICENSE_KEY)"));
+        assert!(desktop_ui.contains("localStorage.removeItem(`${LICENSE_KEY}:verified`)"));
     }
 
     #[test]
@@ -862,5 +902,41 @@ mod tests {
             .expect("a new capture can open after the first capture stops");
         let _ = replay.wait();
         assert!(restarted.iter().any(|sample| sample.abs() > 0.01));
+    }
+
+    #[cfg(target_os = "linux")]
+    #[test]
+    #[ignore = "requires scripts/linux-audio-acceptance.sh to provide an isolated PulseAudio monitor"]
+    // @claim:german-caption-end-to-end
+    fn claim_german_caption_end_to_end() {
+        let cache = std::env::var("LLC_AUDIO_TEST_CACHE")
+            .expect("run through scripts/linux-audio-acceptance.sh");
+        let source = std::env::var("LLC_TEST_PULSE_SOURCE")
+            .expect("the acceptance script must expose a monitor source");
+        let fixture = std::env::var("LLC_TEST_GERMAN_FIXTURE")
+            .expect("the acceptance script must provide the German speech fixture");
+        let destination = model_destination(std::path::Path::new(&cache), "base").unwrap();
+        tauri::async_runtime::block_on(download_model_file("base", &destination))
+            .expect("the real multilingual model download must complete");
+
+        let mut player = std::process::Command::new("paplay")
+            .arg(&fixture)
+            .spawn()
+            .expect("paplay must play the German fixture into the null sink");
+        let audio = capture_fixture_from_monitor(&source, 9)
+            .expect("the selected monitor must yield German fixture audio");
+        let _ = player.wait();
+        let captions = transcribe(destination.to_str().unwrap(), &audio, "auto")
+            .expect("the multilingual model must caption German monitor audio");
+        let joined = captions.join(" ").to_lowercase();
+        let german_markers = ["die", "der", "und", "wie", "zu", "sprechen", "planeten"];
+        let marker_count = german_markers
+            .iter()
+            .filter(|marker| joined.contains(**marker))
+            .count();
+        assert!(
+            marker_count >= 2,
+            "unexpected German caption output: {joined}"
+        );
     }
 }

@@ -2,14 +2,14 @@
 
 Caption Linux calls, lectures, and recordings on your device.
 
-Local Live Captions is a Tauri 2 desktop overlay for deaf and hard-of-hearing students. It captures a selected audio input, runs a downloadable Whisper model locally, and exports transcript text as SRT. Raw audio is held in memory and is not saved.
+Local Live Captions is a desktop overlay for deaf and hard-of-hearing students. It turns a selected audio source into captions on your computer and exports SubRip (SRT) subtitle files. Raw audio stays in memory and is not saved.
 
 The public site is at <https://local-live-captions.sociobot.in>. Open the isolated sample at <https://local-live-captions.sociobot.in/demo>.
 
 ## What works
 
-- Select an input exposed by the operating system. On Linux, PipeWire or PulseAudio monitor sources appear when the sound server exposes them.
-- Download free English or multilingual German-capable models.
+- Select an audio source exposed by the operating system. On Linux, PipeWire or PulseAudio monitor sources appear when the sound server exposes them.
+- Download free English or multilingual German speech models.
 - Start only after confirming consent.
 - Read captions in an always-on-top, resizable overlay.
 - Change caption size while capture runs.
@@ -63,12 +63,12 @@ Desktop installers are built only in GitHub Actions. Tag a `v*` release or run t
 
 ## Privacy and licensing
 
-There is no telemetry. Settings and the optional supporter-license token stay on the computer. Model downloads contact Hugging Face. License checks contact the Sociobot billing API. Neither request includes audio or transcript text.
+There is no telemetry. Settings and the optional supporter-license token stay on the computer. Model downloads contact Hugging Face. License checks contact the Sociobot billing API. Neither request includes audio or transcript text. Desktop setup can delete a downloaded model and remove a supporter license from this computer.
 
 ## Linux system audio
 
-The app opens PipeWire or PulseAudio monitor sources through the local PulseAudio-compatible server, rather than relying only on ALSA device enumeration. A monitor source must exist and be visible to `pactl list short sources`; normal microphones are still listed through the operating system's native input list. Before a monitor starts, the app confirms that it is still exposed by the sound server.
+The app opens PipeWire or PulseAudio monitor sources through the local PulseAudio-compatible server. A monitor source carries system audio. A monitor source must appear in `pactl list short sources` before capture starts. The app also lists microphones reported by the operating system. Before capture, the app confirms that a monitor source is still exposed by the sound server.
 
-`npm run test:linux-audio` is the reproducible Linux acceptance run. It starts an isolated PulseAudio null sink, plays the shipped public-domain JFK speech fixture into its monitor, downloads the real `tiny.en` model if needed, asserts the caption text, checks SRT formatting, and opens a second capture after stopping. It needs `pulseaudio`, `pulseaudio-utils`, and the Linux development packages in the release workflow. The fixture is local only and is never uploaded.
+`npm run test:linux-audio` is the reproducible Linux acceptance run. The test creates an isolated PulseAudio output and plays the included public-domain JFK clip. It downloads `tiny.en`, checks captions and SRT output, then starts capture again. It also plays the included original German clip through that monitor. The multilingual `base` model must return recognizable German caption text. The test needs `pulseaudio`, `pulseaudio-utils`, and the Linux development packages in the release workflow. Fixtures stay local and are never uploaded.
 
 The source is available under the [MIT License](LICENSE). Read the site [privacy policy](https://local-live-captions.sociobot.in/privacy) and [terms](https://local-live-captions.sociobot.in/terms).

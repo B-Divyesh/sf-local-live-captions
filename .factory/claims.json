@@ -1,7 +1,7 @@
 [
   {
     "id": "private-local",
-    "claim": "The browser demo makes no cross-origin requests",
+    "claim": "The browser demo sends no data to other sites",
     "where": "demo privacy copy",
     "test": "npm test -- --grep @claim:private-local",
     "sandbox": "fresh browser context at /demo; exercise sample captions and assert every request stays same-origin"
@@ -43,7 +43,7 @@
   },
   {
     "id": "free-and-paid",
-    "claim": "English and German captions are free; a $24 supporter license has a live checkout",
+    "claim": "English and German speech models are free; a $24 supporter license has a live checkout",
     "where": "landing facts and supporter section",
     "test": "npm test -- --grep @claim:free-and-paid",
     "sandbox": "fresh landing page; assert free feature copy, price, checkout URL, and its live Dodo redirect"
@@ -75,6 +75,13 @@
     "where": "landing steps and desktop model picker",
     "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_language_models",
     "sandbox": "native unit test checks the exact bundled model catalog and multilingual language setting"
+  },
+  {
+    "id": "german-caption-end-to-end",
+    "claim": "The multilingual speech model captions German system audio locally.",
+    "where": "landing, README, desktop model picker",
+    "test": "npm run test:linux-audio",
+    "sandbox": "isolated PulseAudio monitor plays the shipped original German fixture; the real multilingual base model captions recognizable German output"
   },
   {
     "id": "linux-system-audio",
@@ -124,6 +131,13 @@
     "where": "landing and privacy policy",
     "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_models_are_downloaded",
     "sandbox": "native unit test resolves a selected model below the local app data models directory"
+  },
+  {
+    "id": "storage-controls",
+    "claim": "Desktop setup can delete a downloaded model and remove a supporter license from this computer.",
+    "where": "privacy policy and desktop setup",
+    "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_storage_controls",
+    "sandbox": "native unit test deletes a selected temporary model file and checks the visible desktop controls remove both license keys"
   },
   {
     "id": "source-start-validation",
