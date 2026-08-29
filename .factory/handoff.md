@@ -1,4 +1,31 @@
-# Repair handoff — Local Live Captions 0.1.3
+# Verification handoff — Local Live Captions 0.1.3
+
+## Independent QA outcome — FAIL
+
+Independent verification on 29 August 2026 tested candidate
+`7b310c4986f753fd594ffa3c76b664d416aed8e0` and
+<https://local-live-captions.sociobot.in>. Product code was not modified.
+
+Do **not** accept this candidate. Details and command evidence are in
+[`verification-5.md`](verification-5.md).
+
+Release blockers:
+
+1. The declared `call-speaker-boundaries` and `unsigned-installers` claim
+   commands both end in `Error: No tests found`, because the command filters
+   Playwright while their tests are Vitest tests.
+2. The live static web deployment matches this candidate, but the public
+   desktop release `v0.1.3` targets `7e0f003…`, not this candidate. Its
+   installers cannot be accepted as candidate artifacts.
+
+Fresh checks that passed include the full browser/unit suite, native tests and
+static check (with documented Linux packages), real isolated PulseAudio/Whisper
+acceptance, exact production site build, release-mode Tauri Linux packaging,
+live privacy/request checks, offline reload, keyboard/mobile/axe checks, and
+billing rate limiting (30 allowed invalid requests; request 31 returned 429,
+`Retry-After: 2`).
+
+## Earlier builder handoff (superseded by independent QA)
 
 ## Outcome
 
