@@ -28,7 +28,7 @@ npm run dev          # website
 npm run tauri dev    # desktop app
 ```
 
-The desktop build needs the platform packages listed in [the release workflow](.github/workflows/release.yml). Speech models download on demand from the official `ggerganov/whisper.cpp` Hugging Face repository. OpenAI Whisper and whisper.cpp publish their code and converted models under the MIT License.
+The desktop build needs the platform packages listed in [the release workflow](.github/workflows/release.yml). Speech model downloads use the listed `ggerganov/whisper.cpp` Hugging Face repository. The bundled upstream MIT license copy is pinned in [`third_party/whisper.cpp-LICENSE`](third_party/whisper.cpp-LICENSE).
 
 `src-tauri/Cargo.lock` is committed on purpose. It pins the Rust Tauri stack to the compatible 2.8 release used by the desktop JavaScript API. Do not commit `src-tauri/target/` or `src-tauri/gen/`; both are generated during native builds.
 
@@ -63,7 +63,7 @@ Desktop installers are built only in GitHub Actions. Tag a `v*` release or run t
 
 ## Privacy and licensing
 
-There is no telemetry. Settings and the optional supporter-license token stay on the computer. Model downloads contact Hugging Face. License checks contact the Sociobot billing API. Neither request includes audio or transcript text. Desktop setup can delete a downloaded model and remove a supporter license from this computer.
+The website makes no advertising or telemetry request. Settings and the optional supporter-license token stay on the computer. Model downloads contact Hugging Face. License checks contact the Sociobot billing API. Neither request includes audio or transcript text. Desktop setup can delete a downloaded model and remove a supporter license from this computer.
 
 ## Linux system audio
 

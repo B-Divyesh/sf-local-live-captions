@@ -64,4 +64,20 @@ describe("release configuration regressions", () => {
     expect(config).toContain('retries: process.env.CI === "1" ? 1 : 0');
     expect(config).toContain('reuseExistingServer: process.env.CI !== "1"');
   });
+
+  it("@claim:release-artifacts publishes the documented desktop packages and integrity files", async () => {
+    const [workflow, fixture] = await Promise.all([
+      readFile(".github/workflows/release.yml", "utf8"),
+      readFile("tests/fixtures/release-v0.1.7.json", "utf8"),
+    ]);
+    const assets = JSON.parse(fixture).assets as string[];
+    expect(workflow).toContain("tauri-apps/tauri-action@v0");
+    expect(workflow).toContain("tags: [\"v*\"]");
+    expect(workflow).toContain("workflow_dispatch");
+    expect(workflow).toContain("sha256sum * > SHA256SUMS");
+    expect(workflow).toContain("latest.json");
+    for (const pattern of [/\.dmg$/i, /\.(msi|exe)$/i, /\.(AppImage|deb)$/i, /^SHA256SUMS$/, /^latest\.json$/]) {
+      expect(assets.some((asset) => pattern.test(asset)), String(pattern)).toBe(true);
+    }
+  });
 });

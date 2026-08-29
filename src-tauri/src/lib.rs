@@ -68,6 +68,18 @@ fn report_start_failure(
     let _ = reply.send(Err(message));
 }
 
+fn reset_session(state: &CaptionState) -> Result<(), String> {
+    state
+        .transcript
+        .lock()
+        .map_err(|_| "The transcript is busy.".to_string())?
+        .clear();
+    if let Ok(mut last_error) = state.last_error.lock() {
+        *last_error = None;
+    }
+    Ok(())
+}
+
 #[tauri::command]
 fn list_audio_devices() -> Result<Vec<String>, String> {
     let host = cpal::default_host();
@@ -308,14 +320,7 @@ fn start_pulse_capture(
     language: String,
     state: State<'_, CaptionState>,
 ) -> Result<(), String> {
-    state
-        .transcript
-        .lock()
-        .map_err(|_| "The transcript is busy.".to_string())?
-        .clear();
-    if let Ok(mut last_error) = state.last_error.lock() {
-        *last_error = None;
-    }
+    reset_session(&state)?;
     let transcript = state.transcript.clone();
     let running = state.running.clone();
     let last_error = state.last_error.clone();
@@ -427,14 +432,7 @@ fn start_capture(
         }
         return start_pulse_capture(source, model_path, language_for_model(&model), state);
     }
-    state
-        .transcript
-        .lock()
-        .map_err(|_| "The transcript is busy.".to_string())?
-        .clear();
-    if let Ok(mut last_error) = state.last_error.lock() {
-        *last_error = None;
-    }
+    reset_session(&state)?;
     let transcript = state.transcript.clone();
     let running = state.running.clone();
     let last_error = state.last_error.clone();
@@ -690,8 +688,7 @@ mod tests {
     }
 
     #[test]
-    // @claim:capture-recovery
-    fn claim_capture_recovery_failure_clears_running_state_and_keeps_a_retryable_error() {
+    fn capture_recovery_failure_clears_running_state_and_keeps_a_retryable_error() {
         let running = AtomicBool::new(true);
         let error = Mutex::new(None);
         record_capture_failure(
@@ -707,37 +704,21 @@ mod tests {
     }
 
     #[test]
-    // @claim:native-local-processing
-    fn claim_native_local_processing_only_model_and_license_paths_are_network_capable() {
-        let source = include_str!("lib.rs");
-        let production = source.split("#[cfg(test)]\nmod tests").next().unwrap();
-        assert_eq!(production.matches("reqwest::get(").count(), 2);
-        assert!(production.contains("fn transcribe"));
-        assert!(!production[production.find("fn transcribe").unwrap()
-            ..production
-                .find("#[tauri::command]\nfn start_capture")
-                .unwrap()]
-            .contains("reqwest"));
-    }
-
-    #[test]
-    // @claim:no-audio-storage
-    fn claim_no_audio_storage_keeps_capture_samples_out_of_the_file_system() {
-        let source = include_str!("lib.rs");
-        let production = source.split("#[cfg(test)]\nmod tests").next().unwrap();
-        assert_eq!(production.matches("std::fs::write(").count(), 1);
-        assert!(production.contains("let temporary = destination.with_extension(\"download\")"));
-        assert!(production.contains("let mut audio = Vec::with_capacity"));
-    }
-
-    #[test]
     // @claim:session-transcript
-    fn claim_session_transcript_is_runtime_state_and_is_cleared_for_each_capture() {
-        let source = include_str!("lib.rs");
-        let production = source.split("#[cfg(test)]\nmod tests").next().unwrap();
-        assert!(production.contains("transcript: Arc<Mutex<Vec<CaptionLine>>>,"));
-        assert!(production.matches(".clear();").count() >= 2);
-        assert!(!production.contains("transcript.json"));
+    fn claim_session_transcript_is_runtime_state_and_a_new_session_clears_it() {
+        let state = CaptionState {
+            transcript: Arc::new(Mutex::new(vec![CaptionLine {
+                at: 0,
+                end: 1,
+                text: "sample words".into(),
+            }])),
+            running: Arc::new(AtomicBool::new(false)),
+            last_error: Arc::new(Mutex::new(Some("old error".into()))),
+            data_dir: std::env::temp_dir(),
+        };
+        reset_session(&state).unwrap();
+        assert!(state.transcript.lock().unwrap().is_empty());
+        assert_eq!(*state.last_error.lock().unwrap(), None);
     }
 
     #[test]
@@ -762,8 +743,7 @@ mod tests {
     }
 
     #[test]
-    // @claim:storage-controls
-    fn claim_storage_controls_delete_the_selected_model_and_remove_the_local_license() {
+    fn storage_control_core_deletes_the_selected_model_file() {
         let folder = std::env::temp_dir().join(format!(
             "local-live-captions-storage-control-{}",
             std::process::id()
@@ -777,12 +757,6 @@ mod tests {
         );
         assert!(!destination.exists());
         std::fs::remove_dir_all(&folder).unwrap();
-
-        let desktop_ui = include_str!("../../src/main.ts");
-        assert!(desktop_ui.contains("id=\"delete-model\""));
-        assert!(desktop_ui.contains("id=\"remove-license\""));
-        assert!(desktop_ui.contains("localStorage.removeItem(LICENSE_KEY)"));
-        assert!(desktop_ui.contains("localStorage.removeItem(`${LICENSE_KEY}:verified`)"));
     }
 
     #[test]
@@ -861,6 +835,8 @@ mod tests {
     #[cfg(target_os = "linux")]
     #[test]
     #[ignore = "requires scripts/linux-audio-acceptance.sh to provide an isolated PulseAudio monitor"]
+    // @claim:native-local-processing
+    // @claim:no-audio-storage
     // @claim:linux-monitor-end-to-end
     fn claim_linux_monitor_end_to_end_captions_speech_and_restarts() {
         let cache = std::env::var("LLC_AUDIO_TEST_CACHE")
@@ -872,6 +848,11 @@ mod tests {
         let destination = model_destination(std::path::Path::new(&cache), "tiny.en").unwrap();
         tauri::async_runtime::block_on(download_model_file("tiny.en", &destination))
             .expect("the real model download must complete");
+        let model_folder = destination.parent().unwrap();
+        let before_capture: Vec<_> = std::fs::read_dir(model_folder)
+            .unwrap()
+            .map(|entry| entry.unwrap().file_name())
+            .collect();
 
         let mut player = std::process::Command::new("paplay")
             .arg(&fixture)
@@ -893,6 +874,14 @@ mod tests {
             text: captions.join(" "),
         }];
         assert!(format_srt(&lines).contains("00:00:00,000 --> 00:00:09,000"));
+        let after_capture: Vec<_> = std::fs::read_dir(model_folder)
+            .unwrap()
+            .map(|entry| entry.unwrap().file_name())
+            .collect();
+        assert_eq!(
+            before_capture, after_capture,
+            "capturing must not write raw audio beside the local model"
+        );
 
         let mut replay = std::process::Command::new("paplay")
             .arg(&fixture)

@@ -14,7 +14,7 @@ word. Decorative text is absent from the landing page.
 | Opens a private sample. | 4 |
 | Nothing is saved. | 3 |
 | Audio stays on your device. | 5 |
-| The sample works without internet. | 5 |
+| The sample works offline after your first visit. | 8 |
 | English and German speech models are free. | 7 |
 | The app turns audio into captions on your computer. | 10 |
 | Keep the resizable overlay above your lecture or call. | 9 |
@@ -46,6 +46,7 @@ word. Decorative text is absent from the landing page.
 |---|---:|
 | This sample uses a bundled transcript. | 6 |
 | It sends no data to other sites. | 7 |
+| The website makes no advertising or telemetry request. | 8 |
 | Your audio stays on your computer | 7 |
 | In desktop setup, choose Delete downloaded model or Remove supporter license. | 11 |
 | Checkout opens Dodo through Sociobot. | 5 |
@@ -66,6 +67,8 @@ word. Decorative text is absent from the landing page.
 | The test creates an isolated PulseAudio output and plays the included public-domain JFK clip. | 14 |
 | It downloads `tiny.en`, checks captions and SRT output, then starts capture again. | 11 |
 | The multilingual `base` model must return recognizable German caption text. | 10 |
+| Speech model downloads use the listed `ggerganov/whisper.cpp` Hugging Face repository. | 10 |
+| The bundled upstream MIT license copy is pinned in `third_party/whisper.cpp-LICENSE`. | 9 |
 
 ## Terminology
 

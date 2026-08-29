@@ -208,10 +208,12 @@ footer p { color: #c8d4cc; margin-bottom: 0; }
 }
 
 @media (min-width: 801px) and (max-height: 760px) {
-  .hero { padding-block: 32px; }
-  .hero h1 { max-width: 11ch; font-size: clamp(3rem, 5.7vw, 4.5rem); }
-  .dek { margin: 20px 0; }
-  .hero-action { margin-bottom: 24px; }
+  .hero { min-height: calc(100vh - 88px); align-items: start; gap: 40px; padding-block: 16px; }
+  .hero h1 { max-width: 12ch; font-size: clamp(2.75rem, 5vw, 4rem); }
+  .hero-art { width: min(100%, 520px); justify-self: end; }
+  .dek { margin: 14px 0; }
+  .hero-action { margin-bottom: 14px; }
+  .facts { gap: 6px; padding-top: 12px; }
 }
 
 @media (max-width: 480px) {
@@ -219,7 +221,10 @@ footer p { color: #c8d4cc; margin-bottom: 0; }
   .site-header { min-height: 76px; }
   .wordmark span { display: none; }
   h1 { font-size: 3.15rem; }
-  .hero { padding-top: 48px; }
+  .hero { padding-top: 24px; padding-bottom: 32px; gap: 28px; }
+  .hero .dek { margin: 16px 0; }
+  .hero-action { margin-bottom: 18px; gap: 10px; }
+  .facts { padding-top: 14px; gap: 6px; }
   .hero-art { transform: none; }
   .hero-art::before { inset: -10px 20% 20% -10px; }
   .hero-art img { border-width: 4px; border-radius: 4px 30px 4px 4px; }

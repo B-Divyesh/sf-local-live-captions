@@ -5,7 +5,7 @@ import "./styles.css";
 import { SAMPLE_LINES, toSrt, toTxt, type CaptionLine } from "./sample";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
-const isDesktop = __DESKTOP__ || Boolean(window.__TAURI_INTERNALS__);
+const isDesktop = __DESKTOP__ || Boolean(window.__TAURI_INTERNALS__) || Boolean(window.__LLC_INVOKE__);
 const SITE = "https://local-live-captions.sociobot.in";
 const API = "https://api.sociobot.in/api/v1/products/local-live-captions";
 const LICENSE_KEY = "sb_license:local-live-captions";
@@ -26,7 +26,7 @@ function header(): string {
   return `<a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <a class="wordmark nav-link" href="/" aria-label="Local Live Captions home"><svg aria-hidden="true" viewBox="0 0 40 40"><path d="M3 15c7-9 11 9 18 0s12 0 16 0"/><path d="M9 26h22M15 33h16"/></svg><span>Local Live<br>Captions</span></a>
-    <nav aria-label="Main navigation"><a class="nav-link" href="/demo">Demo</a><a href="/#how">How it works</a><a href="/#price">Price</a><a class="nav-link" href="/privacy">Privacy</a></nav>
+    <nav aria-label="Main navigation"><a class="nav-link" href="/demo">Demo</a><a class="nav-link" data-focus-target="#how-title" href="/#how">How it works</a><a class="nav-link" data-focus-target="#price-title" href="/#price">Price</a><a class="nav-link" href="/privacy">Privacy</a></nav>
   </header>`;
 }
 
@@ -41,7 +41,7 @@ function shell(content: string): string {
 function preview(kind: "landing" | "demo" = "landing"): string {
   const demo = kind === "demo";
   return `<section class="caption-stage ${demo ? "demo-stage" : ""}" aria-label="Caption overlay preview">
-    <div class="stage-top"><span class="capture-state"><i></i>${demo ? "Capturing sample" : "Capturing"}</span><span>English · local model</span></div>
+    <div class="stage-top"><span class="capture-state"><i></i>${demo ? "Capturing sample" : "Capturing"}</span><span>English · processed on this computer</span></div>
     <div class="caption-stack" aria-live="polite">
       <p>Gravity pulls the cloud inward while pressure pushes back.</p>
       <p class="older">Today we will trace how a star changes over its lifetime.</p>
@@ -49,7 +49,7 @@ function preview(kind: "landing" | "demo" = "landing"): string {
     <div class="stage-controls">
       <button type="button" data-action="toggle-captions">${demo ? "Pause captions" : "Stop captions"}</button>
       <label>Caption size <input data-caption-size type="range" min="20" max="42" value="28"><output>28 px</output></label>
-      <button type="button" class="quiet" data-action="export-srt">Export SRT</button>
+      <button type="button" class="quiet" data-action="export-srt">Export subtitle file (.srt)</button>
     </div>
   </section>`;
 }
@@ -59,13 +59,13 @@ function landing(): string {
     <section class="hero">
       <div class="hero-copy"><h1 tabindex="-1">Caption Linux calls and recordings locally</h1><p class="dek">For deaf and hard-of-hearing students when lectures, calls, or recordings have no captions.</p>
         <div class="hero-action"><a class="button primary nav-link" href="/?demo=1">Try it with sample data <span aria-hidden="true">→</span></a><span>Opens a private sample. Nothing is saved.</span></div>
-        <ul class="facts"><li><strong>Private</strong><span>Audio stays on your device.</span></li><li><strong>Offline</strong><span>The sample works without internet.</span></li><li><strong>Free</strong><span>English and German speech models are free.</span></li></ul>
+        <ul class="facts"><li><strong>Private</strong><span>Audio stays on your device.</span></li><li><strong>Offline</strong><span>The sample works offline after your first visit.</span></li><li><strong>Free</strong><span>English and German speech models are free.</span></li></ul>
       </div>
       <figure class="hero-art"><picture><source media="(max-width: 720px)" srcset="/assets/listening-room-720.webp"><img src="/assets/listening-room-1120.webp" width="1120" height="747" alt="Paper sound waves fold into caption ribbons above a laptop in an empty lecture room." fetchpriority="high" decoding="async"></picture><figcaption>The app turns audio into captions on your computer.</figcaption></figure>
     </section>
     <section class="product-preview" aria-labelledby="preview-title"><div class="section-mark" aria-hidden="true"></div><div><h2 id="preview-title">Resizable caption overlay</h2><p>Keep the resizable overlay above your lecture or call. Adjust the words without stopping captions.</p></div>${preview()}</section>
     <section id="how" class="steps" aria-labelledby="how-title"><div class="section-mark" aria-hidden="true"></div><h2 id="how-title">How it works</h2>
-      <ol><li><span>1</span><div><h3>Choose the audio source</h3><p>Choose an audio source. A monitor source carries system audio through PipeWire or PulseAudio.</p><p>The app checks a monitor source before capture.</p></div></li><li><span>2</span><div><h3>Download a speech model</h3><p>Choose English or German. The model stays on this computer.</p></div></li><li><span>3</span><div><h3>Ask, then start</h3><p>Confirm that everyone agreed to captions. Stop at any time.</p></div></li></ol>
+      <ol><li><span>1</span><div><h3>Choose the audio source</h3><p>Choose an audio source. A monitor source carries system audio through PipeWire or PulseAudio.</p><p>The app checks a monitor source before capture.</p></div></li><li><span>2</span><div><h3>Download a speech model</h3><p>Choose English or German. The model stays on this computer.</p></div></li><li><span>3</span><div><h3>Confirm consent and start captions</h3><p>Confirm that everyone agreed to captions. Stop at any time.</p></div></li></ol>
       <div class="walkthrough" aria-label="Desktop app walkthrough"><article><b>1 · Pick</b><div class="mini-ui"><span>Audio source</span><strong>Monitor of Built-in Audio</strong></div></article><article><b>2 · Confirm</b><div class="mini-ui"><span>Consent</span><strong>Everyone has agreed</strong></div></article><article><b>3 · Read</b><div class="mini-ui dark"><span>Capturing</span><strong>That balance can last for billions of years.</strong></div></article></div>
     </section>
     <section class="limits" aria-labelledby="limits-title"><div class="section-mark" aria-hidden="true"></div><div><h2 id="limits-title">Privacy and limits</h2><p>The app does not join calls, name speakers, or save audio. It keeps transcript text only while the session is open.</p></div><ul><li>No cloud recording</li><li>Consent before capture</li><li>Resizable overlay</li><li>No perfect accuracy promise</li></ul></section>
@@ -77,11 +77,11 @@ function landing(): string {
 }
 
 function demoPage(): string {
-  return shell(`<div class="demo-banner" role="status"><strong>Demo — sample data, nothing is saved</strong><span><button type="button" data-action="reset-demo">Reset demo</button><a class="nav-link" data-action="exit-demo" href="/">Start for real</a></span></div><main id="main" class="demo-main" tabindex="-1"><div class="demo-heading"><p class="eyebrow">Sample astronomy lecture</p><h1 tabindex="-1">See live captions before installing</h1><p>This sample uses a bundled transcript. It sends no data to other sites.</p></div>${preview("demo")}<aside class="demo-notes"><h2>Session transcript</h2><ol id="transcript-list">${SAMPLE_LINES.map((line) => `<li><time>00:${String(line.at).padStart(2, "0")}</time> ${escapeHtml(line.text)}</li>`).join("")}</ol><div class="export-row"><button class="button secondary" type="button" data-action="export-txt">Export TXT</button><button class="button secondary" type="button" data-action="export-srt">Export SRT</button></div></aside></main>`);
+  return shell(`<div class="demo-banner" role="status"><strong>Demo — sample data, nothing is saved</strong><span><button type="button" data-action="reset-demo">Reset demo</button><a class="nav-link" data-action="exit-demo" href="/">Start for real</a></span></div><main id="main" class="demo-main" tabindex="-1"><div class="demo-heading"><p class="eyebrow">Sample astronomy lecture</p><h1 tabindex="-1">See live captions before installing</h1><p>This sample uses a bundled transcript. It sends no data to other sites.</p></div>${preview("demo")}<aside class="demo-notes"><h2>Session transcript</h2><ol id="transcript-list">${SAMPLE_LINES.map((line) => `<li><time>00:${String(line.at).padStart(2, "0")}</time> ${escapeHtml(line.text)}</li>`).join("")}</ol><div class="export-row"><button class="button secondary" type="button" data-action="export-txt">Export TXT</button><button class="button secondary" type="button" data-action="export-srt">Export subtitle file (.srt)</button></div></aside></main>`);
 }
 
 const legal = {
-  "/privacy": { title: "Privacy — Local Live Captions", h1: "Your audio stays on your computer", intro: "Local Live Captions processes speech on your computer.", body: `<h2>What the app handles</h2><p>The desktop app reads the audio source you choose. It processes that audio in memory with a downloaded speech model. It does not save raw audio.</p><h2>What is stored</h2><p>Settings, downloaded model files, and an optional license token stay on your computer. Transcript text stays in memory until you export it or close the session.</p><h2>Network access</h2><p>The app uses the network when you download a model or verify a supporter license. Model downloads come from Hugging Face. License checks go to Sociobot. Audio and transcript text are never sent with either request.</p><h2>Website data</h2><p>This site has no advertising trackers. The demo uses a separate <code>demo:</code> browser storage namespace and clears it when you leave.</p><h2>Your choices</h2><p>In desktop setup, choose Delete downloaded model or Remove supporter license. Contact <a href="mailto:privacy@sociobot.in">privacy@sociobot.in</a> with privacy questions.</p><p><em>Effective 29 August 2026.</em></p>` },
+  "/privacy": { title: "Privacy — Local Live Captions", h1: "Your audio stays on your computer", intro: "Local Live Captions processes speech on your computer.", body: `<h2>What the app handles</h2><p>The desktop app reads the audio source you choose. It processes that audio in memory with a downloaded speech model. It does not save raw audio.</p><h2>What is stored</h2><p>Settings, downloaded model files, and an optional license token stay on your computer. Transcript text stays in memory until you export it or close the session.</p><h2>Network access</h2><p>The app uses the network when you download a model or verify a supporter license. Model downloads come from Hugging Face. License checks go to Sociobot. Audio and transcript text are never sent with either request.</p><h2>Website data</h2><p>The website makes no advertising or telemetry request. The demo uses a separate <code>demo:</code> browser storage namespace and clears it when you leave.</p><h2>Your choices</h2><p>In desktop setup, choose Delete downloaded model or Remove supporter license. Contact <a href="mailto:privacy@sociobot.in">privacy@sociobot.in</a> with privacy questions.</p><p><em>Effective 29 August 2026.</em></p>` },
   "/terms": { title: "Terms — Local Live Captions", h1: "Use captions with consent", intro: "These terms cover the Local Live Captions app and website.", body: `<h2>Permission to caption</h2><p>Tell people when capture starts. Get any consent required by your school, workplace, or local law.</p><h2>Accuracy</h2><p>Automatic captions can miss or change words. Do not use them as the only record for medical, legal, safety, or assessment decisions.</p><h2>Supporter license</h2><p>All caption features remain available without payment. A $24 one-time supporter license helps fund updates. Checkout opens Dodo through Sociobot. Review the checkout terms before paying.</p><h2>Software</h2><p>The app is provided under the MIT License, without warranty. You are responsible for choosing and following each downloaded model license.</p><h2>Contact</h2><p>Email <a href="mailto:support@sociobot.in">support@sociobot.in</a> for support or terms questions.</p><p><em>Effective 29 August 2026.</em></p>` }
 } as const;
 
@@ -111,7 +111,8 @@ function wireShared(): void {
     if (link.origin !== location.origin || event.metaKey || event.ctrlKey || event.shiftKey) return;
     event.preventDefault();
     if (link.dataset.action === "exit-demo") discardDemo();
-    history.pushState({}, "", link.pathname + link.search); render(true);
+    history.pushState({}, "", link.pathname + link.search + link.hash);
+    render(true, link.dataset.focusTarget);
   }));
   document.querySelectorAll<HTMLInputElement>("[data-caption-size]").forEach((input) => input.addEventListener("input", () => {
     const stage = input.closest<HTMLElement>(".caption-stage")!;
@@ -232,7 +233,7 @@ function setRouteMetadata(route: Route, title: string): void {
   document.querySelector<HTMLMetaElement>("meta[name='twitter:description']")?.setAttribute("content", description);
 }
 
-function render(focusHeading = false): void {
+function render(focusHeading = false, focusTarget?: string): void {
   if (isDesktop) { void renderDesktop(); return; }
   const route = routeFromPath();
   app.innerHTML = route === "/" ? landing() : route === "/demo" ? demoPage() : route === "/privacy" || route === "/terms" ? legalPage(route) : notFound();
@@ -240,18 +241,22 @@ function render(focusHeading = false): void {
   setRouteMetadata(route, titles[route]);
   wireShared(); if (route === "/demo") wireDemo(); if (route === "/") { void setupDownloads(); setupLicense(); }
   requestAnimationFrame(() => {
+    const target = focusTarget ? document.querySelector<HTMLElement>(focusTarget) : document.querySelector<HTMLElement>("h1");
     if (focusHeading) {
-      document.querySelector<HTMLElement>("h1")?.focus({ preventScroll: true });
-      document.querySelector<HTMLElement>("#route-status")!.textContent = document.querySelector("h1")?.textContent || "Page loaded";
+      target?.setAttribute("tabindex", "-1");
+      target?.focus({ preventScroll: true });
+      document.querySelector<HTMLElement>("#route-status")!.textContent = target?.textContent || "Page loaded";
     }
-    window.scrollTo(0, 0);
+    if (focusTarget) target?.scrollIntoView({ block: "start" });
+    else window.scrollTo(0, 0);
   });
 }
 
-window.addEventListener("popstate", () => render(true));
+window.addEventListener("popstate", () => render(true, location.hash === "#how" ? "#how-title" : location.hash === "#price" ? "#price-title" : undefined));
 
 async function renderDesktop(): Promise<void> {
-  const { invoke } = await import("@tauri-apps/api/core");
+  const { invoke: tauriInvoke } = await import("@tauri-apps/api/core");
+  const invoke = window.__LLC_INVOKE__ || tauriInvoke;
   let demo = false;
   let consent = false;
   let lines: CaptionLine[] = [];
@@ -261,7 +266,7 @@ async function renderDesktop(): Promise<void> {
   const cachedAt = Number(localStorage.getItem(`${LICENSE_KEY}:verified`) || 0);
   let plusActive = Boolean(localStorage.getItem(LICENSE_KEY)) && Date.now() - cachedAt < 86_400_000;
   const draw = (screen: "setup" | "caption" = "setup") => {
-    if (screen === "setup") app.innerHTML = `<main id="main" class="desktop-setup"><header class="app-brand"><span class="capture-orb"></span><strong>Local Live Captions</strong><span>Audio never leaves this computer</span></header><section><p class="eyebrow">Ready when the room is</p><h1>Caption audio on this computer</h1><p>Choose an audio source and speech model. Ask everyone before you start.</p><div id="desktop-error" role="alert">${escapeHtml(desktopError)}</div><label>Audio source<select id="audio-device"><option>Loading audio sources…</option></select></label><label>Speech model<select id="model"><option value="tiny.en">English · Tiny · free</option><option value="base.en">English · Base · free</option><option value="base">English + German · Base · free</option></select></label><label class="consent"><input id="consent" type="checkbox"> Everyone has agreed to captions</label><div class="app-actions"><button class="button primary" id="start" disabled>Start captions</button><button class="button secondary" id="sample">Load sample project</button></div><p class="model-note"><button class="text-button" id="download-model">Download the selected model</button>. The small English model is free. Whisper models use the MIT License.</p><div class="storage-actions"><button class="text-button" id="delete-model">Delete downloaded model</button><button class="text-button" id="remove-license" type="button">Remove supporter license</button></div><p id="storage-result" role="status">${escapeHtml(storageStatus)}</p><details class="app-license"><summary>${plusActive ? "Supporter license is active" : "Add or restore a supporter license"}</summary><p>A supporter license costs $24 once and helps fund updates. It does not change caption features. <a href="${API}/checkout" target="_blank" rel="external">Buy supporter license <span class="sr-only">(external checkout)</span></a></p><form id="app-license-form"><label for="app-license">License token</label><input id="app-license" value="${escapeHtml(localStorage.getItem(LICENSE_KEY) || "")}" autocomplete="off"><button class="button secondary" type="submit">Verify license</button><p id="app-license-result" role="status"></p></form></details></section></main>`;
+    if (screen === "setup") app.innerHTML = `<main id="main" class="desktop-setup"><header class="app-brand"><span class="capture-orb"></span><strong>Local Live Captions</strong><span>Audio never leaves this computer</span></header><section><p class="eyebrow">Ready when the room is</p><h1>Caption audio on this computer</h1><p>Choose an audio source and speech model. Ask everyone before you start.</p><div id="desktop-error" role="alert">${escapeHtml(desktopError)}</div><label>Audio source<select id="audio-device"><option>Loading audio sources…</option></select></label><label>Speech model<select id="model"><option value="tiny.en">English · Tiny · free</option><option value="base.en">English · Base · free</option><option value="base">English + German · Base · free</option></select></label><label class="consent"><input id="consent" type="checkbox"> Everyone has agreed to captions</label><div class="app-actions"><button class="button primary" id="start" disabled>Start captions</button><button class="button secondary" id="sample">Load sample project</button></div><p class="model-note"><button class="text-button" id="download-model">Download the selected model</button>. The small English model is free. See the bundled upstream MIT license.</p><div class="storage-actions"><button class="text-button" id="delete-model">Delete downloaded model</button><button class="text-button" id="remove-license" type="button">Remove supporter license</button></div><p id="storage-result" role="status">${escapeHtml(storageStatus)}</p><details class="app-license"><summary>${plusActive ? "Supporter license is active" : "Add or restore a supporter license"}</summary><p>A supporter license costs $24 once and helps fund updates. It does not change caption features. <a href="${API}/checkout" target="_blank" rel="external">Buy supporter license <span class="sr-only">(external checkout)</span></a></p><form id="app-license-form"><label for="app-license">License token</label><input id="app-license" value="${escapeHtml(localStorage.getItem(LICENSE_KEY) || "")}" autocomplete="off"><button class="button secondary" type="submit">Verify license</button><p id="app-license-result" role="status"></p></form></details></section></main>`;
     else app.innerHTML = `<main id="main" class="desktop-caption"><h1 class="sr-only">Live captions</h1><header class="overlay-bar"><span class="capture-state"><i></i>${demo ? "Sample captions" : "Capturing"}</span><span>${demo ? "Bundled sample" : "Audio stays local"}</span><button id="pin" aria-pressed="true">Keep on top</button></header><section class="live-words" aria-live="polite" style="--caption-size:28px">${lines.length ? lines.slice(-3).reverse().map((line, i) => `<p class="${i ? "older" : ""}">${escapeHtml(line.text)}</p>`).join("") : `<p>Listening… Speech will appear here.</p>`}</section><footer class="overlay-controls"><button id="stop" class="stop-button">Stop captions</button><label>Size <input id="app-size" type="range" min="20" max="48" value="28"><output>28 px</output></label><button id="app-export">Export transcript</button></footer></main>`;
   };
   draw();

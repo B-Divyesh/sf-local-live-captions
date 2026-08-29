@@ -23,6 +23,22 @@ test("desktop first screen keeps the primary sample action fully visible", async
   expect(box).not.toBeNull();
   expect(box!.y).toBeGreaterThanOrEqual(0);
   expect(box!.y + box!.height).toBeLessThanOrEqual(720);
+  for (const fact of await page.locator(".facts li").all()) {
+    const factBox = await fact.boundingBox();
+    expect(factBox).not.toBeNull();
+    expect(factBox!.y + factBox!.height).toBeLessThanOrEqual(720);
+  }
+});
+
+test("mobile first screen keeps the three plain facts visible", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "mobile project only");
+  await page.route("https://api.github.com/**", (route) => route.fulfill({ status: 404, body: "{}" }));
+  await page.goto("/");
+  for (const fact of await page.locator(".facts li").all()) {
+    const box = await fact.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.y + box!.height).toBeLessThanOrEqual(844);
+  }
 });
 
 test("dark pages have no serious or critical contrast violations", async ({ page }) => {
@@ -111,6 +127,18 @@ test("client-side route changes move focus to the new heading", async ({ page })
   await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
 });
 
+test("section navigation and browser history keep focus on the destination heading", async ({ page }) => {
+  await page.goto("/privacy");
+  await page.getByRole("link", { name: "How it works" }).click();
+  await expect(page).toHaveURL(/\/#how$/);
+  await expect(page.getByRole("heading", { name: "How it works" })).toBeFocused();
+  await page.goBack();
+  await expect(page).toHaveURL(/\/privacy$/);
+  await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
+  await page.goForward();
+  await expect(page.getByRole("heading", { name: "How it works" })).toBeFocused();
+});
+
 test("reduced motion removes interface transitions", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
@@ -119,12 +147,71 @@ test("reduced motion removes interface transitions", async ({ page }) => {
   expect(parseFloat(duration)).toBeLessThanOrEqual(0.00001);
 });
 
-test("@claim:desktop-overlay ships a resizable caption overlay with an always-on-top control", async ({ page }) => {
-  await page.goto("/demo");
-  const config = JSON.parse(await readFile("src-tauri/tauri.conf.json", "utf8"));
-  const source = await readFile("src-tauri/src/lib.rs", "utf8");
-  expect(config.app.windows[0]).toMatchObject({ resizable: true, alwaysOnTop: false });
-  expect(source).toContain("set_always_on_top");
+test("@claim:desktop-overlay desktop renderer loads sample captions and changes its keep-on-top window state", async ({ page }) => {
+  const commands: { command: string; args?: Record<string, unknown> }[] = [];
+  await page.addInitScript(() => {
+    window.__LLC_INVOKE__ = async (command, args) => {
+      (window as unknown as { __commands: { command: string; args?: Record<string, unknown> }[] }).__commands ??= [];
+      (window as unknown as { __commands: { command: string; args?: Record<string, unknown> }[] }).__commands.push({ command, args });
+      if (command === "list_audio_devices") return ["pulse:classroom.monitor"] as never;
+      if (command === "set_always_on_top") return undefined as never;
+      return [] as never;
+    };
+  });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Load sample project" }).click();
+  await expect(page.getByRole("heading", { name: "Live captions" })).toBeVisible();
+  const pin = page.getByRole("button", { name: "Keep on top" });
+  await pin.click();
+  await expect(page.getByRole("button", { name: "Allow behind" })).toHaveAttribute("aria-pressed", "false");
+  commands.push(...await page.evaluate(() => (window as unknown as { __commands: { command: string; args?: Record<string, unknown> }[] }).__commands));
+  expect(commands).toContainEqual({ command: "set_always_on_top", args: { enabled: false } });
+});
+
+test("@claim:capture-recovery desktop renderer shows a capture error and starts again", async ({ page }) => {
+  await page.addInitScript(() => {
+    let starts = 0;
+    window.__LLC_INVOKE__ = async (command) => {
+      if (command === "list_audio_devices") return ["pulse:classroom.monitor"] as never;
+      if (command === "start_capture") {
+        starts += 1;
+        if (starts === 1) throw new Error("The selected audio source stopped.");
+        return undefined as never;
+      }
+      if (command === "capture_status") return { active: true, error: null } as never;
+      if (command === "get_transcript") return [] as never;
+      return undefined as never;
+    };
+  });
+  await page.goto("/");
+  await page.getByLabel("Everyone has agreed to captions").check();
+  await page.getByRole("button", { name: "Start captions" }).click();
+  await expect(page.getByRole("alert")).toContainText("Captions did not start");
+  await page.getByRole("button", { name: "Start captions" }).click();
+  await expect(page.getByRole("heading", { name: "Live captions" })).toBeVisible();
+});
+
+test("@claim:storage-controls desktop renderer deletes the selected model and removes the local license", async ({ page }) => {
+  const commands: { command: string; args?: Record<string, unknown> }[] = [];
+  await page.addInitScript(() => {
+    localStorage.setItem("sb_license:local-live-captions", "sample-license");
+    localStorage.setItem("sb_license:local-live-captions:verified", "1");
+    window.__LLC_INVOKE__ = async (command, args) => {
+      (window as unknown as { __commands: { command: string; args?: Record<string, unknown> }[] }).__commands ??= [];
+      (window as unknown as { __commands: { command: string; args?: Record<string, unknown> }[] }).__commands.push({ command, args });
+      if (command === "list_audio_devices") return ["pulse:classroom.monitor"] as never;
+      if (command === "delete_model") return "The downloaded model was deleted from this computer." as never;
+      return undefined as never;
+    };
+  });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Delete downloaded model" }).click();
+  await expect(page.getByText("The downloaded model was deleted from this computer.")).toBeVisible();
+  await page.getByRole("button", { name: "Remove supporter license" }).click();
+  await expect(page.getByText("The supporter license was removed from this computer.")).toBeVisible();
+  expect(await page.evaluate(() => localStorage.getItem("sb_license:local-live-captions"))).toBeNull();
+  commands.push(...await page.evaluate(() => (window as unknown as { __commands: { command: string; args?: Record<string, unknown> }[] }).__commands));
+  expect(commands).toContainEqual({ command: "delete_model", args: { model: "tiny.en" } });
 });
 
 test("@claim:private-local demo sends no data elsewhere", async ({ page }) => {
@@ -161,7 +248,7 @@ test("@claim:srt-export exports every sample caption", async ({ page }, testInfo
   test.skip(testInfo.project.name === "mobile", "download path is covered in desktop Chromium");
   await page.goto("/demo");
   const downloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: "Export SRT" }).last().click();
+  await page.getByRole("button", { name: "Export subtitle file (.srt)" }).last().click();
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toBe("sample-captions.srt");
   const path = await download.path();

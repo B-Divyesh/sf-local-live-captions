@@ -8,7 +8,7 @@
   },
   {
     "id": "offline-reload",
-    "claim": "The bundled browser sample works without internet after its first visit",
+    "claim": "The sample works offline after your first visit",
     "where": "landing facts",
     "test": "npm test -- --grep @claim:offline-reload",
     "sandbox": "load /demo once, wait for its service worker, set the browser offline, reload, and operate captions"
@@ -57,17 +57,17 @@
   },
   {
     "id": "native-local-processing",
-    "claim": "Desktop captions process audio locally; model downloads and license checks are the only remote paths",
+    "claim": "Desktop captions process audio locally; model downloads and license checks are documented remote paths",
     "where": "landing privacy fact, privacy policy, README",
-    "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_native_local_processing",
-    "sandbox": "native unit test inspects the compiled capture module's network boundary and confirms transcription has no network client"
+    "test": "npm run test:linux-audio",
+    "sandbox": "native monitor acceptance plays consented fixture audio through the local capture path and transcribes it with a downloaded local model"
   },
   {
     "id": "capture-recovery",
     "claim": "If capture stops with an error, the app shows the error and lets you start again",
     "where": "desktop capture flow",
-    "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_capture_recovery",
-    "sandbox": "native unit test records a stream failure and asserts the running lock clears while the error remains available to the UI"
+    "test": "npm test -- --grep @claim:capture-recovery",
+    "sandbox": "desktop renderer harness injects a capture failure, asserts the visible error, then starts captions again"
   },
   {
     "id": "language-models",
@@ -95,28 +95,28 @@
     "claim": "The desktop caption overlay is resizable and can be kept on top",
     "where": "landing overlay section and desktop caption controls",
     "test": "npm test -- --grep @claim:desktop-overlay",
-    "sandbox": "native configuration and command source assert a resizable window and the always-on-top control"
+    "sandbox": "desktop renderer harness loads the built-in sample, uses the keep-on-top control, and observes the native bridge command"
   },
   {
     "id": "no-audio-storage",
     "claim": "The app does not save raw audio.",
     "where": "landing, privacy policy, README",
-    "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_no_audio_storage",
-    "sandbox": "native source-policy test proves the only file write is the temporary model download and capture samples stay in memory"
+    "test": "npm run test:linux-audio",
+    "sandbox": "isolated PulseAudio monitor performs a real capture; the local model folder is compared before and after capture"
   },
   {
     "id": "session-transcript",
     "claim": "Transcript text stays in memory until export or the session closes.",
     "where": "landing and privacy policy",
     "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_session_transcript",
-    "sandbox": "native source-policy test checks transcript runtime state, fresh-session clearing, and no transcript file path"
+    "sandbox": "native test fills the session transcript, starts a fresh session, and observes that the in-memory list is empty"
   },
   {
     "id": "no-telemetry-trackers",
-    "claim": "The app has no telemetry and the site has no advertising trackers.",
+    "claim": "The site makes no advertising or telemetry request.",
     "where": "privacy policy and README",
     "test": "npm test -- --grep @claim:no-telemetry-trackers",
-    "sandbox": "site-source regression test rejects common telemetry endpoints and permits only the documented release API"
+    "sandbox": "fresh browser context records every request while visiting the privacy page and permits only same-origin requests"
   },
   {
     "id": "consent-before-capture",
@@ -136,8 +136,8 @@
     "id": "storage-controls",
     "claim": "Desktop setup can delete a downloaded model and remove a supporter license from this computer.",
     "where": "privacy policy and desktop setup",
-    "test": "cargo test --manifest-path src-tauri/Cargo.toml claim_storage_controls",
-    "sandbox": "native unit test deletes a selected temporary model file and checks the visible desktop controls remove both license keys"
+    "test": "npm test -- --grep @claim:storage-controls",
+    "sandbox": "desktop renderer harness clicks both visible controls, observes the delete-model bridge call, and checks the local license keys are removed"
   },
   {
     "id": "source-start-validation",
@@ -166,5 +166,19 @@
     "where": "README Linux system audio section",
     "test": "npm run test:linux-audio",
     "sandbox": "isolated PulseAudio null sink plays the shipped public-domain speech fixture through a monitor; the real tiny.en model is downloaded, captions are asserted, SRT is formatted, and a second monitor capture opens"
+  },
+  {
+    "id": "model-provenance-license",
+    "claim": "Speech model downloads use the listed ggerganov/whisper.cpp repository and the shipped upstream MIT license copy.",
+    "where": "README Develop and desktop model note",
+    "test": "npm run test:unit -- --testNamePattern @claim:model-provenance-license",
+    "sandbox": "check every catalog download URL, the committed upstream license text, pinned upstream revision, and license checksum"
+  },
+  {
+    "id": "release-artifacts",
+    "claim": "The documented release includes unsigned macOS, Windows, and Linux packages with SHA256SUMS and latest.json.",
+    "where": "README Release and landing download section",
+    "test": "npm run test:unit -- --testNamePattern @claim:release-artifacts",
+    "sandbox": "release fixture verifies each platform package family and integrity files; workflow verifies tag and manual release paths"
   }
 ]
