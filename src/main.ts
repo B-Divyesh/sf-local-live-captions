@@ -151,9 +151,14 @@ async function setupDownloads(): Promise<void> {
     let data: Release;
     if (parsed && Date.now() - parsed.at < 3_600_000) data = parsed.data;
     else {
-      const response = await fetch("https://api.github.com/repos/B-Divyesh/sf-local-live-captions/releases/latest", { headers: { Accept: "application/vnd.github+json" } });
+      // The list endpoint stays a clean 200 with an empty array before the
+      // first release exists. `/releases/latest` instead returns a noisy 404.
+      const response = await fetch("https://api.github.com/repos/B-Divyesh/sf-local-live-captions/releases?per_page=1", { headers: { Accept: "application/vnd.github+json" } });
       if (!response.ok) throw new Error("release unavailable");
-      data = await response.json() as Release; localStorage.setItem("llc:release", JSON.stringify({ at: Date.now(), data }));
+      const releases = await response.json() as Release[];
+      data = releases[0];
+      if (!data) throw new Error("release unavailable");
+      localStorage.setItem("llc:release", JSON.stringify({ at: Date.now(), data }));
     }
     const patterns = platform === "windows" ? [/\.msi$/i, /\.exe$/i] : platform === "macos" ? [/\.dmg$/i] : [/\.AppImage$/i, /\.deb$/i];
     const asset = data.assets.find((item) => patterns.some((pattern) => pattern.test(item.name)));
