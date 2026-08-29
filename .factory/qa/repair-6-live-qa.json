@@ -1,0 +1,288 @@
+{
+  "testedAt": "2026-08-29T12:27:30.336Z",
+  "base": "https://local-live-captions.sociobot.in",
+  "scenarios": {
+    "desktop": {
+      "status": 200,
+      "actionBox": {
+        "x": 64,
+        "y": 476.015625,
+        "width": 250.25,
+        "height": 52.34375
+      },
+      "actionFullyVisible": true,
+      "initialFocus": "BODY",
+      "firstTab": {
+        "tag": "A",
+        "text": "Skip to content"
+      },
+      "transcriptRows": 4,
+      "captionSize": "42px",
+      "txt": {
+        "filename": "sample-transcript.txt",
+        "lines": 4
+      },
+      "srt": {
+        "filename": "sample-captions.srt",
+        "cues": 4
+      },
+      "reset": {
+        "real": "keep",
+        "demo": null
+      },
+      "axe": [],
+      "events": {
+        "consoleErrors": [],
+        "pageErrors": [],
+        "requests": [
+          "https://local-live-captions.sociobot.in/",
+          "https://local-live-captions.sociobot.in/assets/index-BTdooB_h.js",
+          "https://local-live-captions.sociobot.in/assets/index-BM74oma7.css",
+          "https://api.github.com/repos/B-Divyesh/sf-local-live-captions/releases/latest",
+          "https://local-live-captions.sociobot.in/assets/listening-room-1120.webp",
+          "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2"
+        ]
+      }
+    },
+    "mobile": {
+      "targets": {
+        "Reset demo": {
+          "x": 20,
+          "y": 177.796875,
+          "width": 120,
+          "height": 44
+        },
+        "Start for real": {
+          "x": 156,
+          "y": 177.796875,
+          "width": 94,
+          "height": 44
+        }
+      },
+      "overflow": 0,
+      "overflowAt200": 0,
+      "axe": [],
+      "events": {
+        "consoleErrors": [],
+        "pageErrors": [],
+        "requests": [
+          "https://local-live-captions.sociobot.in/demo",
+          "https://local-live-captions.sociobot.in/assets/index-BTdooB_h.js",
+          "https://local-live-captions.sociobot.in/assets/index-BM74oma7.css",
+          "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2"
+        ]
+      }
+    },
+    "darkReducedMotion": {
+      "transition": "1e-05s",
+      "landingAxe": [],
+      "demoAxe": [],
+      "events": {
+        "consoleErrors": [],
+        "pageErrors": [],
+        "requests": [
+          "https://local-live-captions.sociobot.in/",
+          "https://local-live-captions.sociobot.in/assets/index-BTdooB_h.js",
+          "https://local-live-captions.sociobot.in/assets/index-BM74oma7.css",
+          "https://api.github.com/repos/B-Divyesh/sf-local-live-captions/releases/latest",
+          "https://local-live-captions.sociobot.in/assets/listening-room-1120.webp",
+          "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2",
+          "https://local-live-captions.sociobot.in/demo",
+          "https://local-live-captions.sociobot.in/assets/index-BTdooB_h.js",
+          "https://local-live-captions.sociobot.in/assets/index-BM74oma7.css",
+          "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2"
+        ]
+      }
+    },
+    "offlineUpdate": {
+      "update": {
+        "state": "activated",
+        "scriptURL": "https://local-live-captions.sociobot.in/sw.js",
+        "caches": [
+          "llc-shell-v5"
+        ]
+      },
+      "heading": "See live captions before installing",
+      "resumeVisible": true,
+      "events": {
+        "consoleErrors": [],
+        "pageErrors": [],
+        "requests": [
+          "https://local-live-captions.sociobot.in/demo",
+          "https://local-live-captions.sociobot.in/assets/index-BTdooB_h.js",
+          "https://local-live-captions.sociobot.in/assets/index-BM74oma7.css",
+          "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2",
+          "https://local-live-captions.sociobot.in/demo",
+          "https://local-live-captions.sociobot.in/assets/index-BTdooB_h.js",
+          "https://local-live-captions.sociobot.in/assets/index-BM74oma7.css",
+          "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2"
+        ]
+      }
+    },
+    "licenseResponse": {
+      "verifyStatus": 200,
+      "message": "This license is not active. Check the token or buy a supporter license.",
+      "events": {
+        "consoleErrors": [],
+        "pageErrors": [],
+        "requests": [
+          "https://local-live-captions.sociobot.in/",
+          "https://local-live-captions.sociobot.in/assets/index-BTdooB_h.js",
+          "https://local-live-captions.sociobot.in/assets/index-BM74oma7.css",
+          "https://api.github.com/repos/B-Divyesh/sf-local-live-captions/releases/latest",
+          "https://local-live-captions.sociobot.in/assets/listening-room-1120.webp",
+          "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+          "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2",
+          "https://api.sociobot.in/api/v1/products/local-live-captions/verify?license=repair-6-invalid-1788006458588"
+        ]
+      }
+    },
+    "routesAndLinks": {
+      "routes": [
+        {
+          "path": "/",
+          "status": 200,
+          "title": "Local Live Captions — Caption Linux audio locally",
+          "lang": "en",
+          "h1": 1,
+          "main": 1,
+          "header": 1,
+          "footer": 1,
+          "axe": [],
+          "consoleErrors": [],
+          "pageErrors": []
+        },
+        {
+          "path": "/demo",
+          "status": 200,
+          "title": "Demo — Local Live Captions",
+          "lang": "en",
+          "h1": 1,
+          "main": 1,
+          "header": 1,
+          "footer": 1,
+          "axe": [],
+          "consoleErrors": [],
+          "pageErrors": []
+        },
+        {
+          "path": "/privacy",
+          "status": 200,
+          "title": "Privacy — Local Live Captions",
+          "lang": "en",
+          "h1": 1,
+          "main": 1,
+          "header": 1,
+          "footer": 1,
+          "axe": [],
+          "consoleErrors": [],
+          "pageErrors": []
+        },
+        {
+          "path": "/terms",
+          "status": 200,
+          "title": "Terms — Local Live Captions",
+          "lang": "en",
+          "h1": 1,
+          "main": 1,
+          "header": 1,
+          "footer": 1,
+          "axe": [],
+          "consoleErrors": [],
+          "pageErrors": []
+        },
+        {
+          "path": "/missing-repair-6",
+          "status": 404,
+          "title": "Page not found — Local Live Captions",
+          "lang": "en",
+          "h1": 1,
+          "main": 1,
+          "header": 1,
+          "footer": 1,
+          "axe": [],
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 404 ()"
+          ],
+          "pageErrors": []
+        }
+      ],
+      "links": [
+        {
+          "href": "https://api.sociobot.in/api/v1/products/local-live-captions/checkout",
+          "status": 303
+        },
+        {
+          "href": "https://github.com/B-Divyesh/sf-local-live-captions/blob/main/.factory/design.md",
+          "status": 200
+        },
+        {
+          "href": "https://github.com/B-Divyesh/sf-local-live-captions/releases",
+          "status": 200
+        },
+        {
+          "href": "https://hello-factory.sociobot.in/",
+          "status": 200
+        },
+        {
+          "href": "https://local-live-captions.sociobot.in/",
+          "status": 200
+        },
+        {
+          "href": "https://local-live-captions.sociobot.in/#how",
+          "status": 200
+        },
+        {
+          "href": "https://local-live-captions.sociobot.in/#main",
+          "status": 200
+        },
+        {
+          "href": "https://local-live-captions.sociobot.in/#price",
+          "status": 200
+        },
+        {
+          "href": "https://local-live-captions.sociobot.in/demo",
+          "status": 200
+        },
+        {
+          "href": "https://local-live-captions.sociobot.in/demo#main",
+          "status": 200
+        },
+        {
+          "href": "https://local-live-captions.sociobot.in/missing-repair-6#main",
+          "status": 404
+        },
+        {
+          "href": "https://local-live-captions.sociobot.in/privacy",
+          "status": 200
+        },
+        {
+          "href": "https://local-live-captions.sociobot.in/privacy#main",
+          "status": 200
+        },
+        {
+          "href": "https://local-live-captions.sociobot.in/terms",
+          "status": 200
+        },
+        {
+          "href": "https://local-live-captions.sociobot.in/terms#main",
+          "status": 200
+        }
+      ]
+    }
+  },
+  "failures": []
+}
