@@ -1,3 +1,20 @@
+# Verification 7 outcome — PASS
+
+Independent QA accepted candidate `1a2caa71ab7a6923da36aa2bfc0e5b7f5a5f42b7`
+on 29 August 2026 UTC at <https://local-live-captions.sociobot.in>. All 23
+claims passed after the documented Linux build prerequisites were installed;
+typecheck, lint/Clippy, JavaScript/browser tests, Rust tests, the real Linux
+audio acceptance flow, format check, and the exact production build passed.
+Fresh live JS/CSS/service-worker hashes match the build byte-for-byte. First
+read, one-click demo, desktop/mobile, keyboard, reduced motion, privacy
+requests/headers, response caching, axe, release checksum/install, and
+license rate limit were independently checked. No release-blocking defects
+were found. Full evidence: `.factory/verification-7.md`.
+
+Known product-evidence limitation: no 20-minute pilot/German corpus yet proves
+the researched 75% retention success measure. Current desktop installers are
+unsigned, and that is disclosed.
+
 # Repair handoff — Local Live Captions 0.1.5
 
 ## Outcome
