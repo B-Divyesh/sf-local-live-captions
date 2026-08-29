@@ -1,47 +1,59 @@
-# Local Live Captions — polish round 2 handoff
+# Local Live Captions — independent verification 9 handoff
 
 ## Outcome
 
-Repair commit: `55210f7528479699539d7a2a25ac3a1559b1a8d9`. This closes every finding in `.factory/review-1.md` and `.factory/review-2.md`.
+**FAIL — candidate `108dc52d41d58cd6d6e1712646e2df7e6f26d0d5` is not
+releasable.** The live website at <https://local-live-captions.sociobot.in>
+matches the candidate and all functional, claim, accessibility, privacy,
+performance, and build checks passed. The downloadable desktop packages do
+not match the candidate.
 
-## What changed
+## Release blocker
 
-- Reworked the short-height and phone hero so all three required facts are visible above the fold. The offline wording now states the tested first-visit condition exactly.
-- Added section-navigation focus restoration for cross-route links and browser Back/Forward.
-- Replaced the remaining ambiguous headings and technical labels with plain language.
-- Added a desktop-renderer integration harness for recovery, always-on-top, and storage controls; moved local-processing and raw-audio storage checks to the real PulseAudio monitor acceptance run.
-- Added model provenance/license and release-artifact claims, a pinned upstream MIT license copy, release fixture, and claim governance coverage.
-- Preserved the paper lecture-room visual identity and isolated `?demo=1` path.
+The latest release is `v0.1.7`, tagged at older commit
+`4c24e8f0d6ebf5910acbd00b8ffe7840750ba643`. Candidate product changes in
+`55210f7` were committed more than two hours after those release assets were
+published, and candidate `108dc52` is not contained by any tag. The installed
+public AppImage visibly contains older desktop copy than a fresh candidate
+build. This is a Major defect for a desktop app whose live primary action
+downloads that release.
 
-## Verification
+## Verification completed
 
-Main checkout passed:
+- All 26 `.factory/claims.json` entries passed after clean dependency and
+  documented Linux package installation.
+- `npm test`, type checking, Clippy with warnings denied, Rust format/test/check,
+  browser crash recovery, and the real English/German PulseAudio acceptance
+  passed.
+- `npm run build` and the exact Tauri production build passed, producing
+  `dist/site`, `dist/app`, DEB, RPM, and AppImage outputs.
+- Live demo normal, boundary, invalid-input, recovery, export, reset, offline,
+  keyboard, 390 px, 200% text, and reduced-motion paths passed.
+- Axe found zero violations on normal routes in both themes. Live URL verifier
+  found zero errors.
+- Demo/privacy request logs matched privacy promises. Security headers and
+  cache policies passed. The license API allowed 30 requests; request 31
+  returned 429 with `Retry-After: 4`.
+- Mobile Lighthouse scored 98/100/100/100 with 1.4 s LCP and 0.012 CLS.
+- Every publicly deployed candidate site file matched live bytes.
+- The live installer checksum passed and its AppImage launched, but that
+  binary belongs to the stale release.
 
-- `npm run typecheck`
-- `npm run test:unit` — 17 tests
-- `npm test` — 22 Chromium + 22 mobile browser tests passed; four expected project skips each run
-- `cargo fmt --check --manifest-path src-tauri/Cargo.toml`
-- `cargo test --manifest-path src-tauri/Cargo.toml` — 9 passed, two expected environment-gated monitor tests ignored outside the acceptance script
-- `npm run lint`
-- `npm run test:linux-audio` — real English and German PulseAudio monitor caption acceptance, SRT, restart, and raw-audio-folder check
-- `npm run build` — `dist/site` and `dist/app` produced; initial JS is 9.63 kB gzip and CSS is 4.86 kB gzip
-- Axe serious/critical scan passed on `/`, `/demo`, `/privacy`, and `/terms`.
-- `/opt/fleet/lib/verify-url.sh http://127.0.0.1:4173/ .factory/verify-polish-2-local` passed with zero console errors, one h1, main, lang, title, and image alt.
+Full evidence and exact hashes are in `.factory/verification-9.md`.
 
-Fresh-clone evidence is in `/tmp/local-live-captions-claims-YRLAPN`; it ran `npm ci`, type checking, 17 unit tests, native tests, `npm test`, the real `npm run test:linux-audio` acceptance, and `npm run build`. Both `dist/site/index.html` and `dist/app/index.html` were produced from that clean clone.
+## Required next step
 
-Claim inventory: `.factory/claims.json` has 26 entries. Browser claim tests, Rust command claims, the shared real monitor acceptance command, model-license fixture test, and release-artifact fixture test are included in the suites above. `polish-2.md` maps every review finding to its test evidence.
+Create a new `v*` tag at the accepted candidate (for example `v0.1.8`), let
+`.github/workflows/release.yml` publish all platform packages,
+`SHA256SUMS`, and `latest.json`, then rerun independent verification. Confirm
+the GitHub release target is the candidate and the live platform download
+selects the new asset.
 
-## Evidence
+## Known non-blocking limits
 
-- `.factory/evidence-polish-2-desktop.png` — local cold landing capture.
-- `.factory/evidence-polish-2-demo-mobile.png` — direct `?demo=1` mobile capture with banner, reset, and start-for-real controls.
-- `.factory/verify-polish-2-local/verify.json` — local URL verifier report.
-- `.factory/verify-polish-2-live/verify.json` — cold live URL verifier report
-  after deployment, including production screenshots.
+- Desktop packages are intentionally unsigned.
+- The 20-minute human retention target still needs a pilot study.
+- Windows and macOS assets were manifest-checked but not launched in this
+  Linux worker.
 
-## Deploy and operator notes
-
-`main` was pushed and `dist/site` was deployed with `/opt/fleet/lib/deploy-static.sh local-live-captions dist/site` (Azure deployment `fd4405b8-546d-43de-b2c1-167d8ce80c20`). The live verifier, Axe scan, direct `?demo=1` flow, cross-route focus, and live 404 all passed at <https://local-live-captions.sociobot.in>. Desktop installers remain unsigned by design; GitHub Actions builds them on a `v*` tag or manual release dispatch. No signing secrets are configured.
-
-There are no known product defects remaining.
+No product code was modified during this verification.
