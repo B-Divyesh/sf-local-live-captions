@@ -27,7 +27,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 a { color: inherit; text-underline-offset: 4px; text-decoration-thickness: 1.5px; }
 button { color: inherit; }
 img { max-width: 100%; height: auto; }
-h1, h2 { font-family: "Fraunces Variable", Georgia, serif; font-variation-settings: "SOFT" 80, "WONK" 1; line-height: .98; letter-spacing: -.035em; margin: 0; }
+h1, h2 { font-family: "Fraunces Variable", Georgia, serif; font-variation-settings: "SOFT" 80, "WONK" 1; line-height: .98; letter-spacing: -.035em; margin: 0; overflow-wrap: anywhere; }
 h1 { font-size: clamp(3rem, 7.5vw, 6.5rem); max-width: 9ch; }
 h2 { font-size: clamp(2.25rem, 5vw, 4.25rem); max-width: 12ch; }
 h3, p { margin-top: 0; }
@@ -68,6 +68,7 @@ nav a:hover { border-color: var(--tomato); }
 .product-preview .section-mark { color: #f17a62; }
 .caption-stage { --caption-size: 28px; grid-column: 1 / -1; background: #111b18; color: var(--cream); min-height: 400px; border: 1px solid #4a5a54; border-radius: 36px 6px 36px 6px; padding: 20px; display: flex; flex-direction: column; box-shadow: 0 28px 80px rgb(0 0 0 / 28%); }
 .stage-top, .stage-controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; color: #c8d4cc; font-size: .9rem; }
+.stage-top { flex-wrap: wrap; }
 .capture-state { display: inline-flex; align-items: center; gap: 9px; font-weight: 700; color: var(--cream); }
 .capture-state i, .capture-orb { width: 12px; height: 12px; border-radius: 50%; background: var(--tomato); box-shadow: 0 0 0 5px rgb(217 75 50 / 18%); }
 .caption-stack { display: flex; flex-direction: column; justify-content: flex-end; flex: 1; max-width: 32ch; margin: auto; padding: 48px 0; font-family: "Fraunces Variable", Georgia, serif; font-size: var(--caption-size); line-height: 1.25; text-align: center; }
@@ -194,8 +195,8 @@ footer p { color: #c8d4cc; margin-bottom: 0; }
   .hero-copy { order: 1; }
   .hero-art { order: 2; }
   .hero-action { align-items: flex-start; flex-direction: column; }
-  .product-preview, .steps, .limits, .price, .download, .demo-main { grid-template-columns: 1fr; }
-  .product-preview > *, .steps > *, .limits > *, .price > * { grid-column: 1 !important; }
+  .product-preview, .steps, .limits, .price, .download, .demo-main { grid-template-columns: minmax(0, 1fr); }
+  .product-preview > *, .steps > *, .limits > *, .price > *, .download > *, .demo-main > * { grid-column: 1 !important; min-width: 0; }
   .walkthrough { grid-template-columns: 1fr; }
   .limits ul { grid-template-columns: 1fr 1fr; }
   .download-slot { padding: 24px; }

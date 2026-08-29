@@ -36,6 +36,9 @@ test("mobile layout fits 390px", async ({ page }, testInfo) => {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
   await expect(page.getByText("Demo — sample data, nothing is saved")).toBeVisible();
+  await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
+  const resizedOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(resizedOverflow).toBeLessThanOrEqual(1);
 });
 
 test("mobile navigation and footer links meet the 44px target", async ({ page }, testInfo) => {
