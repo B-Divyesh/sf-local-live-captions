@@ -1,0 +1,18 @@
+$ cargo test --manifest-path src-tauri/Cargo.toml claim_language_models
+
+
+running 1 test
+test tests::claim_language_models_include_english_and_german ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.28s
+     Running unittests src/lib.rs (src-tauri/target/debug/deps/local_live_captions_lib-2f495418cf1ac340)
+     Running unittests src/main.rs (src-tauri/target/debug/deps/local_live_captions-797b9c52ad4b7ac9)
+
+exit=0 signal= error=

@@ -1,0 +1,35 @@
+$ cargo test --manifest-path src-tauri/Cargo.toml
+
+
+running 12 tests
+test tests::capture_recovery_failure_clears_running_state_and_keeps_a_retryable_error ... ok
+test tests::claim_consent_is_required_before_any_capture_can_start ... ok
+test tests::claim_german_caption_end_to_end ... ignored, requires scripts/linux-audio-acceptance.sh to provide an isolated PulseAudio monitor
+test tests::claim_language_models_include_english_and_german ... ok
+test tests::claim_linux_monitor_end_to_end_captions_speech_and_restarts ... ignored, requires scripts/linux-audio-acceptance.sh to provide an isolated PulseAudio monitor
+test tests::claim_linux_monitor_must_still_be_exposed_when_capture_starts ... ok
+test tests::claim_linux_system_audio_lists_pipewire_or_pulseaudio_monitor_sources ... ok
+test tests::claim_models_are_downloaded_to_the_app_data_folder ... ok
+test tests::claim_session_transcript_is_runtime_state_and_a_new_session_clears_it ... ok
+test tests::german_caption_regression_accepts_recognizable_local_german_and_rejects_english ... ok
+test tests::resampling_downmixes_and_preserves_the_requested_duration ... ok
+test tests::storage_control_core_deletes_the_selected_model_file ... ok
+
+test result: ok. 10 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.65s
+     Running unittests src/lib.rs (src-tauri/target/debug/deps/local_live_captions_lib-2f495418cf1ac340)
+     Running unittests src/main.rs (src-tauri/target/debug/deps/local_live_captions-797b9c52ad4b7ac9)
+   Doc-tests local_live_captions_lib
+
+exit=0 signal= error=

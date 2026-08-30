@@ -1,0 +1,8 @@
+$ npm run typecheck
+
+
+> local-live-captions@0.1.12 typecheck
+> tsc --noEmit
+
+
+exit=0 signal= error=

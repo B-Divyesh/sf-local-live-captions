@@ -1,0 +1,19 @@
+$ npm run verify:published-release
+
+
+> local-live-captions@0.1.12 verify:published-release
+> node scripts/verify-published-release.mjs
+
+file:///work/repo/scripts/verify-published-release.mjs:92
+  if (errors.length) throw new Error(errors.join("\n"));
+                           ^
+
+Error: Latest release commit 2db4639d4c28af7f964313d45cc69dfc264b7eb1 does not match site commit 003f7a396d6cf279326a9d5481ce4f1b82af43a1.
+latest.json commit 2db4639d4c28af7f964313d45cc69dfc264b7eb1 does not match site commit 003f7a396d6cf279326a9d5481ce4f1b82af43a1.
+    at audit (file:///work/repo/scripts/verify-published-release.mjs:92:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async run (file:///work/repo/scripts/verify-published-release.mjs:101:22)
+
+Node.js v22.23.2
+
+exit=1

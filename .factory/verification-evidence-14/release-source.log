@@ -1,0 +1,20 @@
+$ npm run verify:release-source -- v0.1.12
+
+
+> local-live-captions@0.1.12 verify:release-source
+> node scripts/verify-release-source.mjs v0.1.12
+
+file:///work/repo/scripts/verify-release-source.mjs:25
+  if (errors.length) throw new Error(errors.join("\n"));
+                           ^
+
+Error: Tag v0.1.12 resolves to 2db4639d4c28af7f964313d45cc69dfc264b7eb1, but this workflow is building 003f7a396d6cf279326a9d5481ce4f1b82af43a1.
+    at run (file:///work/repo/scripts/verify-release-source.mjs:25:28)
+    at file:///work/repo/scripts/verify-release-source.mjs:29:81
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v22.23.2
+
+exit=1

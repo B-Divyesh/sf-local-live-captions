@@ -1,0 +1,6 @@
+$ cargo check --manifest-path src-tauri/Cargo.toml
+
+   Compiling local-live-captions v0.1.12 (/work/repo/src-tauri)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.33s
+
+exit=0 signal= error=

@@ -1,0 +1,4 @@
+$ cargo fmt --check --manifest-path src-tauri/Cargo.toml
+
+
+exit=0 signal= error=
