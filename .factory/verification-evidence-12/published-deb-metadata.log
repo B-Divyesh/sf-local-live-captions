@@ -1,0 +1,13 @@
+ new Debian package, version 2.0.
+ size 5388222 bytes: control archive=538 bytes.
+     321 bytes,     9 lines      control
+     432 bytes,     5 lines      md5sums
+ Package: local-live-captions
+ Version: 0.1.10
+ Architecture: amd64
+ Installed-Size: 16351
+ Maintainer: Param Factory
+ Priority: optional
+ Depends: libwebkit2gtk-4.1-0, libgtk-3-0
+ Description: Offline captions for desktop audio
+  Captions selected desktop audio on the device with downloadable English and German Whisper models.

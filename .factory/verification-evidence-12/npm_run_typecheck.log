@@ -1,0 +1,3 @@
+
+> local-live-captions@0.1.10 typecheck
+> tsc --noEmit

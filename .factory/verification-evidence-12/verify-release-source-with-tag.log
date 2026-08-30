@@ -1,0 +1,5 @@
+
+> local-live-captions@0.1.10 verify:release-source
+> node scripts/verify-release-source.mjs v0.1.10
+
+Release source verified: v0.1.10 -> fcb90c7a2e659e930e7ec8fe519eb55118494e8c; package version 0.1.10.

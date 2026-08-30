@@ -1,0 +1,8 @@
+requested=fcb90cf990981ea8987341b4621dc1f8bbff974c
+local_head=fcb90c7a2e659e930e7ec8fe519eb55118494e8c
+origin_main=fcb90c7a2e659e930e7ec8fe519eb55118494e8c
+candidate_local=absent
+candidate_fetch=fatal: remote error: upload-pack: not our ref fcb90cf990981ea8987341b4621dc1f8bbff974c
+absent
+live_identity={"tag":"v0.1.10","commit":"fcb90c7a2e659e930e7ec8fe519eb55118494e8c"}
+live_footer=v0.1.10 · build fcb90c7 Generated artwork disclosed in the design notes (external) .

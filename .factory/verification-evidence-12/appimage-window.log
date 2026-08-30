@@ -1,0 +1,30 @@
+libEGL warning: DRI3 error: Could not get DRI3 device
+libEGL warning: Ensure your X server supports DRI3 to get accelerated rendering
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+Cannot connect to server socket err = No such file or directory
+Cannot connect to server request channel
+jack server is not running or cannot be started
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+Cannot connect to server socket err = No such file or directory
+Cannot connect to server request channel
+jack server is not running or cannot be started
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+ALSA lib pcm_oss.c:397:(_snd_pcm_oss_open) Cannot open device /dev/dsp
+ALSA lib pcm_oss.c:397:(_snd_pcm_oss_open) Cannot open device /dev/dsp
+ALSA lib pulse.c:242:(pulse_connect) PulseAudio: Unable to connect: Connection refused
+
+ALSA lib pulse.c:242:(pulse_connect) PulseAudio: Unable to connect: Connection refused
+
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0

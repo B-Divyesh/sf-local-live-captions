@@ -1,0 +1,438 @@
+
+> local-live-captions@0.1.10 test:linux-audio
+> bash scripts/linux-audio-acceptance.sh
+
+W: [pulseaudio] main.c: Running in system mode, but --disallow-module-loading not set.
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+W: [pulseaudio] main.c: Home directory of user 'pulse' is not '/var/run/pulse', ignoring.
+W: [pulseaudio] main.c: OK, so you are running PA in system mode. Please make sure that you actually do want to do that.
+W: [pulseaudio] main.c: Please read http://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/WhatIsWrongWithSystemWide/ for an explanation why system mode is usually a bad idea.
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+W: [pulseaudio] main.c: Unable to contact D-Bus: org.freedesktop.DBus.Error.FileNotFound: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.28s
+     Running unittests src/lib.rs (src-tauri/target/debug/deps/local_live_captions_lib-ab999a630ad5fee0)
+
+running 1 test
+test tests::claim_linux_monitor_end_to_end_captions_speech_and_restarts ... whisper_init_from_file_with_params_no_state: loading model from '/work/repo/.cache/linux-audio-acceptance/models/ggml-tiny.en.bin'
+whisper_init_with_params_no_state: use gpu    = 0
+whisper_init_with_params_no_state: flash attn = 0
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+whisper_init_with_params_no_state: devices    = 1
+whisper_init_with_params_no_state: backends   = 1
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51864
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 384
+whisper_model_load: n_audio_head  = 6
+whisper_model_load: n_audio_layer = 4
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 384
+whisper_model_load: n_text_head   = 6
+whisper_model_load: n_text_layer  = 4
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 1 (tiny)
+whisper_model_load: adding 1607 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:          CPU total size =    77.11 MB
+whisper_model_load: model size    =   77.11 MB
+whisper_backend_init_gpu: no GPU found
+whisper_init_state: kv self size  =    3.15 MB
+whisper_init_state: kv cross size =    9.44 MB
+whisper_init_state: kv pad  size  =    2.36 MB
+whisper_init_state: compute buffer (conv)   =   13.21 MB
+whisper_init_state: compute buffer (encode) =   64.81 MB
+whisper_init_state: compute buffer (cross)  =    3.89 MB
+whisper_init_state: compute buffer (decode) =   95.91 MB
+
+whisper_full_with_state: strategy = 0, decoding with 1 decoders, temperature = 0.00
+
+
+whisper_full_with_state: prompt[0] = [_SOT_]
+
+
+whisper_full_with_state: id =   0, decoder = 0, token =  50363, p =  0.978, ts =    [_BEG_],  0.978, result_len =    0 '[_BEG_]'
+whisper_full_with_state: id =   1, decoder = 0, token =   2253, p =  0.483, ts =        [?],  0.000, result_len =    0 ' America'
+whisper_full_with_state: id =   2, decoder = 0, token =   1265, p =  0.210, ts =        [?],  0.070, result_len =    0 ' ask'
+whisper_full_with_state: id =   3, decoder = 0, token =    407, p =  0.792, ts =        [?],  0.033, result_len =    0 ' not'
+whisper_full_with_state: id =   4, decoder = 0, token =    644, p =  0.878, ts =        [?],  0.027, result_len =    0 ' what'
+whisper_full_with_state: id =   5, decoder = 0, token =    534, p =  0.979, ts =  [_TT_194],  0.134, result_len =    0 ' your'
+whisper_full_with_state: id =   6, decoder = 0, token =   1499, p =  0.981, ts =  [_TT_205],  0.124, result_len =    0 ' country'
+whisper_full_with_state: id =   7, decoder = 0, token =    460, p =  0.979, ts =  [_TT_233],  0.117, result_len =    0 ' can'
+whisper_full_with_state: id =   8, decoder = 0, token =    466, p =  0.986, ts =  [_TT_248],  0.183, result_len =    0 ' do'
+whisper_full_with_state: id =   9, decoder = 0, token =    329, p =  0.941, ts =  [_TT_258],  0.109, result_len =    0 ' for'
+whisper_full_with_state: id =  10, decoder = 0, token =    345, p =  0.975, ts =  [_TT_271],  0.104, result_len =    0 ' you'
+whisper_full_with_state: id =  11, decoder = 0, token =   1265, p =  0.552, ts =        [?],  0.070, result_len =    0 ' ask'
+whisper_full_with_state: id =  12, decoder = 0, token =    644, p =  0.869, ts =        [?],  0.093, result_len =    0 ' what'
+whisper_full_with_state: id =  13, decoder = 0, token =    345, p =  0.941, ts =  [_TT_356],  0.214, result_len =    0 ' you'
+whisper_full_with_state: id =  14, decoder = 0, token =    460, p =  0.948, ts =  [_TT_367],  0.180, result_len =    0 ' can'
+whisper_full_with_state: id =  15, decoder = 0, token =    466, p =  0.980, ts =  [_TT_386],  0.253, result_len =    0 ' do'
+whisper_full_with_state: id =  16, decoder = 0, token =    329, p =  0.981, ts =  [_TT_392],  0.188, result_len =    0 ' for'
+whisper_full_with_state: id =  17, decoder = 0, token =    534, p =  0.894, ts =  [_TT_405],  0.144, result_len =    0 ' your'
+whisper_full_with_state: id =  18, decoder = 0, token =   1499, p =  0.830, ts =  [_TT_414],  0.157, result_len =    0 ' country'
+whisper_full_with_state: id =  19, decoder = 0, token =     13, p =  0.645, ts =  [_TT_436],  0.121, result_len =    0 '.'
+whisper_full_with_state: id =  20, decoder = 0, token =  50799, p =  0.077, ts =        [?],  0.077, result_len =   21 '[_TT_436]'
+whisper_full_with_state: id =  21, decoder = 0, token =  50256, p =  0.995, ts =  [_TT_436],  0.744, result_len =   21 '<|endoftext|>'
+whisper_full_with_state: decoder 0 completed
+whisper_full_with_state: decoder  0: score = -0.33435, result_len =  21, avg_logprobs = -0.33435, entropy =  2.51641
+whisper_full_with_state: best decoder = 0
+single timestamp ending - skip entire chunk
+seek = 899, seek_delta = 899
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 32.27s
+
+     Running unittests src/main.rs (src-tauri/target/debug/deps/local_live_captions-c7ed107929129875)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.27s
+     Running unittests src/lib.rs (src-tauri/target/debug/deps/local_live_captions_lib-ab999a630ad5fee0)
+
+running 1 test
+test tests::claim_german_caption_end_to_end ... whisper_init_from_file_with_params_no_state: loading model from '/work/repo/.cache/linux-audio-acceptance/models/ggml-base.bin'
+whisper_init_with_params_no_state: use gpu    = 0
+whisper_init_with_params_no_state: flash attn = 0
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+whisper_init_with_params_no_state: devices    = 1
+whisper_init_with_params_no_state: backends   = 1
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 512
+whisper_model_load: n_audio_head  = 8
+whisper_model_load: n_audio_layer = 6
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 512
+whisper_model_load: n_text_head   = 8
+whisper_model_load: n_text_layer  = 6
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 2 (base)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:          CPU total size =   147.37 MB
+whisper_model_load: model size    =  147.37 MB
+whisper_backend_init_gpu: no GPU found
+whisper_init_state: kv self size  =    6.29 MB
+whisper_init_state: kv cross size =   18.87 MB
+whisper_init_state: kv pad  size  =    3.15 MB
+whisper_init_state: compute buffer (conv)   =   16.28 MB
+whisper_init_state: compute buffer (encode) =   85.88 MB
+whisper_init_state: compute buffer (cross)  =    4.66 MB
+whisper_init_state: compute buffer (decode) =   96.37 MB
+whisper_full_with_state: auto-detected language: de (p = 0.837903)
+
+whisper_full_with_state: strategy = 0, decoding with 1 decoders, temperature = 0.00
+
+
+whisper_full_with_state: prompt[0] = [_SOT_]
+whisper_full_with_state: prompt[1] = [_LANG_de]
+whisper_full_with_state: prompt[2] = [_TRANSCRIBE_]
+
+
+whisper_full_with_state: id =   0, decoder = 0, token =  50364, p =  0.979, ts =    [_BEG_],  0.979, result_len =    0 '[_BEG_]'
+whisper_full_with_state: id =   1, decoder = 0, token =    978, p =  0.049, ts =        [?],  0.000, result_len =    0 ' die'
+whisper_full_with_state: id =   2, decoder = 0, token =    566, p =  0.037, ts =        [?],  0.006, result_len =    0 ' im'
+whisper_full_with_state: id =   3, decoder = 0, token =   9039, p =  0.023, ts =        [?],  0.014, result_len =    0 ' Aus'
+whisper_full_with_state: id =   4, decoder = 0, token =  19619, p =  0.238, ts =        [?],  0.021, result_len =    0 'gang'
+whisper_full_with_state: id =   5, decoder = 0, token =    730, p =  0.173, ts =        [?],  0.011, result_len =    0 ' des'
+whisper_full_with_state: id =   6, decoder = 0, token =   3300, p =  0.025, ts =        [?],  0.014, result_len =    0 ' Er'
+whisper_full_with_state: id =   7, decoder = 0, token =     74, p =  0.058, ts =        [?],  0.017, result_len =    0 'k'
+whisper_full_with_state: id =   8, decoder = 0, token =  20479, p =  0.236, ts =        [?],  0.022, result_len =    0 'rank'
+whisper_full_with_state: id =   9, decoder = 0, token =    694, p =  0.384, ts =        [?],  0.009, result_len =    0 'ens'
+whisper_full_with_state: id =  10, decoder = 0, token =     11, p =  0.113, ts =        [?],  0.022, result_len =    0 ','
+whisper_full_with_state: id =  11, decoder = 0, token =    978, p =  0.299, ts =        [?],  0.046, result_len =    0 ' die'
+whisper_full_with_state: id =  12, decoder = 0, token =    566, p =  0.034, ts =        [?],  0.009, result_len =    0 ' im'
+whisper_full_with_state: id =  13, decoder = 0, token =   9039, p =  0.154, ts =        [?],  0.018, result_len =    0 ' Aus'
+whisper_full_with_state: id =  14, decoder = 0, token =  19619, p =  0.986, ts =        [?],  0.025, result_len =    0 'gang'
+whisper_full_with_state: id =  15, decoder = 0, token =    730, p =  0.313, ts =        [?],  0.018, result_len =    0 ' des'
+whisper_full_with_state: id =  16, decoder = 0, token =   3300, p =  0.706, ts =        [?],  0.018, result_len =    0 ' Er'
+whisper_full_with_state: id =  17, decoder = 0, token =     74, p =  0.937, ts =        [?],  0.028, result_len =    0 'k'
+whisper_full_with_state: id =  18, decoder = 0, token =  20479, p =  0.984, ts =        [?],  0.019, result_len =    0 'rank'
+whisper_full_with_state: id =  19, decoder = 0, token =    694, p =  0.985, ts =        [?],  0.040, result_len =    0 'ens'
+whisper_full_with_state: id =  20, decoder = 0, token =     11, p =  0.323, ts =        [?],  0.014, result_len =    0 ','
+whisper_full_with_state: id =  21, decoder = 0, token =    978, p =  0.446, ts =        [?],  0.025, result_len =    0 ' die'
+whisper_full_with_state: id =  22, decoder = 0, token =    566, p =  0.341, ts =        [?],  0.021, result_len =    0 ' im'
+whisper_full_with_state: id =  23, decoder = 0, token =   9039, p =  0.979, ts =        [?],  0.034, result_len =    0 ' Aus'
+whisper_full_with_state: id =  24, decoder = 0, token =  19619, p =  0.997, ts =        [?],  0.022, result_len =    0 'gang'
+whisper_full_with_state: id =  25, decoder = 0, token =    730, p =  0.909, ts =        [?],  0.019, result_len =    0 ' des'
+whisper_full_with_state: id =  26, decoder = 0, token =   3300, p =  0.888, ts =        [?],  0.017, result_len =    0 ' Er'
+whisper_full_with_state: id =  27, decoder = 0, token =     74, p =  0.983, ts =        [?],  0.035, result_len =    0 'k'
+whisper_full_with_state: id =  28, decoder = 0, token =  20479, p =  0.987, ts =        [?],  0.025, result_len =    0 'rank'
+whisper_full_with_state: id =  29, decoder = 0, token =    694, p =  0.992, ts =        [?],  0.080, result_len =    0 'ens'
+whisper_full_with_state: id =  30, decoder = 0, token =     11, p =  0.845, ts =        [?],  0.034, result_len =    0 ','
+whisper_full_with_state: id =  31, decoder = 0, token =    978, p =  0.648, ts =        [?],  0.017, result_len =    0 ' die'
+whisper_full_with_state: id =  32, decoder = 0, token =    566, p =  0.772, ts =        [?],  0.022, result_len =    0 ' im'
+whisper_full_with_state: id =  33, decoder = 0, token =   9039, p =  0.993, ts =        [?],  0.037, result_len =    0 ' Aus'
+whisper_full_with_state: id =  34, decoder = 0, token =  19619, p =  0.998, ts =        [?],  0.024, result_len =    0 'gang'
+whisper_full_with_state: id =  35, decoder = 0, token =    730, p =  0.977, ts =        [?],  0.015, result_len =    0 ' des'
+whisper_full_with_state: id =  36, decoder = 0, token =   3300, p =  0.955, ts =        [?],  0.013, result_len =    0 ' Er'
+whisper_full_with_state: id =  37, decoder = 0, token =     74, p =  0.987, ts =        [?],  0.041, result_len =    0 'k'
+whisper_full_with_state: id =  38, decoder = 0, token =  20479, p =  0.986, ts =        [?],  0.025, result_len =    0 'rank'
+whisper_full_with_state: id =  39, decoder = 0, token =    694, p =  0.994, ts =        [?],  0.045, result_len =    0 'ens'
+whisper_full_with_state: id =  40, decoder = 0, token =     11, p =  0.949, ts =        [?],  0.042, result_len =    0 ','
+whisper_full_with_state: id =  41, decoder = 0, token =    978, p =  0.878, ts =        [?],  0.021, result_len =    0 ' die'
+whisper_full_with_state: id =  42, decoder = 0, token =    566, p =  0.863, ts =        [?],  0.019, result_len =    0 ' im'
+whisper_full_with_state: id =  43, decoder = 0, token =   9039, p =  0.993, ts =        [?],  0.038, result_len =    0 ' Aus'
+whisper_full_with_state: id =  44, decoder = 0, token =  19619, p =  0.998, ts =        [?],  0.030, result_len =    0 'gang'
+whisper_full_with_state: id =  45, decoder = 0, token =    730, p =  0.986, ts =        [?],  0.010, result_len =    0 ' des'
+whisper_full_with_state: id =  46, decoder = 0, token =   3300, p =  0.967, ts =        [?],  0.014, result_len =    0 ' Er'
+whisper_full_with_state: id =  47, decoder = 0, token =     74, p =  0.988, ts =        [?],  0.043, result_len =    0 'k'
+whisper_full_with_state: id =  48, decoder = 0, token =  20479, p =  0.989, ts =        [?],  0.024, result_len =    0 'rank'
+whisper_full_with_state: id =  49, decoder = 0, token =    694, p =  0.994, ts =        [?],  0.029, result_len =    0 'ens'
+whisper_full_with_state: id =  50, decoder = 0, token =     11, p =  0.974, ts =        [?],  0.031, result_len =    0 ','
+whisper_full_with_state: id =  51, decoder = 0, token =    978, p =  0.946, ts =        [?],  0.017, result_len =    0 ' die'
+whisper_full_with_state: id =  52, decoder = 0, token =    566, p =  0.906, ts =        [?],  0.015, result_len =    0 ' im'
+whisper_full_with_state: id =  53, decoder = 0, token =   9039, p =  0.993, ts =        [?],  0.040, result_len =    0 ' Aus'
+whisper_full_with_state: id =  54, decoder = 0, token =  19619, p =  0.999, ts =        [?],  0.035, result_len =    0 'gang'
+whisper_full_with_state: id =  55, decoder = 0, token =    730, p =  0.989, ts =        [?],  0.009, result_len =    0 ' des'
+whisper_full_with_state: id =  56, decoder = 0, token =   3300, p =  0.976, ts =        [?],  0.013, result_len =    0 ' Er'
+whisper_full_with_state: id =  57, decoder = 0, token =     74, p =  0.990, ts =        [?],  0.043, result_len =    0 'k'
+whisper_full_with_state: id =  58, decoder = 0, token =  20479, p =  0.989, ts =        [?],  0.023, result_len =    0 'rank'
+whisper_full_with_state: id =  59, decoder = 0, token =    694, p =  0.995, ts =        [?],  0.026, result_len =    0 'ens'
+whisper_full_with_state: id =  60, decoder = 0, token =     11, p =  0.980, ts =        [?],  0.022, result_len =    0 ','
+whisper_full_with_state: id =  61, decoder = 0, token =    978, p =  0.970, ts =        [?],  0.013, result_len =    0 ' die'
+whisper_full_with_state: id =  62, decoder = 0, token =    566, p =  0.925, ts =        [?],  0.011, result_len =    0 ' im'
+whisper_full_with_state: id =  63, decoder = 0, token =   9039, p =  0.993, ts =        [?],  0.044, result_len =    0 ' Aus'
+whisper_full_with_state: id =  64, decoder = 0, token =  19619, p =  0.999, ts =        [?],  0.041, result_len =    0 'gang'
+whisper_full_with_state: id =  65, decoder = 0, token =    730, p =  0.992, ts =        [?],  0.010, result_len =    0 ' des'
+whisper_full_with_state: id =  66, decoder = 0, token =   3300, p =  0.978, ts =        [?],  0.014, result_len =    0 ' Er'
+whisper_full_with_state: id =  67, decoder = 0, token =     74, p =  0.991, ts =        [?],  0.042, result_len =    0 'k'
+whisper_full_with_state: id =  68, decoder = 0, token =  20479, p =  0.989, ts =        [?],  0.025, result_len =    0 'rank'
+whisper_full_with_state: id =  69, decoder = 0, token =    694, p =  0.996, ts =        [?],  0.023, result_len =    0 'ens'
+whisper_full_with_state: id =  70, decoder = 0, token =     11, p =  0.984, ts =        [?],  0.017, result_len =    0 ','
+whisper_full_with_state: id =  71, decoder = 0, token =    978, p =  0.980, ts =        [?],  0.013, result_len =    0 ' die'
+whisper_full_with_state: id =  72, decoder = 0, token =    566, p =  0.936, ts =        [?],  0.009, result_len =    0 ' im'
+whisper_full_with_state: id =  73, decoder = 0, token =   9039, p =  0.993, ts =        [?],  0.046, result_len =    0 ' Aus'
+whisper_full_with_state: id =  74, decoder = 0, token =  19619, p =  0.999, ts =        [?],  0.042, result_len =    0 'gang'
+whisper_full_with_state: id =  75, decoder = 0, token =    730, p =  0.992, ts =        [?],  0.013, result_len =    0 ' des'
+whisper_full_with_state: id =  76, decoder = 0, token =   3300, p =  0.983, ts =        [?],  0.014, result_len =    0 ' Er'
+whisper_full_with_state: id =  77, decoder = 0, token =     74, p =  0.993, ts =        [?],  0.035, result_len =    0 'k'
+whisper_full_with_state: id =  78, decoder = 0, token =  20479, p =  0.991, ts =        [?],  0.027, result_len =    0 'rank'
+whisper_full_with_state: id =  79, decoder = 0, token =    694, p =  0.996, ts =        [?],  0.020, result_len =    0 'ens'
+whisper_full_with_state: id =  80, decoder = 0, token =     11, p =  0.990, ts =        [?],  0.011, result_len =    0 ','
+whisper_full_with_state: id =  81, decoder = 0, token =    978, p =  0.984, ts =        [?],  0.013, result_len =    0 ' die'
+whisper_full_with_state: id =  82, decoder = 0, token =    566, p =  0.951, ts =        [?],  0.008, result_len =    0 ' im'
+whisper_full_with_state: id =  83, decoder = 0, token =   9039, p =  0.992, ts =        [?],  0.046, result_len =    0 ' Aus'
+whisper_full_with_state: id =  84, decoder = 0, token =  19619, p =  0.999, ts =        [?],  0.045, result_len =    0 'gang'
+whisper_full_with_state: id =  85, decoder = 0, token =    730, p =  0.992, ts =        [?],  0.010, result_len =    0 ' des'
+whisper_full_with_state: id =  86, decoder = 0, token =   3300, p =  0.985, ts =        [?],  0.015, result_len =    0 ' Er'
+whisper_full_with_state: id =  87, decoder = 0, token =     74, p =  0.994, ts =        [?],  0.032, result_len =    0 'k'
+whisper_full_with_state: id =  88, decoder = 0, token =  20479, p =  0.990, ts =        [?],  0.030, result_len =    0 'rank'
+whisper_full_with_state: id =  89, decoder = 0, token =    694, p =  0.997, ts =        [?],  0.020, result_len =    0 'ens'
+whisper_full_with_state: id =  90, decoder = 0, token =     11, p =  0.992, ts =        [?],  0.010, result_len =    0 ','
+whisper_full_with_state: id =  91, decoder = 0, token =    978, p =  0.988, ts =        [?],  0.012, result_len =    0 ' die'
+whisper_full_with_state: id =  92, decoder = 0, token =    566, p =  0.958, ts =        [?],  0.008, result_len =    0 ' im'
+whisper_full_with_state: id =  93, decoder = 0, token =   9039, p =  0.992, ts =        [?],  0.049, result_len =    0 ' Aus'
+whisper_full_with_state: id =  94, decoder = 0, token =  19619, p =  0.999, ts =        [?],  0.043, result_len =    0 'gang'
+whisper_full_with_state: id =  95, decoder = 0, token =    730, p =  0.993, ts =        [?],  0.011, result_len =    0 ' des'
+whisper_full_with_state: id =  96, decoder = 0, token =   3300, p =  0.986, ts =        [?],  0.016, result_len =    0 ' Er'
+whisper_full_with_state: id =  97, decoder = 0, token =     74, p =  0.995, ts =        [?],  0.030, result_len =    0 'k'
+whisper_full_with_state: id =  98, decoder = 0, token =  20479, p =  0.991, ts =        [?],  0.034, result_len =    0 'rank'
+whisper_full_with_state: id =  99, decoder = 0, token =    694, p =  0.996, ts =        [?],  0.019, result_len =    0 'ens'
+whisper_full_with_state: id = 100, decoder = 0, token =     11, p =  0.995, ts =        [?],  0.010, result_len =    0 ','
+whisper_full_with_state: id = 101, decoder = 0, token =    978, p =  0.990, ts =        [?],  0.011, result_len =    0 ' die'
+whisper_full_with_state: id = 102, decoder = 0, token =    566, p =  0.969, ts =        [?],  0.010, result_len =    0 ' im'
+whisper_full_with_state: id = 103, decoder = 0, token =   9039, p =  0.991, ts =        [?],  0.048, result_len =    0 ' Aus'
+whisper_full_with_state: id = 104, decoder = 0, token =  19619, p =  0.999, ts =        [?],  0.043, result_len =    0 'gang'
+whisper_full_with_state: id = 105, decoder = 0, token =    730, p =  0.994, ts =        [?],  0.014, result_len =    0 ' des'
+whisper_full_with_state: id = 106, decoder = 0, token =   3300, p =  0.988, ts =        [?],  0.016, result_len =    0 ' Er'
+whisper_full_with_state: id = 107, decoder = 0, token =     74, p =  0.995, ts =        [?],  0.028, result_len =    0 'k'
+whisper_full_with_state: id = 108, decoder = 0, token =  20479, p =  0.990, ts =        [?],  0.034, result_len =    0 'rank'
+whisper_full_with_state: id = 109, decoder = 0, token =    694, p =  0.996, ts =        [?],  0.019, result_len =    0 'ens'
+whisper_full_with_state: id = 110, decoder = 0, token =     11, p =  0.996, ts =        [?],  0.012, result_len =    0 ','
+whisper_full_with_state: id = 111, decoder = 0, token =    978, p =  0.991, ts =        [?],  0.011, result_len =    0 ' die'
+whisper_full_with_state: id = 112, decoder = 0, token =    566, p =  0.971, ts =        [?],  0.010, result_len =    0 ' im'
+whisper_full_with_state: id = 113, decoder = 0, token =   9039, p =  0.990, ts =        [?],  0.049, result_len =    0 ' Aus'
+whisper_full_with_state: id = 114, decoder = 0, token =  19619, p =  0.999, ts =        [?],  0.043, result_len =    0 'gang'
+whisper_full_with_state: id = 115, decoder = 0, token =    730, p =  0.994, ts =        [?],  0.012, result_len =    0 ' des'
+whisper_full_with_state: id = 116, decoder = 0, token =   3300, p =  0.988, ts =        [?],  0.016, result_len =    0 ' Er'
+whisper_full_with_state: id = 117, decoder = 0, token =     74, p =  0.995, ts =        [?],  0.026, result_len =    0 'k'
+whisper_full_with_state: id = 118, decoder = 0, token =  20479, p =  0.992, ts =        [?],  0.036, result_len =    0 'rank'
+whisper_full_with_state: id = 119, decoder = 0, token =    694, p =  0.997, ts =        [?],  0.020, result_len =    0 'ens'
+whisper_full_with_state: id = 120, decoder = 0, token =     11, p =  0.997, ts =        [?],  0.013, result_len =    0 ','
+whisper_full_with_state: id = 121, decoder = 0, token =    978, p =  0.991, ts =        [?],  0.009, result_len =    0 ' die'
+whisper_full_with_state: id = 122, decoder = 0, token =    566, p =  0.974, ts =        [?],  0.012, result_len =    0 ' im'
+whisper_full_with_state: id = 123, decoder = 0, token =   9039, p =  0.990, ts =        [?],  0.050, result_len =    0 ' Aus'
+whisper_full_with_state: id = 124, decoder = 0, token =  19619, p =  0.999, ts =        [?],  0.041, result_len =    0 'gang'
+whisper_full_with_state: id = 125, decoder = 0, token =    730, p =  0.995, ts =        [?],  0.012, result_len =    0 ' des'
+whisper_full_with_state: id = 126, decoder = 0, token =   3300, p =  0.987, ts =        [?],  0.016, result_len =    0 ' Er'
+whisper_full_with_state: id = 127, decoder = 0, token =     74, p =  0.996, ts =        [?],  0.025, result_len =    0 'k'
+whisper_full_with_state: id = 128, decoder = 0, token =  20479, p =  0.991, ts =        [?],  0.039, result_len =    0 'rank'
+whisper_full_with_state: id = 129, decoder = 0, token =    694, p =  0.996, ts =        [?],  0.018, result_len =    0 'ens'
+whisper_full_with_state: id = 130, decoder = 0, token =     11, p =  0.997, ts =        [?],  0.013, result_len =    0 ','
+whisper_full_with_state: id = 131, decoder = 0, token =    978, p =  0.992, ts =        [?],  0.009, result_len =    0 ' die'
+whisper_full_with_state: id = 132, decoder = 0, token =    566, p =  0.976, ts =        [?],  0.012, result_len =    0 ' im'
+whisper_full_with_state: id = 133, decoder = 0, token =   9039, p =  0.990, ts =        [?],  0.051, result_len =    0 ' Aus'
+whisper_full_with_state: id = 134, decoder = 0, token =  19619, p =  0.999, ts =        [?],  0.038, result_len =    0 'gang'
+whisper_full_with_state: id = 135, decoder = 0, token =    730, p =  0.995, ts =        [?],  0.012, result_len =    0 ' des'
+whisper_full_with_state: id = 136, decoder = 0, token =   3300, p =  0.987, ts =        [?],  0.015, result_len =    0 ' Er'
+whisper_full_with_state: id = 137, decoder = 0, token =     74, p =  0.996, ts =        [?],  0.024, result_len =    0 'k'
+whisper_full_with_state: id = 138, decoder = 0, token =  20479, p =  0.992, ts =        [?],  0.039, result_len =    0 'rank'
+whisper_full_with_state: id = 139, decoder = 0, token =    694, p =  0.996, ts =        [?],  0.018, result_len =    0 'ens'
+whisper_full_with_state: id = 140, decoder = 0, token =     11, p =  0.997, ts =        [?],  0.014, result_len =    0 ','
+whisper_full_with_state: id = 141, decoder = 0, token =    978, p =  0.992, ts =        [?],  0.009, result_len =    0 ' die'
+whisper_full_with_state: id = 142, decoder = 0, token =    566, p =  0.979, ts =        [?],  0.014, result_len =    0 ' im'
+whisper_full_with_state: id = 143, decoder = 0, token =   9039, p =  0.992, ts =        [?],  0.052, result_len =    0 ' Aus'
+whisper_full_with_state: id = 144, decoder = 0, token =  19619, p =  0.999, ts =        [?],  0.036, result_len =    0 'gang'
+whisper_full_with_state: id = 145, decoder = 0, token =    730, p =  0.995, ts =        [?],  0.010, result_len =    0 ' des'
+whisper_full_with_state: id = 146, decoder = 0, token =   3300, p =  0.986, ts =        [?],  0.015, result_len =    0 ' Er'
+whisper_full_with_state: id = 147, decoder = 0, token =     74, p =  0.996, ts =        [?],  0.023, result_len =    0 'k'
+whisper_full_with_state: id = 148, decoder = 0, token =  20479, p =  0.991, ts =        [?],  0.042, result_len =    0 'rank'
+whisper_full_with_state: id = 149, decoder = 0, token =    694, p =  0.996, ts =        [?],  0.017, result_len =    0 'ens'
+whisper_full_with_state: id = 150, decoder = 0, token =     11, p =  0.998, ts =        [?],  0.013, result_len =    0 ','
+whisper_full_with_state: id = 151, decoder = 0, token =    978, p =  0.993, ts =        [?],  0.009, result_len =    0 ' die'
+whisper_full_with_state: id = 152, decoder = 0, token =    566, p =  0.979, ts =        [?],  0.013, result_len =    0 ' im'
+whisper_full_with_state: id = 153, decoder = 0, token =   9039, p =  0.992, ts =        [?],  0.052, result_len =    0 ' Aus'
+whisper_full_with_state: id = 154, decoder = 0, token =  19619, p =  1.000, ts =        [?],  0.028, result_len =    0 'gang'
+whisper_full_with_state: id = 155, decoder = 0, token =    730, p =  0.994, ts =        [?],  0.011, result_len =    0 ' des'
+whisper_full_with_state: id = 156, decoder = 0, token =   3300, p =  0.988, ts =        [?],  0.014, result_len =    0 ' Er'
+whisper_full_with_state: id = 157, decoder = 0, token =     74, p =  0.996, ts =        [?],  0.022, result_len =    0 'k'
+whisper_full_with_state: id = 158, decoder = 0, token =  20479, p =  0.989, ts =        [?],  0.041, result_len =    0 'rank'
+whisper_full_with_state: id = 159, decoder = 0, token =    694, p =  0.996, ts =        [?],  0.018, result_len =    0 'ens'
+whisper_full_with_state: id = 160, decoder = 0, token =     11, p =  0.998, ts =        [?],  0.012, result_len =    0 ','
+whisper_full_with_state: id = 161, decoder = 0, token =    978, p =  0.993, ts =        [?],  0.008, result_len =    0 ' die'
+whisper_full_with_state: id = 162, decoder = 0, token =    566, p =  0.981, ts =        [?],  0.014, result_len =    0 ' im'
+whisper_full_with_state: id = 163, decoder = 0, token =   9039, p =  0.993, ts =        [?],  0.051, result_len =    0 ' Aus'
+whisper_full_with_state: id = 164, decoder = 0, token =  19619, p =  1.000, ts =        [?],  0.031, result_len =    0 'gang'
+whisper_full_with_state: id = 165, decoder = 0, token =    730, p =  0.994, ts =        [?],  0.011, result_len =    0 ' des'
+whisper_full_with_state: id = 166, decoder = 0, token =   3300, p =  0.987, ts =        [?],  0.013, result_len =    0 ' Er'
+whisper_full_with_state: id = 167, decoder = 0, token =     74, p =  0.996, ts =        [?],  0.022, result_len =    0 'k'
+whisper_full_with_state: id = 168, decoder = 0, token =  20479, p =  0.991, ts =        [?],  0.041, result_len =    0 'rank'
+whisper_full_with_state: id = 169, decoder = 0, token =    694, p =  0.996, ts =        [?],  0.018, result_len =    0 'ens'
+whisper_full_with_state: id = 170, decoder = 0, token =     11, p =  0.998, ts =        [?],  0.011, result_len =    0 ','
+whisper_full_with_state: id = 171, decoder = 0, token =    978, p =  0.992, ts =        [?],  0.008, result_len =    0 ' die'
+whisper_full_with_state: id = 172, decoder = 0, token =    566, p =  0.984, ts =        [?],  0.016, result_len =    0 ' im'
+whisper_full_with_state: id = 173, decoder = 0, token =   9039, p =  0.993, ts =        [?],  0.050, result_len =    0 ' Aus'
+whisper_full_with_state: id = 174, decoder = 0, token =  19619, p =  1.000, ts =        [?],  0.027, result_len =    0 'gang'
+whisper_full_with_state: id = 175, decoder = 0, token =    730, p =  0.993, ts =        [?],  0.011, result_len =    0 ' des'
+whisper_full_with_state: id = 176, decoder = 0, token =   3300, p =  0.988, ts =        [?],  0.012, result_len =    0 ' Er'
+whisper_full_with_state: id = 177, decoder = 0, token =     74, p =  0.996, ts =        [?],  0.021, result_len =    0 'k'
+whisper_full_with_state: id = 178, decoder = 0, token =  20479, p =  0.990, ts =        [?],  0.044, result_len =    0 'rank'
+whisper_full_with_state: id = 179, decoder = 0, token =    694, p =  0.996, ts =        [?],  0.017, result_len =    0 'ens'
+whisper_full_with_state: id = 180, decoder = 0, token =     11, p =  0.997, ts =        [?],  0.011, result_len =    0 ','
+whisper_full_with_state: id = 181, decoder = 0, token =    978, p =  0.992, ts =        [?],  0.009, result_len =    0 ' die'
+whisper_full_with_state: id = 182, decoder = 0, token =    566, p =  0.985, ts =        [?],  0.016, result_len =    0 ' im'
+whisper_full_with_state: id = 183, decoder = 0, token =   9039, p =  0.994, ts =        [?],  0.050, result_len =    0 ' Aus'
+whisper_full_with_state: id = 184, decoder = 0, token =  19619, p =  1.000, ts =        [?],  0.020, result_len =    0 'gang'
+whisper_full_with_state: id = 185, decoder = 0, token =    730, p =  0.993, ts =        [?],  0.013, result_len =    0 ' des'
+whisper_full_with_state: id = 186, decoder = 0, token =   3300, p =  0.990, ts =        [?],  0.011, result_len =    0 ' Er'
+whisper_full_with_state: id = 187, decoder = 0, token =     74, p =  0.996, ts =        [?],  0.022, result_len =    0 'k'
+whisper_full_with_state: id = 188, decoder = 0, token =  20479, p =  0.989, ts =        [?],  0.045, result_len =    0 'rank'
+whisper_full_with_state: id = 189, decoder = 0, token =    694, p =  0.996, ts =        [?],  0.017, result_len =    0 'ens'
+whisper_full_with_state: id = 190, decoder = 0, token =     11, p =  0.998, ts =        [?],  0.011, result_len =    0 ','
+whisper_full_with_state: id = 191, decoder = 0, token =    978, p =  0.992, ts =        [?],  0.009, result_len =    0 ' die'
+whisper_full_with_state: id = 192, decoder = 0, token =    566, p =  0.983, ts =        [?],  0.015, result_len =    0 ' im'
+whisper_full_with_state: id = 193, decoder = 0, token =   9039, p =  0.994, ts =        [?],  0.048, result_len =    0 ' Aus'
+whisper_full_with_state: id = 194, decoder = 0, token =  19619, p =  1.000, ts =        [?],  0.019, result_len =    0 'gang'
+whisper_full_with_state: id = 195, decoder = 0, token =    730, p =  0.993, ts =        [?],  0.012, result_len =    0 ' des'
+whisper_full_with_state: id = 196, decoder = 0, token =   3300, p =  0.989, ts =        [?],  0.010, result_len =    0 ' Er'
+whisper_full_with_state: id = 197, decoder = 0, token =     74, p =  0.996, ts =        [?],  0.022, result_len =    0 'k'
+whisper_full_with_state: id = 198, decoder = 0, token =  20479, p =  0.988, ts =        [?],  0.043, result_len =    0 'rank'
+whisper_full_with_state: id = 199, decoder = 0, token =    694, p =  0.996, ts =        [?],  0.018, result_len =    0 'ens'
+whisper_full_with_state: id = 200, decoder = 0, token =     11, p =  0.998, ts =        [?],  0.009, result_len =    0 ','
+whisper_full_with_state: id = 201, decoder = 0, token =    978, p =  0.990, ts =        [?],  0.008, result_len =    0 ' die'
+whisper_full_with_state: id = 202, decoder = 0, token =    566, p =  0.984, ts =        [?],  0.016, result_len =    0 ' im'
+whisper_full_with_state: id = 203, decoder = 0, token =   9039, p =  0.995, ts =        [?],  0.045, result_len =    0 ' Aus'
+whisper_full_with_state: id = 204, decoder = 0, token =  19619, p =  1.000, ts =        [?],  0.018, result_len =    0 'gang'
+whisper_full_with_state: id = 205, decoder = 0, token =    730, p =  0.992, ts =        [?],  0.014, result_len =    0 ' des'
+whisper_full_with_state: id = 206, decoder = 0, token =   3300, p =  0.991, ts =        [?],  0.010, result_len =    0 ' Er'
+whisper_full_with_state: id = 207, decoder = 0, token =     74, p =  0.996, ts =        [?],  0.020, result_len =    0 'k'
+whisper_full_with_state: id = 208, decoder = 0, token =  20479, p =  0.989, ts =        [?],  0.042, result_len =    0 'rank'
+whisper_full_with_state: id = 209, decoder = 0, token =    694, p =  0.995, ts =        [?],  0.018, result_len =    0 'ens'
+whisper_full_with_state: id = 210, decoder = 0, token =     11, p =  0.997, ts =        [?],  0.009, result_len =    0 ','
+whisper_full_with_state: id = 211, decoder = 0, token =    978, p =  0.990, ts =        [?],  0.009, result_len =    0 ' die'
+whisper_full_with_state: id = 212, decoder = 0, token =    566, p =  0.983, ts =        [?],  0.016, result_len =    0 ' im'
+whisper_full_with_state: id = 213, decoder = 0, token =   9039, p =  0.995, ts =        [?],  0.045, result_len =    0 ' Aus'
+whisper_full_with_state: id = 214, decoder = 0, token =  19619, p =  1.000, ts =        [?],  0.018, result_len =    0 'gang'
+whisper_full_with_state: id = 215, decoder = 0, token =    730, p =  0.993, ts =        [?],  0.012, result_len =    0 ' des'
+whisper_full_with_state: id = 216, decoder = 0, token =   3300, p =  0.991, ts =        [?],  0.009, result_len =    0 ' Er'
+whisper_full_with_state: id = 217, decoder = 0, token =     74, p =  0.996, ts =        [?],  0.021, result_len =    0 'k'
+whisper_full_with_state: id = 218, decoder = 0, token =  20479, p =  0.986, ts =        [?],  0.046, result_len =    0 'rank'
+whisper_full_with_state: id = 219, decoder = 0, token =    694, p =  0.996, ts =        [?],  0.019, result_len =    0 'ens'
+whisper_full_with_state: decoder 0: failed due to repetition loop
+whisper_full_with_state: best decoder = 0
+whisper_full_with_state: failed due to avg_logprobs     -inf < -1.00000 and no_speech_prob  0.35703 <  0.60000
+
+whisper_full_with_state: failed to decode with temperature = 0.00
+
+whisper_full_with_state: strategy = 0, decoding with 1 decoders, temperature = 0.20
+
+
+whisper_full_with_state: prompt[0] = [_SOT_]
+whisper_full_with_state: prompt[1] = [_LANG_de]
+whisper_full_with_state: prompt[2] = [_TRANSCRIBE_]
+
+
+whisper_full_with_state: id =   0, decoder = 0, token =  50364, p =  1.000, ts =    [_BEG_],  1.000, result_len =    0 '[_BEG_]'
+whisper_full_with_state: id =   1, decoder = 0, token =    978, p =  0.682, ts =        [?],  0.000, result_len =    0 ' die'
+whisper_full_with_state: id =   2, decoder = 0, token =   2164, p =  0.260, ts =        [?],  0.000, result_len =    0 ' zu'
+whisper_full_with_state: id =   3, decoder = 0, token =  27853, p =  0.402, ts =        [?],  0.001, result_len =    0 ' sprechen'
+whisper_full_with_state: id =   4, decoder = 0, token =   3355, p =  0.997, ts =        [?],  0.000, result_len =    0 ' wie'
+whisper_full_with_state: id =   5, decoder = 0, token =    566, p =  0.637, ts =        [?],  0.000, result_len =    0 ' im'
+whisper_full_with_state: id =   6, decoder = 0, token =    316, p =  0.990, ts =        [?],  0.000, result_len =    0 ' A'
+whisper_full_with_state: id =   7, decoder = 0, token =   2941, p =  0.244, ts =        [?],  0.000, result_len =    0 'ste'
+whisper_full_with_state: id =   8, decoder = 0, token =   2932, p =  1.000, ts =        [?],  0.000, result_len =    0 'hen'
+whisper_full_with_state: id =   9, decoder = 0, token =    674, p =  1.000, ts =        [?],  0.000, result_len =    0 ' und'
+whisper_full_with_state: id =  10, decoder = 0, token =   8112, p =  0.252, ts =        [?],  0.000, result_len =    0 ' Plan'
+whisper_full_with_state: id =  11, decoder = 0, token =  19865, p =  1.000, ts =        [?],  0.000, result_len =    0 'eten'
+whisper_full_with_state: id =  12, decoder = 0, token =     13, p =  0.925, ts =  [_TT_150],  0.952, result_len =    0 '.'
+whisper_full_with_state: id =  13, decoder = 0, token =  50514, p =  0.987, ts =  [_TT_150],  0.987, result_len =   14 '[_TT_150]'
+whisper_full_with_state: id =  14, decoder = 0, token =  50514, p =  1.000, ts =  [_TT_150],  1.000, result_len =   15 '[_TT_150]'
+whisper_full_with_state: id =  15, decoder = 0, token =   9233, p =  0.722, ts =        [?],  0.000, result_len =   15 ' Wie'
+whisper_full_with_state: id =  16, decoder = 0, token =    334, p =  0.386, ts =        [?],  0.000, result_len =   15 ' Th'
+whisper_full_with_state: id =  17, decoder = 0, token =    260, p =  0.999, ts =        [?],  0.000, result_len =   15 'er'
+whisper_full_with_state: id =  18, decoder = 0, token =   1130, p =  0.980, ts =        [?],  0.000, result_len =   15 'ese'
+whisper_full_with_state: id =  19, decoder = 0, token =    978, p =  0.999, ts =        [?],  0.000, result_len =   15 ' die'
+whisper_full_with_state: id =  20, decoder = 0, token =  30661, p =  0.999, ts =        [?],  0.000, result_len =   15 ' nächste'
+whisper_full_with_state: id =  21, decoder = 0, token =  15255, p =  1.000, ts =        [?],  0.000, result_len =   15 ' Fol'
+whisper_full_with_state: id =  22, decoder = 0, token =    414, p =  1.000, ts =        [?],  0.000, result_len =   15 'ie'
+whisper_full_with_state: id =  23, decoder = 0, token =     13, p =  0.997, ts =  [_TT_300],  0.855, result_len =   15 '.'
+whisper_full_with_state: id =  24, decoder = 0, token =  50664, p =  0.786, ts =  [_TT_300],  0.786, result_len =   25 '[_TT_300]'
+whisper_full_with_state: id =  25, decoder = 0, token =  50257, p =  1.000, ts =  [_TT_300],  0.365, result_len =   25 '[_EOT_]'
+whisper_full_with_state: decoder 0 completed
+whisper_full_with_state: decoder  0: score = -0.30124, result_len =  25, avg_logprobs = -0.30124, entropy =  3.05252
+whisper_full_with_state: best decoder = 0
+single timestamp ending - skip entire chunk
+seek = 899, seek_delta = 899
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 33.01s
+
+     Running unittests src/main.rs (src-tauri/target/debug/deps/local_live_captions-c7ed107929129875)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory

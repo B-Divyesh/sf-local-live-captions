@@ -1,0 +1,5 @@
+
+> local-live-captions@0.1.10 test:linux-audio
+> bash scripts/linux-audio-acceptance.sh
+
+Install pulseaudio before running this test.

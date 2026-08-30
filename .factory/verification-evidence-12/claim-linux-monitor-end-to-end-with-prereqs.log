@@ -1,0 +1,239 @@
+
+> local-live-captions@0.1.10 test:linux-audio
+> bash scripts/linux-audio-acceptance.sh
+
+W: [pulseaudio] main.c: Running in system mode, but --disallow-module-loading not set.
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+W: [pulseaudio] main.c: Home directory of user 'pulse' is not '/var/run/pulse', ignoring.
+W: [pulseaudio] main.c: OK, so you are running PA in system mode. Please make sure that you actually do want to do that.
+W: [pulseaudio] main.c: Please read http://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/WhatIsWrongWithSystemWide/ for an explanation why system mode is usually a bad idea.
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+W: [pulseaudio] main.c: Unable to contact D-Bus: org.freedesktop.DBus.Error.FileNotFound: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.27s
+     Running unittests src/lib.rs (src-tauri/target/debug/deps/local_live_captions_lib-ab999a630ad5fee0)
+
+running 1 test
+test tests::claim_linux_monitor_end_to_end_captions_speech_and_restarts ... whisper_init_from_file_with_params_no_state: loading model from '/work/repo/.cache/linux-audio-acceptance/models/ggml-tiny.en.bin'
+whisper_init_with_params_no_state: use gpu    = 0
+whisper_init_with_params_no_state: flash attn = 0
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+whisper_init_with_params_no_state: devices    = 1
+whisper_init_with_params_no_state: backends   = 1
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51864
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 384
+whisper_model_load: n_audio_head  = 6
+whisper_model_load: n_audio_layer = 4
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 384
+whisper_model_load: n_text_head   = 6
+whisper_model_load: n_text_layer  = 4
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 1 (tiny)
+whisper_model_load: adding 1607 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:          CPU total size =    77.11 MB
+whisper_model_load: model size    =   77.11 MB
+whisper_backend_init_gpu: no GPU found
+whisper_init_state: kv self size  =    3.15 MB
+whisper_init_state: kv cross size =    9.44 MB
+whisper_init_state: kv pad  size  =    2.36 MB
+whisper_init_state: compute buffer (conv)   =   13.21 MB
+whisper_init_state: compute buffer (encode) =   64.81 MB
+whisper_init_state: compute buffer (cross)  =    3.89 MB
+whisper_init_state: compute buffer (decode) =   95.91 MB
+
+whisper_full_with_state: strategy = 0, decoding with 1 decoders, temperature = 0.00
+
+
+whisper_full_with_state: prompt[0] = [_SOT_]
+
+
+whisper_full_with_state: id =   0, decoder = 0, token =  50363, p =  0.979, ts =    [_BEG_],  0.979, result_len =    0 '[_BEG_]'
+whisper_full_with_state: id =   1, decoder = 0, token =   2253, p =  0.564, ts =        [?],  0.000, result_len =    0 ' America'
+whisper_full_with_state: id =   2, decoder = 0, token =   1265, p =  0.255, ts =        [?],  0.067, result_len =    0 ' ask'
+whisper_full_with_state: id =   3, decoder = 0, token =    407, p =  0.840, ts =        [?],  0.034, result_len =    0 ' not'
+whisper_full_with_state: id =   4, decoder = 0, token =    644, p =  0.859, ts =        [?],  0.027, result_len =    0 ' what'
+whisper_full_with_state: id =   5, decoder = 0, token =    534, p =  0.980, ts =  [_TT_194],  0.151, result_len =    0 ' your'
+whisper_full_with_state: id =   6, decoder = 0, token =   1499, p =  0.983, ts =  [_TT_205],  0.134, result_len =    0 ' country'
+whisper_full_with_state: id =   7, decoder = 0, token =    460, p =  0.980, ts =  [_TT_233],  0.114, result_len =    0 ' can'
+whisper_full_with_state: id =   8, decoder = 0, token =    466, p =  0.986, ts =  [_TT_248],  0.190, result_len =    0 ' do'
+whisper_full_with_state: id =   9, decoder = 0, token =    329, p =  0.945, ts =  [_TT_258],  0.115, result_len =    0 ' for'
+whisper_full_with_state: id =  10, decoder = 0, token =    345, p =  0.974, ts =  [_TT_270],  0.123, result_len =    0 ' you'
+whisper_full_with_state: id =  11, decoder = 0, token =   1265, p =  0.501, ts =        [?],  0.075, result_len =    0 ' ask'
+whisper_full_with_state: id =  12, decoder = 0, token =    644, p =  0.862, ts =        [?],  0.088, result_len =    0 ' what'
+whisper_full_with_state: id =  13, decoder = 0, token =    345, p =  0.943, ts =  [_TT_356],  0.196, result_len =    0 ' you'
+whisper_full_with_state: id =  14, decoder = 0, token =    460, p =  0.943, ts =  [_TT_367],  0.173, result_len =    0 ' can'
+whisper_full_with_state: id =  15, decoder = 0, token =    466, p =  0.982, ts =  [_TT_386],  0.212, result_len =    0 ' do'
+whisper_full_with_state: id =  16, decoder = 0, token =    329, p =  0.983, ts =  [_TT_392],  0.197, result_len =    0 ' for'
+whisper_full_with_state: id =  17, decoder = 0, token =    534, p =  0.910, ts =  [_TT_405],  0.148, result_len =    0 ' your'
+whisper_full_with_state: id =  18, decoder = 0, token =   1499, p =  0.828, ts =  [_TT_414],  0.147, result_len =    0 ' country'
+whisper_full_with_state: id =  19, decoder = 0, token =     13, p =  0.602, ts =  [_TT_436],  0.134, result_len =    0 '.'
+whisper_full_with_state: id =  20, decoder = 0, token =  50801, p =  0.067, ts =        [?],  0.067, result_len =   21 '[_TT_438]'
+whisper_full_with_state: id =  21, decoder = 0, token =  50256, p =  0.998, ts =  [_TT_438],  0.672, result_len =   21 '<|endoftext|>'
+whisper_full_with_state: decoder 0 completed
+whisper_full_with_state: decoder  0: score = -0.33004, result_len =  21, avg_logprobs = -0.33004, entropy =  2.51641
+whisper_full_with_state: best decoder = 0
+single timestamp ending - skip entire chunk
+seek = 899, seek_delta = 899
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 32.28s
+
+     Running unittests src/main.rs (src-tauri/target/debug/deps/local_live_captions-c7ed107929129875)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.27s
+     Running unittests src/lib.rs (src-tauri/target/debug/deps/local_live_captions_lib-ab999a630ad5fee0)
+
+running 1 test
+test tests::claim_german_caption_end_to_end ... whisper_init_from_file_with_params_no_state: loading model from '/work/repo/.cache/linux-audio-acceptance/models/ggml-base.bin'
+whisper_init_with_params_no_state: use gpu    = 0
+whisper_init_with_params_no_state: flash attn = 0
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+whisper_init_with_params_no_state: devices    = 1
+whisper_init_with_params_no_state: backends   = 1
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 512
+whisper_model_load: n_audio_head  = 8
+whisper_model_load: n_audio_layer = 6
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 512
+whisper_model_load: n_text_head   = 8
+whisper_model_load: n_text_layer  = 6
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 2 (base)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:          CPU total size =   147.37 MB
+whisper_model_load: model size    =  147.37 MB
+whisper_backend_init_gpu: no GPU found
+whisper_init_state: kv self size  =    6.29 MB
+whisper_init_state: kv cross size =   18.87 MB
+whisper_init_state: kv pad  size  =    3.15 MB
+whisper_init_state: compute buffer (conv)   =   16.28 MB
+whisper_init_state: compute buffer (encode) =   85.88 MB
+whisper_init_state: compute buffer (cross)  =    4.66 MB
+whisper_init_state: compute buffer (decode) =   96.37 MB
+whisper_full_with_state: auto-detected language: de (p = 0.942847)
+
+whisper_full_with_state: strategy = 0, decoding with 1 decoders, temperature = 0.00
+
+
+whisper_full_with_state: prompt[0] = [_SOT_]
+whisper_full_with_state: prompt[1] = [_LANG_de]
+whisper_full_with_state: prompt[2] = [_TRANSCRIBE_]
+
+
+whisper_full_with_state: id =   0, decoder = 0, token =  50364, p =  0.977, ts =    [_BEG_],  0.977, result_len =    0 '[_BEG_]'
+whisper_full_with_state: id =   1, decoder = 0, token =    978, p =  0.052, ts =        [?],  0.000, result_len =    0 ' die'
+whisper_full_with_state: id =   2, decoder = 0, token =   4502, p =  0.050, ts =        [?],  0.008, result_len =    0 ' über'
+whisper_full_with_state: id =   3, decoder = 0, token =   2941, p =  0.386, ts =        [?],  0.012, result_len =    0 'ste'
+whisper_full_with_state: id =   4, decoder = 0, token =   2932, p =  0.584, ts =        [?],  0.010, result_len =    0 'hen'
+whisper_full_with_state: id =   5, decoder = 0, token =    674, p =  0.939, ts =        [?],  0.018, result_len =    0 ' und'
+whisper_full_with_state: id =   6, decoder = 0, token =   1393, p =  0.407, ts =        [?],  0.012, result_len =    0 ' plan'
+whisper_full_with_state: id =   7, decoder = 0, token =  19865, p =  0.839, ts =        [?],  0.011, result_len =    0 'eten'
+whisper_full_with_state: id =   8, decoder = 0, token =     13, p =  0.246, ts =        [?],  0.053, result_len =    0 '.'
+whisper_full_with_state: id =   9, decoder = 0, token =  50514, p =  0.076, ts =        [?],  0.076, result_len =   10 '[_TT_150]'
+whisper_full_with_state: id =  10, decoder = 0, token =  50514, p =  0.807, ts =  [_TT_150],  0.807, result_len =   11 '[_TT_150]'
+whisper_full_with_state: id =  11, decoder = 0, token =   4347, p =  0.128, ts =        [?],  0.000, result_len =   11 ' Wir'
+whisper_full_with_state: id =  12, decoder = 0, token =    334, p =  0.173, ts =        [?],  0.010, result_len =   11 ' Th'
+whisper_full_with_state: id =  13, decoder = 0, token =    260, p =  0.158, ts =        [?],  0.010, result_len =   11 'er'
+whisper_full_with_state: id =  14, decoder = 0, token =    737, p =  0.209, ts =        [?],  0.016, result_len =   11 'ä'
+whisper_full_with_state: id =  15, decoder = 0, token =   6748, p =  0.660, ts =        [?],  0.027, result_len =   11 'sen'
+whisper_full_with_state: id =  16, decoder = 0, token =    978, p =  0.438, ts =        [?],  0.008, result_len =   11 ' die'
+whisper_full_with_state: id =  17, decoder = 0, token =  30661, p =  0.893, ts =        [?],  0.006, result_len =   11 ' nächste'
+whisper_full_with_state: id =  18, decoder = 0, token =  15255, p =  0.610, ts =        [?],  0.017, result_len =   11 ' Fol'
+whisper_full_with_state: id =  19, decoder = 0, token =    414, p =  0.906, ts =        [?],  0.008, result_len =   11 'ie'
+whisper_full_with_state: id =  20, decoder = 0, token =     13, p =  0.629, ts =  [_TT_300],  0.209, result_len =   11 '.'
+whisper_full_with_state: id =  21, decoder = 0, token =  50664, p =  0.184, ts =  [_TT_300],  0.184, result_len =   22 '[_TT_300]'
+whisper_full_with_state: id =  22, decoder = 0, token =  50257, p =  0.986, ts =  [_TT_300],  0.600, result_len =   22 '[_EOT_]'
+whisper_full_with_state: decoder 0 completed
+whisper_full_with_state: decoder  0: score = -1.09688, result_len =  22, avg_logprobs = -1.09688, entropy =  2.90200
+whisper_full_with_state: best decoder = 0
+whisper_full_with_state: failed due to avg_logprobs -1.09688 < -1.00000 and no_speech_prob  0.25473 <  0.60000
+
+whisper_full_with_state: failed to decode with temperature = 0.00
+
+whisper_full_with_state: strategy = 0, decoding with 1 decoders, temperature = 0.20
+
+
+whisper_full_with_state: prompt[0] = [_SOT_]
+whisper_full_with_state: prompt[1] = [_LANG_de]
+whisper_full_with_state: prompt[2] = [_TRANSCRIBE_]
+
+
+whisper_full_with_state: id =   0, decoder = 0, token =  50364, p =  1.000, ts =    [_BEG_],  1.000, result_len =    0 '[_BEG_]'
+whisper_full_with_state: id =   1, decoder = 0, token =    978, p =  0.515, ts =        [?],  0.000, result_len =    0 ' die'
+whisper_full_with_state: id =   2, decoder = 0, token =   4502, p =  0.964, ts =        [?],  0.000, result_len =    0 ' über'
+whisper_full_with_state: id =   3, decoder = 0, token =   2941, p =  0.921, ts =        [?],  0.000, result_len =    0 'ste'
+whisper_full_with_state: id =   4, decoder = 0, token =   2932, p =  0.996, ts =        [?],  0.000, result_len =    0 'hen'
+whisper_full_with_state: id =   5, decoder = 0, token =    674, p =  1.000, ts =        [?],  0.000, result_len =    0 ' und'
+whisper_full_with_state: id =   6, decoder = 0, token =   1393, p =  0.970, ts =        [?],  0.000, result_len =    0 ' plan'
+whisper_full_with_state: id =   7, decoder = 0, token =  19865, p =  1.000, ts =        [?],  0.000, result_len =    0 'eten'
+whisper_full_with_state: id =   8, decoder = 0, token =     13, p =  0.987, ts =  [_TT_148],  0.410, result_len =    0 '.'
+whisper_full_with_state: id =   9, decoder = 0, token =  50514, p =  0.939, ts =  [_TT_150],  0.939, result_len =   10 '[_TT_150]'
+whisper_full_with_state: id =  10, decoder = 0, token =  50514, p =  1.000, ts =  [_TT_150],  1.000, result_len =   11 '[_TT_150]'
+whisper_full_with_state: id =  11, decoder = 0, token =   4347, p =  0.690, ts =        [?],  0.000, result_len =   11 ' Wir'
+whisper_full_with_state: id =  12, decoder = 0, token =    334, p =  0.817, ts =        [?],  0.000, result_len =   11 ' Th'
+whisper_full_with_state: id =  13, decoder = 0, token =    260, p =  0.895, ts =        [?],  0.000, result_len =   11 'er'
+whisper_full_with_state: id =  14, decoder = 0, token =    737, p =  0.774, ts =        [?],  0.000, result_len =   11 'ä'
+whisper_full_with_state: id =  15, decoder = 0, token =   6748, p =  1.000, ts =        [?],  0.000, result_len =   11 'sen'
+whisper_full_with_state: id =  16, decoder = 0, token =    978, p =  0.999, ts =        [?],  0.000, result_len =   11 ' die'
+whisper_full_with_state: id =  17, decoder = 0, token =  30661, p =  1.000, ts =        [?],  0.000, result_len =   11 ' nächste'
+whisper_full_with_state: id =  18, decoder = 0, token =  15255, p =  1.000, ts =        [?],  0.000, result_len =   11 ' Fol'
+whisper_full_with_state: id =  19, decoder = 0, token =    414, p =  1.000, ts =        [?],  0.000, result_len =   11 'ie'
+whisper_full_with_state: id =  20, decoder = 0, token =     13, p =  1.000, ts =  [_TT_300],  0.835, result_len =   11 '.'
+whisper_full_with_state: id =  21, decoder = 0, token =  50664, p =  0.617, ts =  [_TT_300],  0.617, result_len =   22 '[_TT_300]'
+whisper_full_with_state: id =  22, decoder = 0, token =  50257, p =  1.000, ts =  [_TT_300],  0.340, result_len =   22 '[_EOT_]'
+whisper_full_with_state: decoder 0 completed
+whisper_full_with_state: decoder  0: score = -0.10539, result_len =  22, avg_logprobs = -0.10539, entropy =  2.90200
+whisper_full_with_state: best decoder = 0
+single timestamp ending - skip entire chunk
+seek = 899, seek_delta = 899
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 30.06s
+
+     Running unittests src/main.rs (src-tauri/target/debug/deps/local_live_captions-c7ed107929129875)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory

@@ -1,0 +1,13 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.28s
+     Running unittests src/lib.rs (src-tauri/target/debug/deps/local_live_captions_lib-ab999a630ad5fee0)
+
+running 1 test
+test tests::claim_linux_monitor_must_still_be_exposed_when_capture_starts ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (src-tauri/target/debug/deps/local_live_captions-c7ed107929129875)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

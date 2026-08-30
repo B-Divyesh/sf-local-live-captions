@@ -1,0 +1,43 @@
+
+> local-live-captions@0.1.10 test:browser-lifecycle
+> node scripts/run-e2e.mjs crash-recovery
+
+[WebServer] (node:30822) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:30855) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:30875) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30875) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+×(node:30941) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30941) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+±
+
+  1) [crash-recovery] › tests/e2e/browser-crash.spec.ts:21:1 › mobile Chromium SIGSEGV is isolated and retried with a clean browser
+
+    Error: page.waitForTimeout: Target page, context or browser has been closed
+
+      23 |   if (testInfo.retry === 0) {
+      24 |     process.kill(chromiumProcessId(), "SIGSEGV");
+    > 25 |     await page.waitForTimeout(1_000);
+         |                ^
+      26 |     throw new Error("Chromium did not exit after SIGSEGV");
+      27 |   }
+      28 |
+        at /work/repo/tests/e2e/browser-crash.spec.ts:25:16
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/browser-crash-mobile-Chrom-292b6-etried-with-a-clean-browser-crash-recovery/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/browser-crash-mobile-Chrom-292b6-etried-with-a-clean-browser-crash-recovery/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 flaky
+    [crash-recovery] › tests/e2e/browser-crash.spec.ts:21:1 › mobile Chromium SIGSEGV is isolated and retried with a clean browser
