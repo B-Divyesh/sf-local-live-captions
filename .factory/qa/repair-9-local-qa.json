@@ -1,0 +1,502 @@
+{
+  "testedAt": "2026-08-30T00:41:48.822Z",
+  "base": "http://127.0.0.1:4173",
+  "scenarios": {
+    "firstRead1280x720": {
+      "bounds": {
+        "audience": {
+          "box": {
+            "x": 64,
+            "y": 407.375,
+            "width": 462.390625,
+            "height": 64.96875
+          },
+          "fullyVisible": true
+        },
+        "action": {
+          "box": {
+            "x": 64,
+            "y": 490.34375,
+            "width": 250.25,
+            "height": 52.34375
+          },
+          "fullyVisible": true
+        },
+        "explanation": {
+          "box": {
+            "x": 332.25,
+            "y": 497.078125,
+            "width": 180,
+            "height": 38.875
+          },
+          "fullyVisible": true
+        },
+        "private": {
+          "box": {
+            "x": 64,
+            "y": 576.078125,
+            "width": 462.390625,
+            "height": 26.34375
+          },
+          "fullyVisible": true
+        },
+        "offline": {
+          "box": {
+            "x": 64,
+            "y": 609.609375,
+            "width": 462.390625,
+            "height": 26.34375
+          },
+          "fullyVisible": true
+        },
+        "free": {
+          "box": {
+            "x": 64,
+            "y": 643.140625,
+            "width": 462.390625,
+            "height": 26.34375
+          },
+          "fullyVisible": true
+        }
+      },
+      "events": {
+        "consoleErrors": [],
+        "pageErrors": []
+      }
+    },
+    "firstRead1366x768": {
+      "bounds": {
+        "audience": {
+          "box": {
+            "x": 68.296875,
+            "y": 438.21875,
+            "width": 493.46875,
+            "height": 64.96875
+          },
+          "fullyVisible": true
+        },
+        "action": {
+          "box": {
+            "x": 68.296875,
+            "y": 522.375,
+            "width": 250.25,
+            "height": 52.34375
+          },
+          "fullyVisible": true
+        },
+        "explanation": {
+          "box": {
+            "x": 336.546875,
+            "y": 529.109375,
+            "width": 180,
+            "height": 38.875
+          },
+          "fullyVisible": true
+        },
+        "private": {
+          "box": {
+            "x": 68.296875,
+            "y": 610.265625,
+            "width": 493.46875,
+            "height": 26.34375
+          },
+          "fullyVisible": true
+        },
+        "offline": {
+          "box": {
+            "x": 68.296875,
+            "y": 644.28125,
+            "width": 493.46875,
+            "height": 26.34375
+          },
+          "fullyVisible": true
+        },
+        "free": {
+          "box": {
+            "x": 68.296875,
+            "y": 678.296875,
+            "width": 493.46875,
+            "height": 26.34375
+          },
+          "fullyVisible": true
+        }
+      },
+      "events": {
+        "consoleErrors": [],
+        "pageErrors": []
+      }
+    },
+    "firstRead1440x900": {
+      "bounds": {
+        "audience": {
+          "box": {
+            "x": 72,
+            "y": 507.171875,
+            "width": 520.1875,
+            "height": 64.96875
+          },
+          "fullyVisible": true
+        },
+        "action": {
+          "box": {
+            "x": 72,
+            "y": 594.640625,
+            "width": 250.25,
+            "height": 52.34375
+          },
+          "fullyVisible": true
+        },
+        "explanation": {
+          "box": {
+            "x": 340.25,
+            "y": 601.375,
+            "width": 180,
+            "height": 38.875
+          },
+          "fullyVisible": true
+        },
+        "private": {
+          "box": {
+            "x": 72,
+            "y": 688.484375,
+            "width": 520.1875,
+            "height": 26.34375
+          },
+          "fullyVisible": true
+        },
+        "offline": {
+          "box": {
+            "x": 72,
+            "y": 723.828125,
+            "width": 520.1875,
+            "height": 26.34375
+          },
+          "fullyVisible": true
+        },
+        "free": {
+          "box": {
+            "x": 72,
+            "y": 759.171875,
+            "width": 520.1875,
+            "height": 26.34375
+          },
+          "fullyVisible": true
+        }
+      },
+      "events": {
+        "consoleErrors": [],
+        "pageErrors": []
+      }
+    },
+    "mobile": {
+      "firstReadBottom": 780.671875,
+      "targets": [
+        {
+          "name": "Skip to content",
+          "width": 139,
+          "height": 48.796875
+        },
+        {
+          "name": "Local Live Captions home",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "name": "Demo",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "name": "How it works",
+          "width": 98,
+          "height": 44
+        },
+        {
+          "name": "Price",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "name": "Privacy",
+          "width": 98,
+          "height": 44
+        },
+        {
+          "name": "Try it with sample data →",
+          "width": 245.40625,
+          "height": 50.796875
+        },
+        {
+          "name": "Stop captions",
+          "width": 320,
+          "height": 44
+        },
+        {
+          "name": null,
+          "width": 129,
+          "height": 44
+        },
+        {
+          "name": "Export subtitle file (.srt)",
+          "width": 320,
+          "height": 44
+        },
+        {
+          "name": "Buy supporter license (external checkout)→",
+          "width": 234.40625,
+          "height": 50.796875
+        },
+        {
+          "name": "license",
+          "width": 350,
+          "height": 48
+        },
+        {
+          "name": "Verify license",
+          "width": 350,
+          "height": 50.796875
+        },
+        {
+          "name": "Check the release page (external)",
+          "width": 219,
+          "height": 50.796875
+        },
+        {
+          "name": "Privacy",
+          "width": 350,
+          "height": 44
+        },
+        {
+          "name": "Terms",
+          "width": 350,
+          "height": 44
+        },
+        {
+          "name": "Built by Param Factory (external)",
+          "width": 350,
+          "height": 44
+        },
+        {
+          "name": "design notes (external)",
+          "width": 83,
+          "height": 44
+        }
+      ],
+      "overflow": 0,
+      "overflowAt200": 0,
+      "events": {
+        "consoleErrors": [],
+        "pageErrors": []
+      }
+    },
+    "keyboard": {
+      "firstFocus": "Skip to content",
+      "mainFocused": true,
+      "resumed": true,
+      "minimum": "20",
+      "maximum": "42",
+      "events": {
+        "consoleErrors": [],
+        "pageErrors": []
+      }
+    },
+    "accessibility": {
+      "routes": [
+        {
+          "colorScheme": "light",
+          "path": "/",
+          "status": 200,
+          "title": "Local Live Captions — Caption calls locally",
+          "structure": {
+            "lang": "en",
+            "h1": 1,
+            "main": 1,
+            "header": 1,
+            "footer": 1
+          },
+          "violations": [],
+          "events": {
+            "consoleErrors": [],
+            "pageErrors": []
+          }
+        },
+        {
+          "colorScheme": "light",
+          "path": "/demo",
+          "status": 200,
+          "title": "Demo — Local Live Captions",
+          "structure": {
+            "lang": "en",
+            "h1": 1,
+            "main": 1,
+            "header": 1,
+            "footer": 1
+          },
+          "violations": [],
+          "events": {
+            "consoleErrors": [],
+            "pageErrors": []
+          }
+        },
+        {
+          "colorScheme": "light",
+          "path": "/privacy",
+          "status": 200,
+          "title": "Privacy — Local Live Captions",
+          "structure": {
+            "lang": "en",
+            "h1": 1,
+            "main": 1,
+            "header": 1,
+            "footer": 1
+          },
+          "violations": [],
+          "events": {
+            "consoleErrors": [],
+            "pageErrors": []
+          }
+        },
+        {
+          "colorScheme": "light",
+          "path": "/terms",
+          "status": 200,
+          "title": "Terms — Local Live Captions",
+          "structure": {
+            "lang": "en",
+            "h1": 1,
+            "main": 1,
+            "header": 1,
+            "footer": 1
+          },
+          "violations": [],
+          "events": {
+            "consoleErrors": [],
+            "pageErrors": []
+          }
+        },
+        {
+          "colorScheme": "light",
+          "path": "/missing-repair-8",
+          "status": 200,
+          "title": "Page not found — Local Live Captions",
+          "structure": {
+            "lang": "en",
+            "h1": 1,
+            "main": 1,
+            "header": 1,
+            "footer": 1
+          },
+          "violations": [],
+          "events": {
+            "consoleErrors": [],
+            "pageErrors": []
+          }
+        },
+        {
+          "colorScheme": "dark",
+          "path": "/",
+          "status": 200,
+          "title": "Local Live Captions — Caption calls locally",
+          "structure": {
+            "lang": "en",
+            "h1": 1,
+            "main": 1,
+            "header": 1,
+            "footer": 1
+          },
+          "violations": [],
+          "events": {
+            "consoleErrors": [],
+            "pageErrors": []
+          }
+        },
+        {
+          "colorScheme": "dark",
+          "path": "/demo",
+          "status": 200,
+          "title": "Demo — Local Live Captions",
+          "structure": {
+            "lang": "en",
+            "h1": 1,
+            "main": 1,
+            "header": 1,
+            "footer": 1
+          },
+          "violations": [],
+          "events": {
+            "consoleErrors": [],
+            "pageErrors": []
+          }
+        },
+        {
+          "colorScheme": "dark",
+          "path": "/privacy",
+          "status": 200,
+          "title": "Privacy — Local Live Captions",
+          "structure": {
+            "lang": "en",
+            "h1": 1,
+            "main": 1,
+            "header": 1,
+            "footer": 1
+          },
+          "violations": [],
+          "events": {
+            "consoleErrors": [],
+            "pageErrors": []
+          }
+        },
+        {
+          "colorScheme": "dark",
+          "path": "/terms",
+          "status": 200,
+          "title": "Terms — Local Live Captions",
+          "structure": {
+            "lang": "en",
+            "h1": 1,
+            "main": 1,
+            "header": 1,
+            "footer": 1
+          },
+          "violations": [],
+          "events": {
+            "consoleErrors": [],
+            "pageErrors": []
+          }
+        },
+        {
+          "colorScheme": "dark",
+          "path": "/missing-repair-8",
+          "status": 200,
+          "title": "Page not found — Local Live Captions",
+          "structure": {
+            "lang": "en",
+            "h1": 1,
+            "main": 1,
+            "header": 1,
+            "footer": 1
+          },
+          "violations": [],
+          "events": {
+            "consoleErrors": [],
+            "pageErrors": []
+          }
+        }
+      ],
+      "reducedMotionTransition": "1e-05s"
+    },
+    "privacyOffline": {
+      "external": [],
+      "caches": [
+        "llc-shell-v7"
+      ],
+      "offlineResume": true
+    },
+    "android": {
+      "explanation": true,
+      "packageLinks": 0,
+      "githubRequests": []
+    }
+  },
+  "failures": []
+}

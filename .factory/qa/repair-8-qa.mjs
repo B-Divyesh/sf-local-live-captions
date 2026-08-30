@@ -5,7 +5,7 @@ import { writeFile } from "node:fs/promises";
 const base = process.env.QA_BASE || "https://local-live-captions.sociobot.in";
 const output = process.env.QA_OUTPUT || ".factory/qa/repair-8-live-qa.json";
 const isLive = base.startsWith("https://");
-const evidencePrefix = isLive ? "repair-8-live" : "repair-8-local";
+const evidencePrefix = process.env.QA_EVIDENCE_PREFIX || (isLive ? "repair-8-live" : "repair-8-local");
 const report = { testedAt: new Date().toISOString(), base, scenarios: {} };
 const failures = [];
 

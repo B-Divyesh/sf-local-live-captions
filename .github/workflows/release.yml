@@ -109,3 +109,5 @@ jobs:
           sha256sum * > SHA256SUMS
           gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json tagName,assets | jq --arg commit "$GITHUB_SHA" '{version:.tagName,commit:$commit,assets:[.assets[]|{name:.name,url:.url}]}' > latest.json
           gh release upload "$RELEASE_TAG" SHA256SUMS latest.json --repo "$GITHUB_REPOSITORY" --clobber
+      - name: Verify the published release contract
+        run: node scripts/verify-published-release.mjs --expected-tag "$RELEASE_TAG" --expected-commit "$GITHUB_SHA" --attempts 12

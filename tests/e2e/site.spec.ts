@@ -51,8 +51,8 @@ test("mobile first screen keeps the three plain facts visible", async ({ page },
 test("download refuses a stale release and selects the exact site build", async ({ page }) => {
   await page.addInitScript(() => { Reflect.deleteProperty(Navigator.prototype, "serviceWorker"); });
   const assets = [
-    { name: "Local.Live.Captions_0.1.9_amd64.AppImage", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.9/Local.Live.Captions_0.1.9_amd64.AppImage" },
-    { name: "Local.Live.Captions_0.1.9_x64_en-US.msi", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.9/Local.Live.Captions_0.1.9_x64_en-US.msi" },
+    { name: "Local.Live.Captions_0.1.10_amd64.AppImage", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.10/Local.Live.Captions_0.1.10_amd64.AppImage" },
+    { name: "Local.Live.Captions_0.1.10_x64_en-US.msi", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.10/Local.Live.Captions_0.1.10_x64_en-US.msi" },
   ];
   let release = { tag_name: "v0.1.7", target_commitish: "older-sha", assets };
   await page.route("https://api.github.com/**", (route) => route.fulfill({
@@ -64,14 +64,14 @@ test("download refuses a stale release and selects the exact site build", async 
   await expect(page.getByText("Downloads are being published.")).toBeVisible();
   await expect(page.getByRole("link", { name: /^Download for/ })).toHaveCount(0);
 
-  release = { tag_name: "v0.1.9", target_commitish: "older-sha", assets };
+  release = { tag_name: "v0.1.10", target_commitish: "older-sha", assets };
   await page.reload();
   await expect(page.getByText("Downloads are being published.")).toBeVisible();
   await expect(page.getByRole("link", { name: /^Download for/ })).toHaveCount(0);
 
-  release = { tag_name: "v0.1.9", target_commitish: buildSha, assets };
+  release = { tag_name: "v0.1.10", target_commitish: buildSha, assets };
   await page.reload();
-  await expect(page.getByRole("link", { name: /^Download for/ })).toHaveAttribute("href", /\/releases\/download\/v0\.1\.9\//);
+  await expect(page.getByRole("link", { name: /^Download for/ })).toHaveAttribute("href", /\/releases\/download\/v0\.1\.10\//);
 });
 
 test("Android visitors get a desktop explanation instead of a Linux package", async ({ page }) => {

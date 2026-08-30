@@ -15,7 +15,7 @@ describe("one-line installer release identity", () => {
     const release = join(root, "release.json");
     const asset = join(root, "caption.AppImage");
     await mkdir(fakeBin);
-    await writeFile(identity, JSON.stringify({ tag: "v0.1.9", commit }));
+    await writeFile(identity, JSON.stringify({ tag: "v0.1.10", commit }));
     await writeFile(asset, "exact release package\n");
     await writeFile(join(fakeBin, "curl"), `#!/bin/bash
 set -eu
@@ -48,7 +48,7 @@ esac
       MOCK_ASSET: asset,
     };
     const releaseData = (target: string) => JSON.stringify({
-      tag_name: "v0.1.9",
+      tag_name: "v0.1.10",
       target_commitish: target,
       assets: [
         { browser_download_url: "https://downloads.invalid/caption.AppImage" },

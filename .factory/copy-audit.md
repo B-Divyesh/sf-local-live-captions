@@ -71,11 +71,13 @@ word. Decorative text is absent from the landing page.
 | Speech model downloads use the listed `ggerganov/whisper.cpp` Hugging Face repository. | 10 |
 | The bundled upstream MIT license copy is pinned in `third_party/whisper.cpp-LICENSE`. | 9 |
 | Desktop installers are built only in GitHub Actions. | 8 |
-| Tag the exact commit with the version from `package.json`, such as `v0.1.9`. | 12 |
+| Tag the exact commit with the version from `package.json`, such as `v0.1.10`. | 12 |
 | To rebuild, run the workflow for that tag. | 8 |
 | The workflow rejects a tag or commit mismatch. | 8 |
 | It creates unsigned packages for macOS, Windows, and Linux. | 9 |
 | It also publishes `SHA256SUMS` and `latest.json` with the source commit. | 10 |
+| The workflow audits their source identity, package list, URLs, and checksums after publication. | 13 |
+| After deploying the tagged site build, run `npm run verify:published-release` to check the live identity against GitHub. | 16 |
 | The site offers packages only when the release and deployed site use the same tag and commit. | 15 |
 
 ## Terminology
