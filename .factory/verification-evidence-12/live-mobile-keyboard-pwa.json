@@ -1,0 +1,45 @@
+{
+  "mobile": {
+    "overflow": 0,
+    "overflow200": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "seriousCritical": []
+  },
+  "keyboard": {
+    "first": {
+      "text": "Skip to content",
+      "outline": "rgb(23, 77, 140) solid 3px"
+    },
+    "skipTarget": "main",
+    "focus": {
+      "outline": "rgb(23, 77, 140) solid 3px",
+      "outlineColor": "rgb(23, 77, 140)"
+    },
+    "spaceActivated": true
+  },
+  "reducedMotion": {
+    "ctaTransition": "1e-05s",
+    "smoothScroll": "auto"
+  },
+  "pwa": {
+    "before": {
+      "scriptURL": "https://local-live-captions.sociobot.in/sw.js",
+      "state": "activated",
+      "scope": "https://local-live-captions.sociobot.in/",
+      "caches": [
+        "llc-shell-v7"
+      ]
+    },
+    "update": {
+      "scriptURL": "https://local-live-captions.sociobot.in/sw.js",
+      "state": "activated"
+    },
+    "offline": {
+      "error": "",
+      "title": "Demo — Local Live Captions",
+      "h1": "See live captions before installing",
+      "pauseWorked": true
+    }
+  }
+}

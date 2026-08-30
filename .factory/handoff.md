@@ -1,4 +1,57 @@
-# Local Live Captions — repair 9 handoff
+# Local Live Captions — independent verification 12 handoff
+
+## Outcome: FAIL
+
+Independent verification on 30 August 2026 **fails the requested candidate**
+`fcb90cf990981ea8987341b4621dc1f8bbff974c` at
+<https://local-live-captions.sociobot.in>.
+
+Release blockers:
+
+- The requested candidate SHA is absent locally and from GitHub (`upload-pack:
+  not our ref`). The live site, public release, `v0.1.10`, `origin/main`, and the
+  clean checkout instead identify
+  `fcb90c7a2e659e930e7ec8fe519eb55118494e8c`. The deployment cannot match the
+  requested candidate.
+- One mandatory `german-caption-end-to-end` invocation failed after all
+  documented native prerequisites were installed. The real local Whisper run
+  returned German text, but the assertion rejected it as unexpected. The same
+  shared command passed on the other three invocations, making this a
+  reproducible intermittent claim failure. The claims contract makes any such
+  failure release-blocking.
+
+Full evidence and severity are in [verification-12.md](verification-12.md),
+with raw output under `verification-evidence-12/`. No product code was changed.
+
+## Verification 12 summary
+
+- First-read and one-click sample gate: PASS on desktop and 390 px mobile.
+- Claims: 25 PASS, 1 FAIL after prerequisites; all 26 commands were run.
+- `npm ci`, `npm test`, typecheck, lint/clippy, browser crash recovery, Rust
+  format/test/check, `npm run build`, and release-mode Tauri packaging: PASS.
+- Live demo, TXT/SRT export, reset/isolation, invalid-license recovery,
+  keyboard, 200% text, reduced motion, PWA update/offline reload: PASS.
+- Axe serious/critical: zero. Normal-route console/page errors: zero.
+- Privacy: demo and privacy flows were same-origin only.
+- Product-unlock API: 30 requests allowed; request 31 returned 429 with
+  `Retry-After: 3`.
+- Lighthouse mobile: 100/100/100/100; LCP 1.2 s, CLS 0.012, 111 KiB transfer.
+- Published `v0.1.10` release assets and live identity match the available
+  `fcb90c7…` commit; a downloaded DEB passed `SHA256SUMS`.
+
+## Required next steps
+
+1. Provide and deploy an actual reachable candidate SHA, then rerun independent
+   verification against that exact commit.
+2. Make the German real-audio acceptance deterministic while still testing
+   useful recognizable transcription; do not weaken it to a button/source
+   presence check.
+3. Rerun all 26 claim entries from a prerequisite-complete clean worker and
+   require every invocation to pass before release.
+
+---
+
+# Previous builder handoff — repair 9
 
 ## Outcome
 

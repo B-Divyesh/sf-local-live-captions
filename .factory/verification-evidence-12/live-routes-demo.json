@@ -1,0 +1,172 @@
+{
+  "routes": {
+    "/": {
+      "status": 200,
+      "finalUrl": "https://local-live-captions.sociobot.in/",
+      "title": "Local Live Captions — Caption calls locally",
+      "lang": "en",
+      "h1Count": 1,
+      "h1": [
+        "Caption Linux calls and recordings locally"
+      ],
+      "mainCount": 1,
+      "seriousCritical": [],
+      "headers": {
+        "cache-control": "public, must-revalidate, max-age=30",
+        "content-encoding": "br",
+        "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://api.sociobot.in; object-src 'none'; base-uri 'self'; form-action 'self' https://api.sociobot.in; frame-ancestors 'none'",
+        "content-type": "text/html",
+        "date": "Sun, 30 Aug 2026 01:58:28 GMT",
+        "etag": "\"08931920\"",
+        "last-modified": "Sun, 30 Aug 2026 01:14:49 GMT",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-xss-protection": "1; mode=block"
+      }
+    },
+    "/demo": {
+      "status": 200,
+      "finalUrl": "https://local-live-captions.sociobot.in/demo",
+      "title": "Demo — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "h1": [
+        "See live captions before installing"
+      ],
+      "mainCount": 1,
+      "seriousCritical": [],
+      "headers": {
+        "cache-control": "public, must-revalidate, max-age=30",
+        "content-encoding": "br",
+        "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://api.sociobot.in; object-src 'none'; base-uri 'self'; form-action 'self' https://api.sociobot.in; frame-ancestors 'none'",
+        "content-type": "text/html",
+        "date": "Sun, 30 Aug 2026 01:58:29 GMT",
+        "etag": "\"08931920\"",
+        "last-modified": "Sun, 30 Aug 2026 01:14:49 GMT",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-xss-protection": "1; mode=block"
+      }
+    },
+    "/privacy": {
+      "status": 200,
+      "finalUrl": "https://local-live-captions.sociobot.in/privacy",
+      "title": "Privacy — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "h1": [
+        "Your audio stays on your computer"
+      ],
+      "mainCount": 1,
+      "seriousCritical": [],
+      "headers": {
+        "cache-control": "public, must-revalidate, max-age=30",
+        "content-encoding": "br",
+        "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://api.sociobot.in; object-src 'none'; base-uri 'self'; form-action 'self' https://api.sociobot.in; frame-ancestors 'none'",
+        "content-type": "text/html",
+        "date": "Sun, 30 Aug 2026 01:58:29 GMT",
+        "etag": "\"08931920\"",
+        "last-modified": "Sun, 30 Aug 2026 01:14:49 GMT",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-xss-protection": "1; mode=block"
+      }
+    },
+    "/terms": {
+      "status": 200,
+      "finalUrl": "https://local-live-captions.sociobot.in/terms",
+      "title": "Terms — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "h1": [
+        "Use captions with consent"
+      ],
+      "mainCount": 1,
+      "seriousCritical": [],
+      "headers": {
+        "cache-control": "public, must-revalidate, max-age=30",
+        "content-encoding": "br",
+        "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://api.sociobot.in; object-src 'none'; base-uri 'self'; form-action 'self' https://api.sociobot.in; frame-ancestors 'none'",
+        "content-type": "text/html",
+        "date": "Sun, 30 Aug 2026 01:58:29 GMT",
+        "etag": "\"08931920\"",
+        "last-modified": "Sun, 30 Aug 2026 01:14:49 GMT",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-xss-protection": "1; mode=block"
+      }
+    },
+    "/missing": {
+      "status": 404,
+      "finalUrl": "https://local-live-captions.sociobot.in/missing",
+      "title": "Page not found — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "h1": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "seriousCritical": [],
+      "headers": {
+        "cache-control": "public, must-revalidate, max-age=30",
+        "content-length": "1691",
+        "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://api.sociobot.in; object-src 'none'; base-uri 'self'; form-action 'self' https://api.sociobot.in; frame-ancestors 'none'",
+        "content-type": "text/html",
+        "date": "Sun, 30 Aug 2026 01:58:34 GMT",
+        "etag": "\"08931920\"",
+        "last-modified": "Sun, 30 Aug 2026 01:14:49 GMT",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-xss-protection": "1; mode=block"
+      }
+    }
+  },
+  "demo": {
+    "banner": true,
+    "paused": true,
+    "size": "28",
+    "srtName": "sample-captions.srt",
+    "srtCueCount": 4,
+    "srtHasTimestamp": true,
+    "txtName": "sample-transcript.txt",
+    "txtLines": 4,
+    "realAfterReset": "keep",
+    "demoAfterReset": null,
+    "requestOrigins": []
+  },
+  "invalidLicense": {
+    "message": "This license is not active. Check the token or buy a supporter license.",
+    "stored": null
+  },
+  "consoleErrors": [
+    {
+      "url": "https://local-live-captions.sociobot.in/missing",
+      "text": "Failed to load resource: the server responded with a status of 404 ()"
+    }
+  ],
+  "pageErrors": [],
+  "requestOrigins": [
+    "https://local-live-captions.sociobot.in",
+    "https://api.github.com",
+    "https://api.sociobot.in"
+  ]
+}

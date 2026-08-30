@@ -1,0 +1,78 @@
+{
+  "/demo": {
+    "requests": [
+      {
+        "url": "https://local-live-captions.sociobot.in/demo",
+        "method": "GET",
+        "type": "document"
+      },
+      {
+        "url": "https://local-live-captions.sociobot.in/assets/index-Bsx1gRC9.js",
+        "method": "GET",
+        "type": "script"
+      },
+      {
+        "url": "https://local-live-captions.sociobot.in/assets/index-DecVP1iZ.css",
+        "method": "GET",
+        "type": "stylesheet"
+      },
+      {
+        "url": "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+        "method": "GET",
+        "type": "font"
+      },
+      {
+        "url": "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+        "method": "GET",
+        "type": "font"
+      },
+      {
+        "url": "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2",
+        "method": "GET",
+        "type": "font"
+      }
+    ],
+    "origins": [
+      "https://local-live-captions.sociobot.in"
+    ],
+    "failed": []
+  },
+  "/privacy": {
+    "requests": [
+      {
+        "url": "https://local-live-captions.sociobot.in/privacy",
+        "method": "GET",
+        "type": "document"
+      },
+      {
+        "url": "https://local-live-captions.sociobot.in/assets/index-Bsx1gRC9.js",
+        "method": "GET",
+        "type": "script"
+      },
+      {
+        "url": "https://local-live-captions.sociobot.in/assets/index-DecVP1iZ.css",
+        "method": "GET",
+        "type": "stylesheet"
+      },
+      {
+        "url": "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2",
+        "method": "GET",
+        "type": "font"
+      },
+      {
+        "url": "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+        "method": "GET",
+        "type": "font"
+      },
+      {
+        "url": "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+        "method": "GET",
+        "type": "font"
+      }
+    ],
+    "origins": [
+      "https://local-live-captions.sociobot.in"
+    ],
+    "failed": []
+  }
+}

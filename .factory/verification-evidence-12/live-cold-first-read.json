@@ -1,0 +1,42 @@
+{
+  "status": 200,
+  "url": "https://local-live-captions.sociobot.in/",
+  "title": "Local Live Captions — Caption calls locally",
+  "h1": [
+    "Caption Linux calls and recordings locally"
+  ],
+  "viewportText": "Skip to content\nLocal Live\nCaptions\nDemo\nHow it works\nPrice\nPrivacy\nCaption Linux calls and recordings locally\n\nFor deaf and hard-of-hearing students when lectures, calls, or recordings have no captions.\n\nTry it with sample data\n→\nOpens a private sample. Nothing is saved.\nPrivate\nAudio stays on your device.\nOffline\nThe sample works offline after your first visit.\nFree\nEnglish and German speech models are free.\nThe app turns audio into captions on your computer.\nResizable caption overlay\n\nKeep the resizable overlay above your lecture or call. Adjust the words without stopping captions.\n\nCapturing\nEnglish · processed on this computer\n\nGravity pulls the cloud inward while pressure pushes back.\n\nToday we will trace how a star changes over its lifetime.\n\nStop captions\nCaption size\n28 px\nExport subtitle file (.srt)\nHow it works\n1\nChoose the audio source\n\nChoose an audio source. A monitor source carries system audio through PipeWire or PulseAudio.\n\nThe app checks a monitor source before capture.\n\n2\nDownload a speech model\n\nChoose English or German. The model stays on this computer.\n\n3\nConfirm consent and start captions\n\nConfirm that everyone agreed to captions. Stop at any time.\n\n1 · Pick\nAudio source\nMonitor of Built-in Audio\n2 · Confirm\nConsent\nEveryone has agreed\n3 · Read\nCapturing\nThat balance can last for billions of years.\nPrivacy and limits\n\nThe app does not join calls, name speakers, or save audio. It keeps transcript text only while the session is open.\n\nNo cloud recording\nConsent before capture\nResizable overlay\nNo perfect accuracy promise\n\nLOCAL LIVE CAPTIONS SUPPORTER LICENSE\n\nOptional $24 supporter license\n\nEnglish and German speech models, size controls, and transcript export stay free. A supporter license helps fund updates; it does not unlock caption features.\n\n$24\nonce\n\nBuy supporter license\n(external checkout)\n→\n\nCheckout opens Dodo through Sociobot. Review the checkout terms before paying.\n\nRestore a supporter license\nLicense token\nVerify license\n\nDownload for Linux\n\nChoose the package that matches your computer from the current release.\n\nCurrent builds are unsigned. Your system may ask you to confirm the download.\n\nDownload for Linux\nSee every download\n(external)\nLocal Live Captions\n\nCaption Linux calls and recordings on your device.\n\nPrivacy\nTerms\nBuilt by Param Factory\n(external)\n\nv0.1.10 · build fcb90c7\nGenerated artwork disclosed in the design notes\n(external)\n.",
+  "links": [
+    "Skip to content",
+    "Local LiveCaptions",
+    "Demo",
+    "How it works",
+    "Price",
+    "Privacy",
+    "Try it with sample data →",
+    "Buy supporter license (external checkout)→",
+    "Download for Linux",
+    "See every download (external)",
+    "Privacy",
+    "Terms",
+    "Built by Param Factory (external)",
+    "design notes (external)"
+  ],
+  "buttons": [
+    "Stop captions",
+    "Export subtitle file (.srt)",
+    "Verify license"
+  ],
+  "requests": [
+    "https://local-live-captions.sociobot.in/",
+    "https://local-live-captions.sociobot.in/assets/index-Bsx1gRC9.js",
+    "https://local-live-captions.sociobot.in/assets/index-DecVP1iZ.css",
+    "https://api.github.com/repos/B-Divyesh/sf-local-live-captions/releases?per_page=1",
+    "https://local-live-captions.sociobot.in/assets/listening-room-1120.webp",
+    "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+    "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+    "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2"
+  ],
+  "consoleErrors": [],
+  "pageErrors": []
+}

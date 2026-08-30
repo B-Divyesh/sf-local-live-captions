@@ -1,0 +1,17 @@
+{
+  "runtimeError": null,
+  "scores": {
+    "performance": 100,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+  },
+  "metrics": {
+    "LCP": "1.2 s",
+    "CLS": "0.012",
+    "TBT": "0 ms",
+    "FCP": "1.1 s",
+    "SI": "1.1 s"
+  },
+  "transfer": "Total size was 111 KiB"
+}
