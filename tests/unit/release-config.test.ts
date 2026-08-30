@@ -68,15 +68,16 @@ describe("release configuration regressions", () => {
   });
 
   it("@claim:release-artifacts publishes the documented desktop packages and integrity files", async () => {
-    const [workflow, fixture, packageText, tauriText, cargoText, shellInstaller, windowsInstaller, viteConfig] = await Promise.all([
+    const [workflow, fixture, packageText, tauriText, cargoText, shellInstaller, windowsInstaller, viteConfig, releaseBuilder] = await Promise.all([
       readFile(".github/workflows/release.yml", "utf8"),
-      readFile("tests/fixtures/release-v0.1.12.json", "utf8"),
+      readFile("tests/fixtures/release-v0.1.13.json", "utf8"),
       readFile("package.json", "utf8"),
       readFile("src-tauri/tauri.conf.json", "utf8"),
       readFile("src-tauri/Cargo.toml", "utf8"),
       readFile("public/install.sh", "utf8"),
       readFile("public/install.ps1", "utf8"),
       readFile("vite.config.ts", "utf8"),
+      readFile("scripts/build-release-site.mjs", "utf8"),
     ]);
     const assets = JSON.parse(fixture).assets as string[];
     const packageVersion = JSON.parse(packageText).version as string;
@@ -99,6 +100,8 @@ describe("release configuration regressions", () => {
     expect(shellInstaller).toContain('release_commit" != "$expected_commit');
     expect(windowsInstaller).toContain("$release.target_commitish -ne $identity.commit");
     expect(viteConfig).toContain('fileName: "release-identity.json"');
+    expect(releaseBuilder).toContain("Static release must be built from");
+    expect(releaseBuilder).toContain("VITE_BUILD_SHA: releaseCommit");
     expect(JSON.parse(fixture).tag_name).toBe(`v${packageVersion}`);
     expect(tauriVersion).toBe(packageVersion);
     expect(cargoVersion).toBe(packageVersion);
@@ -109,15 +112,15 @@ describe("release configuration regressions", () => {
 
   it("rejects stale release tags and source commits before packaging", () => {
     const valid = {
-      releaseTag: "v0.1.12",
+      releaseTag: "v0.1.13",
       expectedSha: "candidate-sha",
       tagCommit: "candidate-sha",
-      packageVersion: "0.1.12",
-      tauriVersion: "0.1.12",
-      cargoVersion: "0.1.12",
+      packageVersion: "0.1.13",
+      tauriVersion: "0.1.13",
+      cargoVersion: "0.1.13",
     };
     expect(releaseSourceErrors(valid)).toEqual([]);
-    expect(releaseSourceErrors({ ...valid, releaseTag: "v0.1.11" })).toContain("Release tag v0.1.11 does not match package version 0.1.12.");
-    expect(releaseSourceErrors({ ...valid, tagCommit: "older-sha" })).toContain("Tag v0.1.12 resolves to older-sha, but this workflow is building candidate-sha.");
+    expect(releaseSourceErrors({ ...valid, releaseTag: "v0.1.12" })).toContain("Release tag v0.1.12 does not match package version 0.1.13.");
+    expect(releaseSourceErrors({ ...valid, tagCommit: "older-sha" })).toContain("Tag v0.1.13 resolves to older-sha, but this workflow is building candidate-sha.");
   });
 });

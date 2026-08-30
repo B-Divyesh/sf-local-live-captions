@@ -1,145 +1,102 @@
-# Local Live Captions — verification 14 handoff — FAIL
-
-## Independent verification 14 outcome
-
-**FAIL — do not release candidate `003f7a396d6cf279326a9d5481ce4f1b82af43a1`.**
-
-Fresh QA found that the live static site identifies as the candidate, while
-the latest immutable `v0.1.12` desktop release and `latest.json` identify
-`2db4639d4c28af7f964313d45cc69dfc264b7eb1`. Both release-identity audits
-fail, the landing page says downloads are still being published, and no
-candidate-matched installer can be downloaded. This is release-blocking for a
-desktop app.
-
-All local quality gates, all 26 manifest claims (after installing the
-documented native test prerequisites), the real PulseAudio/Whisper capture
-acceptance, accessibility/browser QA, local native bundles, and AppImage
-smoke test passed. The detailed report and evidence are
-`.factory/verification-14.md` and `.factory/verification-evidence-14/`.
-
-Required operator action: publish immutable desktop artifacts and
-`latest.json` for `003f7a3…`, or redeploy the site from `2db4639…`; then rerun
-the two release audits and confirm a detected-platform download link exists.
-
----
-
-# Local Live Captions — repair 11 handoff
+# Local Live Captions — repair 12 handoff
 
 ## Outcome
 
-Release-blocking verification 13 findings are repaired in the `v0.1.12`
-source release. Immutable tag `v0.1.12` points to
-`2db4639d4c28af7f964313d45cc69dfc264b7eb1`; the release workflow resolves
-that tag once and uses that same commit for package verification,
-`latest.json`, and the published-release audit. This documentation-only
-follow-up records the publication evidence and does not change that artifact.
+Repaired the release-blocking finding from independent verification 14 for
+candidate `003f7a396d6cf279326a9d5481ce4f1b82af43a1`.
+
+The failure was a release identity split: the deployed site claimed
+`003f7a3…`, while `v0.1.12` and its `latest.json` claimed `2db4639…`.
+Downloads correctly withheld their packages, but that left the desktop app
+without an installable release. The repair creates a new immutable
+`v0.1.13` release source and adds a checked release-site build path so a site
+cannot be built for deployment from a different checkout than its release tag.
 
 ## What changed
 
-- Reproduced the verifier's exact stale identity before editing:
-  `GITHUB_SHA=242656aeed034e3600ba3b98eafe47ea34249033 npm run
-  verify:release-source -- v0.1.11` exited 1 because `v0.1.11` resolves to
-  `6b919f6a10327f48725327fd2d3ed02ddf9dcec8`.
-- Bumped package, Tauri, Cargo, lockfile, release fixtures, and documentation
-  to `0.1.12` / `v0.1.12`. The old `v0.1.11` tag was not moved.
-- Added a `resolve` job to `.github/workflows/release.yml`. Every release job
-  now checks out the resolved tag, verifies `RELEASE_COMMIT`, builds from that
-  tag, writes that exact commit into `latest.json`, and audits it after upload.
-- Added regression coverage for verification 13's exact candidate/release
-  mismatch (`242656a…` versus `6b919f6…`), the new versioned release contract,
-  installer identity gate, and static download selection.
-- Kept the shared checkout UI fail-soft. The $24 supporter action is a secure
-  new-tab checkout link; the original local page remains available if the
-  shared endpoint is unavailable. It explains the retry path and keeps all
-  captions free. Its claim tests the observable product behavior without
-  treating a third-party checkout outage as a product failure.
+- Bumped package, Tauri, Cargo, lockfile, release fixture, browser fixture,
+  installer fixture, and release documentation to `0.1.13` / `v0.1.13`.
+- Added `npm run build:release-site`. It resolves `RELEASE_TAG`, refuses an
+  untagged or mismatched checkout, verifies package/tag/source consistency,
+  builds with the immutable tag commit in `VITE_BUILD_SHA`, and then checks
+  the generated `dist/site/release-identity.json` before a deployable site is
+  left on disk.
+- Added the exact verification-14 regression: candidate
+  `003f7a3…` cannot produce a site for `v0.1.12` because that tag resolves to
+  `2db4639…`. The regression also checks the emitted site identity.
+- Kept the existing download and one-line-installer guards. They continue to
+  withhold artifacts unless the site identity, GitHub release target, and
+  `latest.json` all agree.
 
 ## Verification
 
-Performed in this clean worker after `npm ci` (66 packages; 0
-vulnerabilities):
+Performed after a clean `npm ci` (66 packages; 0 npm vulnerabilities) and
+after installing the Linux/Tauri/PulseAudio prerequisite packages documented
+in `.github/workflows/release.yml`:
 
 ```sh
-CI=1 npm test
-npm run test:browser-lifecycle
+npm run test:unit -- --testNamePattern='immutable static release builds|release configuration regressions|published release contract|one-line installer release identity'
 npm run typecheck
+npm test
 npm run lint
+npm run test:browser-lifecycle
 cargo fmt --check --manifest-path src-tauri/Cargo.toml
 cargo test --manifest-path src-tauri/Cargo.toml
 cargo check --manifest-path src-tauri/Cargo.toml
-npm run test:linux-audio
 npm run build
+npm run test:linux-audio
 APPIMAGE_EXTRACT_AND_RUN=1 CI=true npm run tauri build
 ```
 
-All passed. The full browser run has 23 Vitest tests and passing Chromium and
-390 px mobile suites; `test-results/.last-run.json` reports `passed`. The
-browser-lifecycle test completed its expected injected first-attempt crash and
-clean retry. Rust reports 10 passing tests and two hardware acceptance tests
-ignored by the normal unit suite; those acceptance tests passed through the
-Linux script.
+All commands passed. The full unit/browser run has 25 Vitest tests and the
+isolated Chromium desktop plus 390 px mobile suites. The intentional
+browser-crash lifecycle test retried with a clean browser and passed. Rust
+reports 10 passing unit tests and two hardware acceptance tests ignored by
+the ordinary unit suite; the isolated PulseAudio acceptance script passed its
+English monitor capture, SRT/restart checks, and all four German runs.
 
-Every one of the 26 commands in `.factory/claims.json` was then invoked in
-manifest order, independently. This includes four isolated PulseAudio monitor
-runs with local Whisper recognition. The script's expected container D-Bus
-and no-device ALSA noise did not affect the real monitor, transcription, SRT,
-restart, no-audio-storage, or German acceptance checks.
+All 23 distinct commands in `.factory/claims.json` were invoked in manifest
+order. They cover all 26 claims; the shared Linux-audio command covers the
+native local-processing, German, no-audio-storage, and monitor end-to-end
+claims. Every command passed.
 
-`npm run build` emitted `dist/site` and `dist/app`. The landing main chunk is
-29.23 kB raw / 9.91 kB gzip and CSS is 18.49 kB raw / 4.87 kB gzip. Local
-`verify-url.sh` checks on `/` and `/demo` passed with titles, `lang=en`, one
-`h1`, a `main` landmark, image alt text, labeled buttons, and zero console
-errors. The pinned Playwright `@axe-core` scans in the complete desktop/mobile
-suite passed with no serious or critical findings. The standalone axe CLI could
-not attach to this worker's Playwright headless shell because no compatible
-ChromeDriver is installed; the Playwright integration is the equivalent
-project-supported axe check.
+The production Tauri build produced:
 
-The Linux release build produced and smoke-tested:
+- `Local Live Captions_0.1.13_amd64.AppImage` — 81,246,712 bytes
+- `Local Live Captions_0.1.13_amd64.deb` — 5,437,144 bytes
+- `Local Live Captions-0.1.13-1.x86_64.rpm` — 5,436,788 bytes
 
-- `Local Live Captions_0.1.12_amd64.AppImage` (81,246,712 bytes)
-- `Local Live Captions_0.1.12_amd64.deb` (5,430,912 bytes)
-- `Local Live Captions-0.1.12-1.x86_64.rpm` (5,431,801 bytes)
+The AppImage stayed open under Xvfb for 15 seconds (expected timeout status
+124). The only output was normal headless EGL/ALSA/JACK device noise.
 
-The AppImage stayed open under Xvfb for 15 seconds (expected `timeout` status
-124); only normal headless graphics/audio-device warnings appeared.
+Local `verify-url.sh` checks on `/` and `/demo` passed: both routes returned
+200 with correct title, `lang`, one `h1`, a main landmark, alt text, labelled
+buttons, and no browser console/page errors. The project’s Playwright axe
+scans passed with no serious or critical findings in desktop and 390 px
+mobile coverage. The standalone `@axe-core/cli` was also attempted but this
+worker has no compatible ChromeDriver for the preinstalled Playwright
+headless shell; it exits at ChromeDriver session creation before scanning.
 
-## Publish and deploy
+## Publish and deploy procedure
 
-Published and deployed successfully on 30 August 2026:
-
-- GitHub Actions release run `33295590483` completed successfully.
-- GitHub release `v0.1.12` targets
-  `2db4639d4c28af7f964313d45cc69dfc264b7eb1` and contains checksum metadata
-  plus AppImage, DEB, RPM, DMG, macOS archive, Windows EXE, and MSI.
-- The release's `latest.json` names `v0.1.12`, the same commit, and all seven
-  platform package URLs. The public DEB checksum was verified against
-  `SHA256SUMS`.
-- The static site was deployed from a bundle whose
-  `release-identity.json` is exactly
-  `{"tag":"v0.1.12","commit":"2db4639d4c28af7f964313d45cc69dfc264b7eb1"}`.
-  The live custom domain returned that same identity after deployment.
-- `npm run verify:release-source -- v0.1.12` and
-  `npm run verify:published-release` passed against the public release and
-  deployed site. The real public Linux installer downloaded, checksum-checked,
-  and installed the matching AppImage into an isolated temporary directory.
-
-The tag-triggered GitHub workflow publishes macOS, Windows, and Linux
-installers, `SHA256SUMS`, and `latest.json`, then runs
-`verify-published-release` against the resolved tag commit. To recheck:
+The release tag must point at this repair commit. After the GitHub Actions
+release has published its packages, deploy only the tag-built output:
 
 ```sh
-npm run verify:release-source -- v0.1.12
+RELEASE_TAG=v0.1.13 npm run build:release-site
+/opt/fleet/lib/deploy-static.sh local-live-captions dist/site
 npm run verify:published-release
 ```
 
-The landing page will expose the detected-platform download only when its
-release identity, the GitHub release target, and `latest.json` all agree.
+The final publication check must show the same `v0.1.13` tag and commit for
+the deployed `/release-identity.json`, GitHub release target, and
+`latest.json`. The landing download link and `install.sh` then expose only
+that matching release.
 
-## Known limits and operator action
+## Known limits
 
-- macOS and Windows packages are built and published by GitHub Actions but
-  cannot be launched in this Linux worker. They remain unsigned; production
-  signing requires `APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` from the owner.
-- The brief's 75% 20-minute retention measure needs the planned human pilot;
-  it is not claimed by the product.
+- GitHub Actions builds macOS and Windows packages, but they cannot be run in
+  this Linux worker. They remain unsigned; operator signing requires
+  `APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX`.
+- The brief’s 75% retention target still needs its planned human pilot and is
+  not claimed by the product.
