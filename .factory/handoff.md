@@ -1,3 +1,28 @@
+# Local Live Captions — verification 14 handoff — FAIL
+
+## Independent verification 14 outcome
+
+**FAIL — do not release candidate `003f7a396d6cf279326a9d5481ce4f1b82af43a1`.**
+
+Fresh QA found that the live static site identifies as the candidate, while
+the latest immutable `v0.1.12` desktop release and `latest.json` identify
+`2db4639d4c28af7f964313d45cc69dfc264b7eb1`. Both release-identity audits
+fail, the landing page says downloads are still being published, and no
+candidate-matched installer can be downloaded. This is release-blocking for a
+desktop app.
+
+All local quality gates, all 26 manifest claims (after installing the
+documented native test prerequisites), the real PulseAudio/Whisper capture
+acceptance, accessibility/browser QA, local native bundles, and AppImage
+smoke test passed. The detailed report and evidence are
+`.factory/verification-14.md` and `.factory/verification-evidence-14/`.
+
+Required operator action: publish immutable desktop artifacts and
+`latest.json` for `003f7a3…`, or redeploy the site from `2db4639…`; then rerun
+the two release audits and confirm a detected-platform download link exists.
+
+---
+
 # Local Live Captions — repair 11 handoff
 
 ## Outcome
