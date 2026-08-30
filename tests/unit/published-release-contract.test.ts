@@ -4,12 +4,12 @@ import { publicationErrors } from "../../scripts/verify-published-release.mjs";
 const siteCommit = "f81f6c0eb051326dee835280bd25818c8a3d2b15";
 const olderCommit = "6ec51c0352298721e6ef7905da7c1485ce526fab";
 const names = [
-  "Local.Live.Captions-0.1.10-1.x86_64.rpm",
-  "Local.Live.Captions_0.1.10_amd64.AppImage",
-  "Local.Live.Captions_0.1.10_amd64.deb",
-  "Local.Live.Captions_0.1.10_universal.dmg",
-  "Local.Live.Captions_0.1.10_x64-setup.exe",
-  "Local.Live.Captions_0.1.10_x64_en-US.msi",
+  "Local.Live.Captions-0.1.11-1.x86_64.rpm",
+  "Local.Live.Captions_0.1.11_amd64.AppImage",
+  "Local.Live.Captions_0.1.11_amd64.deb",
+  "Local.Live.Captions_0.1.11_universal.dmg",
+  "Local.Live.Captions_0.1.11_x64-setup.exe",
+  "Local.Live.Captions_0.1.11_x64_en-US.msi",
   "Local.Live.Captions_universal.app.tar.gz",
   "SHA256SUMS",
   "latest.json",
@@ -18,13 +18,13 @@ const names = [
 function publication(commit = siteCommit) {
   const assets = names.map((name) => ({
     name,
-    browser_download_url: `https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.10/${name}`,
+    browser_download_url: `https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.11/${name}`,
   }));
   return {
-    identity: { tag: "v0.1.10", commit: siteCommit },
-    release: { tag_name: "v0.1.10", target_commitish: commit, assets },
+    identity: { tag: "v0.1.11", commit: siteCommit },
+    release: { tag_name: "v0.1.11", target_commitish: commit, assets },
     manifest: {
-      version: "v0.1.10",
+      version: "v0.1.11",
       commit,
       assets: assets.filter((asset) => !["SHA256SUMS", "latest.json"].includes(asset.name))
         .map((asset) => ({ name: asset.name, url: asset.browser_download_url })),
@@ -52,8 +52,8 @@ describe("published release contract", () => {
     incomplete.manifest.assets = incomplete.manifest.assets.filter((asset) => !asset.name.endsWith(".AppImage"));
     incomplete.checksums = incomplete.checksums.split("\n").filter((line) => !line.endsWith(".AppImage")).join("\n");
     expect(publicationErrors(incomplete)).toEqual([
-      "latest.json does not contain the published URL for Local.Live.Captions_0.1.10_amd64.AppImage.",
-      "SHA256SUMS does not cover Local.Live.Captions_0.1.10_amd64.AppImage.",
+      "latest.json does not contain the published URL for Local.Live.Captions_0.1.11_amd64.AppImage.",
+      "SHA256SUMS does not cover Local.Live.Captions_0.1.11_amd64.AppImage.",
     ]);
   });
 });

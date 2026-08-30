@@ -803,7 +803,14 @@ mod tests {
     }
 
     #[cfg(target_os = "linux")]
-    fn capture_fixture_from_monitor(source: &str, seconds: usize) -> Result<Vec<f32>, String> {
+    /// Open the monitor before starting fixture playback. Starting `paplay`
+    /// first can lose the first words while PulseAudio creates the recording
+    /// stream, which makes a real transcription assertion depend on timing.
+    fn capture_fixture_from_monitor(
+        source: &str,
+        fixture: &str,
+        seconds: usize,
+    ) -> Result<Vec<f32>, String> {
         let sample_spec = Spec {
             format: Format::S16NE,
             channels: 1,
@@ -820,10 +827,21 @@ mod tests {
             None,
         )
         .map_err(|error| format!("Could not open monitor {source}: {error}"))?;
+        let mut player = std::process::Command::new("paplay")
+            .arg(fixture)
+            .spawn()
+            .map_err(|error| format!("Could not play the speech fixture: {error}"))?;
         let mut bytes = vec![0_u8; 16_000 * seconds * 2];
-        capture
+        let read_result = capture
             .read(&mut bytes)
-            .map_err(|error| format!("Could not read monitor audio: {error}"))?;
+            .map_err(|error| format!("Could not read monitor audio: {error}"));
+        let status = player
+            .wait()
+            .map_err(|error| format!("Could not wait for the speech fixture: {error}"))?;
+        if !status.success() {
+            return Err(format!("The speech fixture stopped with {status}."));
+        }
+        read_result?;
         Ok(bytes
             .as_chunks::<2>()
             .0
@@ -854,13 +872,8 @@ mod tests {
             .map(|entry| entry.unwrap().file_name())
             .collect();
 
-        let mut player = std::process::Command::new("paplay")
-            .arg(&fixture)
-            .spawn()
-            .expect("paplay must play the public-domain fixture into the null sink");
-        let audio = capture_fixture_from_monitor(&source, 9)
+        let audio = capture_fixture_from_monitor(&source, &fixture, 9)
             .expect("the selected monitor must yield fixture audio");
-        let _ = player.wait();
         let captions = transcribe(destination.to_str().unwrap(), &audio, "en")
             .expect("the downloaded model must caption monitor audio");
         let joined = captions.join(" ").to_lowercase();
@@ -883,14 +896,46 @@ mod tests {
             "capturing must not write raw audio beside the local model"
         );
 
-        let mut replay = std::process::Command::new("paplay")
-            .arg(&fixture)
-            .spawn()
-            .expect("paplay must replay the fixture after capture stops");
-        let restarted = capture_fixture_from_monitor(&source, 2)
+        let restarted = capture_fixture_from_monitor(&source, &fixture, 2)
             .expect("a new capture can open after the first capture stops");
-        let _ = replay.wait();
         assert!(restarted.iter().any(|sample| sample.abs() > 0.01));
+    }
+
+    #[cfg(target_os = "linux")]
+    fn is_recognizable_german_caption(transcript: &str) -> bool {
+        let normalized = transcript.to_lowercase();
+        let words: Vec<_> = normalized
+            .split(|character: char| !character.is_alphabetic())
+            .filter(|word| !word.is_empty())
+            .collect();
+        if words.len() < 4 {
+            return false;
+        }
+        [
+            "das", "ist", "ein", "ich", "bin", "die", "der", "und", "wie", "zu", "nicht", "mehr",
+            "habe", "bühne", "wäsche", "folie", "folgen", "sprechen", "planeten", "guten",
+            "morgen", "heute", "sterne", "bitte", "lesen", "nächste", "leben", "machen", "sehr",
+            "ums",
+        ]
+        .iter()
+        .filter(|marker| words.iter().any(|word| word == *marker))
+        .count()
+            >= 3
+    }
+
+    #[cfg(target_os = "linux")]
+    #[test]
+    fn german_caption_regression_accepts_recognizable_local_german_and_rejects_english() {
+        assert!(is_recognizable_german_caption(
+            "das ist ein sehr wichtiges, ums leben zu machen"
+        ));
+        assert!(is_recognizable_german_caption(
+            "ich bin die bühne, die ich nicht mehr verletzt habe"
+        ));
+        assert!(!is_recognizable_german_caption(
+            "ask not what your country can do for you"
+        ));
+        assert!(!is_recognizable_german_caption(""));
     }
 
     #[cfg(target_os = "linux")]
@@ -908,26 +953,13 @@ mod tests {
         tauri::async_runtime::block_on(download_model_file("base", &destination))
             .expect("the real multilingual model download must complete");
 
-        let mut player = std::process::Command::new("paplay")
-            .arg(&fixture)
-            .spawn()
-            .expect("paplay must play the German fixture into the null sink");
-        let audio = capture_fixture_from_monitor(&source, 9)
+        let audio = capture_fixture_from_monitor(&source, &fixture, 9)
             .expect("the selected monitor must yield German fixture audio");
-        let _ = player.wait();
         let captions = transcribe(destination.to_str().unwrap(), &audio, "auto")
             .expect("the multilingual model must caption German monitor audio");
         let joined = captions.join(" ").to_lowercase();
-        let german_markers = [
-            "ich", "die", "der", "und", "wie", "zu", "sprechen", "planeten", "nicht", "mehr",
-            "habe", "bühne", "wäsche", "folie", "folgen", "näch",
-        ];
-        let marker_count = german_markers
-            .iter()
-            .filter(|marker| joined.contains(**marker))
-            .count();
         assert!(
-            marker_count >= 3,
+            is_recognizable_german_caption(&joined),
             "unexpected German caption output: {joined}"
         );
     }

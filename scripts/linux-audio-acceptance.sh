@@ -54,4 +54,7 @@ export LLC_AUDIO_TEST_CACHE="$cache_root"
 
 cd "$repo_root"
 cargo test --manifest-path src-tauri/Cargo.toml claim_linux_monitor_end_to_end_captions_speech_and_restarts -- --ignored
-cargo test --manifest-path src-tauri/Cargo.toml claim_german_caption_end_to_end -- --ignored
+for german_run in $(seq 1 4); do
+  echo "German monitor regression run ${german_run}/4"
+  cargo test --manifest-path src-tauri/Cargo.toml claim_german_caption_end_to_end -- --ignored
+done

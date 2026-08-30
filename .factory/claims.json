@@ -81,7 +81,7 @@
     "claim": "The multilingual speech model captions German system audio locally.",
     "where": "landing, README, desktop model picker",
     "test": "npm run test:linux-audio",
-    "sandbox": "isolated PulseAudio monitor plays the shipped original German fixture; the real multilingual base model captions recognizable German output"
+    "sandbox": "an isolated PulseAudio monitor opens before playback of the shipped original German fixture; four real multilingual-base captures each assert a multiword, recognizable German result"
   },
   {
     "id": "linux-system-audio",

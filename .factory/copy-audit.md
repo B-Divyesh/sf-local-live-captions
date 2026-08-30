@@ -67,11 +67,12 @@ word. Decorative text is absent from the landing page.
 | The app also lists microphones reported by the operating system. | 10 |
 | The test creates an isolated PulseAudio output and plays the included public-domain JFK clip. | 14 |
 | It downloads `tiny.en`, checks captions and SRT output, then starts capture again. | 11 |
-| The multilingual `base` model must return recognizable German caption text. | 10 |
+| It opens the monitor before playing the original German clip and runs four captures. | 14 |
+| The multilingual `base` model must return a multiword, recognizable German caption. | 11 |
 | Speech model downloads use the listed `ggerganov/whisper.cpp` Hugging Face repository. | 10 |
 | The bundled upstream MIT license copy is pinned in `third_party/whisper.cpp-LICENSE`. | 9 |
 | Desktop installers are built only in GitHub Actions. | 8 |
-| Tag the exact commit with the version from `package.json`, such as `v0.1.10`. | 12 |
+| Tag the exact commit with the version from `package.json`, such as `v0.1.11`. | 12 |
 | To rebuild, run the workflow for that tag. | 8 |
 | The workflow rejects a tag or commit mismatch. | 8 |
 | It creates unsigned packages for macOS, Windows, and Linux. | 9 |
