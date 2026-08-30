@@ -1,128 +1,68 @@
-# Local Live Captions — repair 10 handoff
+# Local Live Captions — verification 13 handoff
 
-## Outcome: PASS
+## Outcome: FAIL
 
-Repair release **v0.1.11** is published and deployed. Its immutable source is
-`6b919f6a10327f48725327fd2d3ed02ddf9dcec8` (`fix: stabilize German caption
-acceptance`). The release tag, GitHub release target, `latest.json`, and live
-`/release-identity.json` all identify that same commit.
+Candidate `242656aeed034e3600ba3b98eafe47ea34249033` was independently tested
+against <https://local-live-captions.sociobot.in> on 30 August 2026. Do not
+release it. Full evidence is in [verification-13.md](verification-13.md).
 
-The product remains the researched Tauri 2 desktop app with its static landing
-site at <https://local-live-captions.sociobot.in>. The brief, design direction,
-local-first storage, free/core behaviour, demo isolation, and all previously
-passing flows were preserved.
+## Release blockers
 
-## Findings repaired
+1. **Critical — no candidate-matched desktop download.** The deployed static
+   site and its files match candidate `242656ae…`, but the `v0.1.11` tag,
+   GitHub release, and `latest.json` point to `6b919f6a…`. The landing page says
+   “Downloads are being published,” the Linux installer exits 1, and both
+   `verify:release-source` and `verify:published-release` fail.
+2. **High — intermittent checkout failure.** The advertised Sociobot checkout
+   returned HTTP 500 three times and caused the exact `free-and-paid` manifest
+   claim to fail on its initial attempt and retry. It later recovered to 303,
+   so this is an intermittent production failure rather than a permanent
+   configuration failure.
 
-### Candidate identity report error
+## What passed
 
-Verification 12 reports a missing SHA ending in `...f974c`. The actual work
-order candidate, `fcb90c7a2e659e930e7ec8fe519eb55118494e8c`, exists both
-locally and at `origin/main`; it differs by one character (`7` rather than
-`f`) from the SHA written in that report. This was a report transcription
-error, not a missing artifact or product-source defect. Repair 10 establishes
-a new, reachable, immutable release source at `6b919f6…` and verifies it
-end-to-end after publication.
+- First-read gate and one-click isolated sample on desktop and 390 px mobile.
+- All native claim commands after installing the repository's documented OS
+  dependencies, including four manifest invocations of the real Linux audio
+  acceptance suite.
+- Full unit/browser suite, typecheck, lint, Rust format/test/check, site/app
+  build, native DEB/RPM/AppImage build, and 15-second AppImage smoke.
+- Demo pause/recovery, 20–42 px sizing, TXT/SRT export, reset isolation,
+  invalid-input recovery, service-worker update, and offline reload.
+- Axe serious/critical scans on all routes plus light/dark mobile; keyboard,
+  focus, touch targets, 200% text, reduced motion, semantics, and 404 behavior.
+- Privacy request inspection and security/cache headers. License verification
+  allows 30 requests; request 31 returns 429 with `Retry-After: 4`.
+- Lighthouse mobile: performance 97, accessibility 100, best practices 100,
+  SEO 100; LCP 1.2 s, CLS 0.012, 111 KiB transfer.
 
-### Intermittent `german-caption-end-to-end` claim
-
-The native fixture player could begin before PulseAudio had opened the monitor
-stream. Separately, the old acceptance check accepted only a narrow set of
-German marker words, so the verifier's valid local result, “das ist ein sehr
-wichtiges, ums leben zu machen”, could be rejected.
-
-- The monitor stream is now opened before `paplay` starts the shipped German
-  fixture.
-- The real-model assertion requires a multiword caption with three distinct
-  German markers. It accepts recognizable local German rather than pretending
-  this small model produces a verbatim transcript, while rejecting an English
-  JFK transcript and empty/noise output.
-- The Linux acceptance command runs the real German monitor capture four times
-  per invocation. It still uses the base local model and the actual PulseAudio
-  monitor; it is not a source- or button-presence test.
-- Regression coverage includes the verifier's exact German output, rejection
-  of English, static ordering coverage for “open monitor before `paplay`”, and
-  coverage that the four-run loop remains in the native acceptance script.
-
-Relevant changes are in `src-tauri/src/lib.rs`,
-`scripts/linux-audio-acceptance.sh`, and
-`tests/unit/linux-audio-acceptance.test.ts`.
-
-## Verification evidence
-
-All checks below ran after a clean `npm ci` on the repair source unless noted.
-
-| Gate | Result |
-| --- | --- |
-| `npm ci` | PASS — 66 packages, 0 vulnerabilities |
-| `CI=1 npm test` | PASS — 23 unit tests; desktop 24 passed / 4 skipped; 390 px mobile 25 passed / 3 skipped |
-| Claim contract | PASS — all 26 tagged claim assertions are covered by the clean unit/browser/native suites; the German native claim performs four real monitor captures |
-| `npm run typecheck` | PASS |
-| `npm run lint` | PASS — TypeScript and Clippy warnings denied |
-| `npm run test:browser-lifecycle` | PASS — expected first SIGSEGV recovery followed by a clean browser retry |
-| `cargo fmt --check`, `cargo test`, `cargo check` | PASS — 10 Rust tests passed; 2 hardware acceptance tests correctly ignored by the normal unit command |
-| `npm run test:linux-audio` | PASS — English monitor capture, restart, SRT, no audio storage, and four real German monitor captures |
-| `npm run build` | PASS — site JS 9.90 KiB gzip; CSS 4.87 KiB gzip |
-| `APPIMAGE_EXTRACT_AND_RUN=1 CI=true npm run tauri build` | PASS — AppImage, DEB, and RPM built |
-| Linux package smoke | PASS — AppImage stayed open for 15 seconds under Xvfb; DEB metadata is version `0.1.11`, architecture `amd64` |
-| GitHub release workflow | PASS — [run 33290136777](https://github.com/B-Divyesh/sf-local-live-captions/actions/runs/33290136777): clean verify, Linux, Windows, macOS, and manifest jobs all green |
-| Published-release audit | PASS — `npm run verify:published-release` confirmed v0.1.11 → `6b919f6…`, seven packages plus `SHA256SUMS` and `latest.json` |
-| Static deploy | PASS — deployed with `/opt/fleet/lib/deploy-static.sh local-live-captions dist/site` |
-| Live desktop + 390 px demo | PASS — HTTP 200, zero page/console errors, one h1 and main, `lang=en`, title, no missing image alt text or unlabeled buttons |
-| Live accessibility/performance | PASS — Lighthouse mobile: performance 99, accessibility 100, best practices 100, SEO 100; LCP 1.4 s, CLS 0.012, transfer 111 KiB |
-| Privacy/offline/update/keyboard | PASS — Playwright claim coverage verifies same-origin demo/privacy requests, offline reload, service-worker update, skip-link/main focus, Space pause/resume, range Home/End, reduced motion, 200% text, and 390 px layout |
-| Consumer installer | PASS — empty-directory `install.sh` downloaded the v0.1.11 AppImage, validated SHA-256 `234d54641048ba9f04d4ee7aa0d54ac580619de9f68d7f7c681eceea3190c07f`, and installed an executable |
-
-Evidence generated by this repair is retained under `.factory/qa/`:
-
-- `repair-10-verify-home/` and `repair-10-verify-demo/` — local production-build desktop and 390 px checks.
-- `repair-10-live-home/` and `repair-10-live-demo/` — deployed-site checks and screenshots.
-- `repair-10-live-lighthouse/mobile.json` — full live mobile Lighthouse report.
-
-The live site sends `X-Content-Type-Options`, strict referrer policy,
-permissions policy, HSTS, and a CSP allowing only the product, GitHub release
-metadata, and the optional Sociobot license API.
-
-## Release and deployment verification
-
-Release: <https://github.com/B-Divyesh/sf-local-live-captions/releases/tag/v0.1.11>
-
-Published assets are AppImage, DEB, RPM, DMG, universal macOS archive, MSI,
-EXE, `SHA256SUMS`, and `latest.json`. The manifest version and commit are
-`v0.1.11` and `6b919f6a10327f48725327fd2d3ed02ddf9dcec8` respectively. Every
-package URL is present in the manifest and every package has a SHA-256 entry.
-
-The static site was built from the same tagged source:
-
-```sh
-VITE_BUILD_SHA="$(git rev-list -n 1 v0.1.11)" npm run build:site
-/opt/fleet/lib/deploy-static.sh local-live-captions dist/site
-npm run verify:published-release
-```
-
-## How to verify
+## How to reproduce
 
 ```sh
 npm ci
 CI=1 npm test
 npm run typecheck
 npm run lint
-npm run test:browser-lifecycle
 cargo fmt --check --manifest-path src-tauri/Cargo.toml
 cargo test --manifest-path src-tauri/Cargo.toml
-cargo check --manifest-path src-tauri/Cargo.toml
 npm run test:linux-audio
 npm run build
 APPIMAGE_EXTRACT_AND_RUN=1 CI=true npm run tauri build
+npm run verify:release-source -- v0.1.11
 npm run verify:published-release
+npm test -- --grep @claim:free-and-paid
 ```
 
-## Known limits and operator action
+Install the Linux/Tauri/PulseAudio packages listed in the release workflow
+before native checks. Detailed evidence and screenshots are in
+`.factory/verification-evidence-13/`.
 
-- A human 20-minute pilot is still needed to measure the brief's 75% retention
-  target. The product makes no transcription-accuracy guarantee.
-- Desktop packages remain intentionally unsigned. Signing needs operator-owned
+## Required operator action
+
+- Create a new version/tag and publish all platform artifacts from candidate
+  `242656ae…`; deploy the same identity. Do not retag `v0.1.11`.
+- Investigate the checkout 500s and demonstrate stable 303 redirects.
+- Rerun every claim and release audit. Signing still needs operator-owned
   `APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` secrets.
-- Only Linux packages can be launched in this worker. Windows and macOS were
-  built on their native GitHub runners and checked through published release
-  metadata, manifest URLs, and checksums.
+
+No product code was changed.

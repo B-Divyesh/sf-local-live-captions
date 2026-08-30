@@ -1,0 +1,316 @@
+{
+  "checkedAt": "2026-08-30T04:36:00.681Z",
+  "base": "https://local-live-captions.sociobot.in",
+  "routes": {
+    "/": {
+      "status": 200,
+      "title": "Local Live Captions — Caption calls locally",
+      "lang": "en",
+      "h1Count": 1,
+      "h1": [
+        "Caption Linux calls and recordings locally"
+      ],
+      "mainCount": 1,
+      "missingAlt": 0,
+      "unlabeledButtons": 0,
+      "horizontalOverflow": 0,
+      "seriousCriticalAxe": [],
+      "requests": [
+        "https://local-live-captions.sociobot.in/",
+        "https://local-live-captions.sociobot.in/assets/index-DzBZJpzq.js",
+        "https://local-live-captions.sociobot.in/assets/index-DecVP1iZ.css",
+        "https://api.github.com/repos/B-Divyesh/sf-local-live-captions/releases?per_page=1",
+        "https://local-live-captions.sociobot.in/assets/listening-room-1120.webp",
+        "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2"
+      ],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "headers": {
+        "cache-control": "public, must-revalidate, max-age=30",
+        "content-encoding": "br",
+        "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://api.sociobot.in; object-src 'none'; base-uri 'self'; form-action 'self' https://api.sociobot.in; frame-ancestors 'none'",
+        "content-type": "text/html",
+        "date": "Sun, 30 Aug 2026 04:36:00 GMT",
+        "etag": "\"61960906\"",
+        "last-modified": "Sun, 30 Aug 2026 03:45:48 GMT",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-xss-protection": "1; mode=block"
+      }
+    },
+    "/demo": {
+      "status": 200,
+      "title": "Demo — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "h1": [
+        "See live captions before installing"
+      ],
+      "mainCount": 1,
+      "missingAlt": 0,
+      "unlabeledButtons": 0,
+      "horizontalOverflow": 0,
+      "seriousCriticalAxe": [],
+      "requests": [
+        "https://local-live-captions.sociobot.in/demo",
+        "https://local-live-captions.sociobot.in/assets/index-DzBZJpzq.js",
+        "https://local-live-captions.sociobot.in/assets/index-DecVP1iZ.css",
+        "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2"
+      ],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "headers": {
+        "cache-control": "public, must-revalidate, max-age=30",
+        "content-encoding": "br",
+        "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://api.sociobot.in; object-src 'none'; base-uri 'self'; form-action 'self' https://api.sociobot.in; frame-ancestors 'none'",
+        "content-type": "text/html",
+        "date": "Sun, 30 Aug 2026 04:36:01 GMT",
+        "etag": "\"61960906\"",
+        "last-modified": "Sun, 30 Aug 2026 03:45:48 GMT",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-xss-protection": "1; mode=block"
+      }
+    },
+    "/privacy": {
+      "status": 200,
+      "title": "Privacy — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "h1": [
+        "Your audio stays on your computer"
+      ],
+      "mainCount": 1,
+      "missingAlt": 0,
+      "unlabeledButtons": 0,
+      "horizontalOverflow": 0,
+      "seriousCriticalAxe": [],
+      "requests": [
+        "https://local-live-captions.sociobot.in/privacy",
+        "https://local-live-captions.sociobot.in/assets/index-DzBZJpzq.js",
+        "https://local-live-captions.sociobot.in/assets/index-DecVP1iZ.css",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2",
+        "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2"
+      ],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "headers": {
+        "cache-control": "public, must-revalidate, max-age=30",
+        "content-encoding": "br",
+        "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://api.sociobot.in; object-src 'none'; base-uri 'self'; form-action 'self' https://api.sociobot.in; frame-ancestors 'none'",
+        "content-type": "text/html",
+        "date": "Sun, 30 Aug 2026 04:36:03 GMT",
+        "etag": "\"61960906\"",
+        "last-modified": "Sun, 30 Aug 2026 03:45:48 GMT",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-xss-protection": "1; mode=block"
+      }
+    },
+    "/terms": {
+      "status": 200,
+      "title": "Terms — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "h1": [
+        "Use captions with consent"
+      ],
+      "mainCount": 1,
+      "missingAlt": 0,
+      "unlabeledButtons": 0,
+      "horizontalOverflow": 0,
+      "seriousCriticalAxe": [],
+      "requests": [
+        "https://local-live-captions.sociobot.in/terms",
+        "https://local-live-captions.sociobot.in/assets/index-DzBZJpzq.js",
+        "https://local-live-captions.sociobot.in/assets/index-DecVP1iZ.css",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2",
+        "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2"
+      ],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "headers": {
+        "cache-control": "public, must-revalidate, max-age=30",
+        "content-encoding": "br",
+        "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://api.sociobot.in; object-src 'none'; base-uri 'self'; form-action 'self' https://api.sociobot.in; frame-ancestors 'none'",
+        "content-type": "text/html",
+        "date": "Sun, 30 Aug 2026 04:36:05 GMT",
+        "etag": "\"61960906\"",
+        "last-modified": "Sun, 30 Aug 2026 03:45:48 GMT",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-xss-protection": "1; mode=block"
+      }
+    },
+    "/definitely-missing-verification-13": {
+      "status": 404,
+      "title": "Page not found — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "h1": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "missingAlt": 0,
+      "unlabeledButtons": 0,
+      "horizontalOverflow": 0,
+      "seriousCriticalAxe": [],
+      "requests": [
+        "https://local-live-captions.sociobot.in/definitely-missing-verification-13",
+        "https://local-live-captions.sociobot.in/assets/index-DzBZJpzq.js",
+        "https://local-live-captions.sociobot.in/assets/index-DecVP1iZ.css",
+        "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2"
+      ],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "pageErrors": [],
+      "failedRequests": [],
+      "headers": {
+        "cache-control": "public, must-revalidate, max-age=30",
+        "content-length": "1691",
+        "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com https://api.sociobot.in; object-src 'none'; base-uri 'self'; form-action 'self' https://api.sociobot.in; frame-ancestors 'none'",
+        "content-type": "text/html",
+        "date": "Sun, 30 Aug 2026 04:36:07 GMT",
+        "etag": "\"61960906\"",
+        "last-modified": "Sun, 30 Aug 2026 03:45:48 GMT",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-xss-protection": "1; mode=block"
+      }
+    }
+  },
+  "flows": {
+    "cold-desktop": {
+      "h1": "Caption Linux calls and recordings locally",
+      "audience": "For deaf and hard-of-hearing students when lectures, calls, or recordings have no captions.",
+      "action": "Try it with sample data\n→",
+      "actionBox": {
+        "x": 72,
+        "y": 594.640625,
+        "width": 250.25,
+        "height": 52.34375
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "visibleText": "Skip to content\nLocal Live\nCaptions\nDemo\nHow it works\nPrice\nPrivacy\nCaption Linux calls and recordings locally\n\nFor deaf and hard-of-hearing students when lectures, calls, or recordings have no captions.\n\nTry it with sample data\n→\nOpens a private sample. Nothing is saved.\nPrivate\nAudio stays on your device.\nOffline\nThe sample works offline after your first visit.\nFree\nEnglish and German speech models are free.\nThe app turns audio into captions on your computer.\nResizable caption overlay\n\nKeep the resizable overlay above your lecture or call. Adjust the words without stopping captions.\n\nCapturing\nEnglish · processed on this computer\n\nGravity pulls the cloud inward while pressure pushes back.\n\nToday we will trace how a star changes over its lifetime.\n\nStop captions\nCaption size\n28 px\nExport subtitle file (.srt)\nHow it works\n1\nChoose the audio source\n\nChoose an audio source. A monitor sourc"
+    },
+    "one-click-demo-desktop": {
+      "url": "https://local-live-captions.sociobot.in/?demo=1",
+      "banner": true,
+      "transcriptLines": 4,
+      "captureState": "Capturing sample"
+    },
+    "cold-mobile": {
+      "h1": "Caption Linux calls and recordings locally",
+      "audience": "For deaf and hard-of-hearing students when lectures, calls, or recordings have no captions.",
+      "action": "Try it with sample data\n→",
+      "actionBox": {
+        "x": 20,
+        "y": 512.015625,
+        "width": 245.40625,
+        "height": 50.796875
+      },
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "visibleText": "Skip to content\nDemo\nHow it works\nPrice\nPrivacy\nCaption Linux calls and recordings locally\n\nFor deaf and hard-of-hearing students when lectures, calls, or recordings have no captions.\n\nTry it with sample data\n→\nOpens a private sample. Nothing is saved.\nPrivate\nAudio stays on your device.\nOffline\nThe sample works offline after your first visit.\nFree\nEnglish and German speech models are free.\nThe app turns audio into captions on your computer.\nResizable caption overlay\n\nKeep the resizable overlay above your lecture or call. Adjust the words without stopping captions.\n\nCapturing\nEnglish · processed on this computer\n\nGravity pulls the cloud inward while pressure pushes back.\n\nToday we will trace how a star changes over its lifetime.\n\nStop captions\nCaption size\n28 px\nExport subtitle file (.srt)\nHow it works\n1\nChoose the audio source\n\nChoose an audio source. A monitor source carries system aud"
+    },
+    "one-click-demo-mobile": {
+      "url": "https://local-live-captions.sociobot.in/?demo=1",
+      "banner": true,
+      "transcriptLines": 4,
+      "captureState": "Capturing sample"
+    },
+    "demo": {
+      "focus": {
+        "outlineStyle": "solid",
+        "outlineWidth": "3px",
+        "outlineColor": "rgb(23, 77, 140)"
+      },
+      "pausedState": "Stopped",
+      "resumedState": "Capturing sample",
+      "srt": {
+        "filename": "sample-captions.srt",
+        "cueCount": 4,
+        "validTimestamp": true
+      },
+      "txt": {
+        "filename": "sample-transcript.txt",
+        "nonemptyLines": 4,
+        "includesAstronomy": true
+      },
+      "storageAfterReset": {
+        "real": "keep",
+        "demo": null
+      },
+      "motion": {
+        "transitionDuration": "1e-05s",
+        "scrollBehavior": "auto"
+      },
+      "overflowAt200": 0,
+      "sw": {
+        "controlled": true,
+        "scope": "https://local-live-captions.sociobot.in/",
+        "caches": [
+          "llc-shell-v7"
+        ]
+      },
+      "offline": {
+        "title": "Demo — Local Live Captions",
+        "h1": "See live captions before installing",
+        "pauseVisible": true
+      },
+      "externalRequests": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "keyboardAndInvalid": {
+      "firstTab": {
+        "text": "Skip to content",
+        "href": "#main"
+      },
+      "afterSkip": {
+        "id": "main",
+        "tag": "MAIN"
+      },
+      "emptyError": "Enter the license token from your receipt.",
+      "invalidError": "This license is not active. Check the token or buy a supporter license.",
+      "invalidStored": null
+    }
+  }
+}
