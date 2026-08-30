@@ -3,9 +3,11 @@
 ## Outcome
 
 Release-blocking verification 13 findings are repaired in the `v0.1.12`
-source release. Tag `v0.1.12` is created from this handoff's commit; the
-release workflow resolves that tag once and uses that same commit for package
-verification, `latest.json`, and the published-release audit.
+source release. Immutable tag `v0.1.12` points to
+`2db4639d4c28af7f964313d45cc69dfc264b7eb1`; the release workflow resolves
+that tag once and uses that same commit for package verification,
+`latest.json`, and the published-release audit. This documentation-only
+follow-up records the publication evidence and does not change that artifact.
 
 ## What changed
 
@@ -79,10 +81,27 @@ The AppImage stayed open under Xvfb for 15 seconds (expected `timeout` status
 
 ## Publish and deploy
 
-Push this commit and the immutable `v0.1.12` tag. The tag-triggered GitHub
-workflow publishes macOS, Windows, and Linux installers, `SHA256SUMS`, and
-`latest.json`, then runs `verify-published-release` against the resolved tag
-commit. The static deployment must build this same commit. Finally run:
+Published and deployed successfully on 30 August 2026:
+
+- GitHub Actions release run `33295590483` completed successfully.
+- GitHub release `v0.1.12` targets
+  `2db4639d4c28af7f964313d45cc69dfc264b7eb1` and contains checksum metadata
+  plus AppImage, DEB, RPM, DMG, macOS archive, Windows EXE, and MSI.
+- The release's `latest.json` names `v0.1.12`, the same commit, and all seven
+  platform package URLs. The public DEB checksum was verified against
+  `SHA256SUMS`.
+- The static site was deployed from a bundle whose
+  `release-identity.json` is exactly
+  `{"tag":"v0.1.12","commit":"2db4639d4c28af7f964313d45cc69dfc264b7eb1"}`.
+  The live custom domain returned that same identity after deployment.
+- `npm run verify:release-source -- v0.1.12` and
+  `npm run verify:published-release` passed against the public release and
+  deployed site. The real public Linux installer downloaded, checksum-checked,
+  and installed the matching AppImage into an isolated temporary directory.
+
+The tag-triggered GitHub workflow publishes macOS, Windows, and Linux
+installers, `SHA256SUMS`, and `latest.json`, then runs
+`verify-published-release` against the resolved tag commit. To recheck:
 
 ```sh
 npm run verify:release-source -- v0.1.12
