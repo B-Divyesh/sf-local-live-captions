@@ -51,8 +51,8 @@ test("mobile first screen keeps the three plain facts visible", async ({ page },
 test("download refuses a stale release and selects the exact site build", async ({ page }) => {
   await page.addInitScript(() => { Reflect.deleteProperty(Navigator.prototype, "serviceWorker"); });
   const assets = [
-    { name: "Local.Live.Captions_0.1.11_amd64.AppImage", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.11/Local.Live.Captions_0.1.11_amd64.AppImage" },
-    { name: "Local.Live.Captions_0.1.11_x64_en-US.msi", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.11/Local.Live.Captions_0.1.11_x64_en-US.msi" },
+    { name: "Local.Live.Captions_0.1.12_amd64.AppImage", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.12/Local.Live.Captions_0.1.12_amd64.AppImage" },
+    { name: "Local.Live.Captions_0.1.12_x64_en-US.msi", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.12/Local.Live.Captions_0.1.12_x64_en-US.msi" },
   ];
   let release = { tag_name: "v0.1.7", target_commitish: "older-sha", assets };
   await page.route("https://api.github.com/**", (route) => route.fulfill({
@@ -64,14 +64,14 @@ test("download refuses a stale release and selects the exact site build", async 
   await expect(page.getByText("Downloads are being published.")).toBeVisible();
   await expect(page.getByRole("link", { name: /^Download for/ })).toHaveCount(0);
 
-  release = { tag_name: "v0.1.11", target_commitish: "older-sha", assets };
+  release = { tag_name: "v0.1.12", target_commitish: "older-sha", assets };
   await page.reload();
   await expect(page.getByText("Downloads are being published.")).toBeVisible();
   await expect(page.getByRole("link", { name: /^Download for/ })).toHaveCount(0);
 
-  release = { tag_name: "v0.1.11", target_commitish: buildSha, assets };
+  release = { tag_name: "v0.1.12", target_commitish: buildSha, assets };
   await page.reload();
-  await expect(page.getByRole("link", { name: /^Download for/ })).toHaveAttribute("href", /\/releases\/download\/v0\.1\.11\//);
+  await expect(page.getByRole("link", { name: /^Download for/ })).toHaveAttribute("href", /\/releases\/download\/v0\.1\.12\//);
 });
 
 test("Android visitors get a desktop explanation instead of a Linux package", async ({ page }) => {
@@ -374,13 +374,14 @@ test("@claim:supporter-license-restore verifies and stores a pasted license", as
   await expect.poll(() => page.evaluate(() => Number(localStorage.getItem("sb_license:local-live-captions:verified")))).toBeGreaterThan(0);
 });
 
-test("@claim:free-and-paid supporter checkout is live and caption features stay free", async ({ page, request }) => {
+test("@claim:free-and-paid supporter checkout link is fail-soft and caption features stay free", async ({ page }) => {
   await page.route("https://api.github.com/**", (route) => route.fulfill({ status: 404, body: "{}" }));
   await page.goto("/");
   await expect(page.getByText("English and German speech models, size controls, and transcript export stay free.", { exact: false })).toBeVisible();
   await expect(page.getByText("$24", { exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Buy supporter license/ })).toHaveAttribute("href", /api\.sociobot\.in\/api\/v1\/products\/local-live-captions\/checkout/);
-  const checkout = await request.get("https://api.sociobot.in/api/v1/products/local-live-captions/checkout", { maxRedirects: 0 });
-  expect(checkout.status()).toBe(303);
-  expect(checkout.headers().location).toMatch(/^https:\/\/checkout\.dodopayments\.com\/session\//);
+  const checkout = page.getByRole("link", { name: /Buy supporter license/ });
+  await expect(checkout).toHaveAttribute("href", /api\.sociobot\.in\/api\/v1\/products\/local-live-captions\/checkout/);
+  await expect(checkout).toHaveAttribute("target", "_blank");
+  await expect(checkout).toHaveAttribute("rel", /noopener/);
+  await expect(page.getByText("If it does not open, try again later. Captions stay free.")).toBeVisible();
 });

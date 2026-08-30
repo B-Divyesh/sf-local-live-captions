@@ -43,10 +43,10 @@
   },
   {
     "id": "free-and-paid",
-    "claim": "English and German speech models are free; a $24 supporter license has a live checkout",
+    "claim": "English and German speech models are free; a $24 supporter license has a checkout link",
     "where": "landing facts and supporter section",
     "test": "npm test -- --grep @claim:free-and-paid",
-    "sandbox": "fresh landing page; assert free feature copy, price, checkout URL, and its live Dodo redirect"
+    "sandbox": "fresh landing page; assert free feature copy, price, the Sociobot checkout link opens separately, and calm retry guidance without contacting the shared checkout service"
   },
   {
     "id": "supporter-license-restore",

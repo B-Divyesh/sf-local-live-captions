@@ -15,7 +15,7 @@ export function releaseSourceErrors({ releaseTag, expectedSha, tagCommit, packag
 function run() {
   const root = fileURLToPath(new URL("..", import.meta.url));
   const releaseTag = process.env.RELEASE_TAG || process.argv[2] || "";
-  const expectedSha = process.env.GITHUB_SHA || execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim();
+  const expectedSha = process.env.RELEASE_COMMIT || process.env.GITHUB_SHA || execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim();
   const tagCommit = execFileSync("git", ["rev-list", "-n", "1", releaseTag], { cwd: root, encoding: "utf8" }).trim();
   const packageVersion = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")).version;
   const tauriVersion = JSON.parse(readFileSync(new URL("../src-tauri/tauri.conf.json", import.meta.url), "utf8")).version;

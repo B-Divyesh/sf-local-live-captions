@@ -13,15 +13,40 @@ permissions:
   contents: write
 
 jobs:
-  verify:
-    runs-on: ubuntu-22.04
+  resolve:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.release.outputs.tag }}
+      commit: ${{ steps.release.outputs.commit }}
     env:
-      CI: 1
       RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || inputs.tag }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ startsWith(github.ref, 'refs/tags/') && github.ref || inputs.tag }}
+      - id: release
+        name: Resolve immutable release source
+        shell: bash
+        run: |
+          test -n "$RELEASE_TAG"
+          commit="$(git rev-list -n 1 "$RELEASE_TAG")"
+          test -n "$commit"
+          echo "tag=$RELEASE_TAG" >> "$GITHUB_OUTPUT"
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+
+  verify:
+    needs: resolve
+    runs-on: ubuntu-22.04
+    env:
+      CI: 1
+      RELEASE_TAG: ${{ needs.resolve.outputs.tag }}
+      RELEASE_COMMIT: ${{ needs.resolve.outputs.commit }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ needs.resolve.outputs.tag }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -44,7 +69,7 @@ jobs:
       - run: cargo check --manifest-path src-tauri/Cargo.toml
 
   build:
-    needs: verify
+    needs: [resolve, verify]
     strategy:
       fail-fast: false
       matrix:
@@ -60,6 +85,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ needs.resolve.outputs.tag }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -81,23 +107,25 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.FACTORY_RELEASE_TOKEN }}
           APPIMAGE_EXTRACT_AND_RUN: ${{ matrix.platform == 'ubuntu-22.04' && '1' || '' }}
         with:
-          tagName: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || inputs.tag }}
-          releaseName: Local Live Captions ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || inputs.tag }}
+          tagName: ${{ needs.resolve.outputs.tag }}
+          releaseName: Local Live Captions ${{ needs.resolve.outputs.tag }}
           releaseBody: "Unsigned desktop builds. Audio and speech recognition stay on the device."
           releaseDraft: false
           prerelease: false
           args: ${{ matrix.args }}
 
   manifest:
-    needs: build
+    needs: [resolve, build]
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.FACTORY_RELEASE_TOKEN }}
-      RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || inputs.tag }}
+      RELEASE_TAG: ${{ needs.resolve.outputs.tag }}
+      RELEASE_COMMIT: ${{ needs.resolve.outputs.commit }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ needs.resolve.outputs.tag }}
       - name: Verify manifest source identity
         run: npm run verify:release-source
       - name: Download release assets
@@ -107,7 +135,7 @@ jobs:
         run: |
           rm -f SHA256SUMS latest.json
           sha256sum * > SHA256SUMS
-          gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json tagName,assets | jq --arg commit "$GITHUB_SHA" '{version:.tagName,commit:$commit,assets:[.assets[]|{name:.name,url:.url}]}' > latest.json
+          gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json tagName,assets | jq --arg commit "$RELEASE_COMMIT" '{version:.tagName,commit:$commit,assets:[.assets[]|{name:.name,url:.url}]}' > latest.json
           gh release upload "$RELEASE_TAG" SHA256SUMS latest.json --repo "$GITHUB_REPOSITORY" --clobber
       - name: Verify the published release contract
-        run: node scripts/verify-published-release.mjs --expected-tag "$RELEASE_TAG" --expected-commit "$GITHUB_SHA" --attempts 12
+        run: node scripts/verify-published-release.mjs --expected-tag "$RELEASE_TAG" --expected-commit "$RELEASE_COMMIT" --attempts 12

@@ -32,8 +32,9 @@ word. Decorative text is absent from the landing page.
 | It keeps transcript text only while the session is open. | 10 |
 | English and German speech models, size controls, and transcript export stay free. | 11 |
 | A supporter license helps fund updates; it does not unlock caption features. | 12 |
-| Checkout opens Dodo through Sociobot. | 5 |
-| Review the checkout terms before paying. | 7 |
+| The checkout link opens through Sociobot. | 6 |
+| If it does not open, try again later. | 9 |
+| Captions stay free. | 3 |
 | Choose the package that matches your computer from the current release. | 11 |
 | Current builds are unsigned. | 4 |
 | Your system may ask you to confirm the download. | 9 |
@@ -50,8 +51,8 @@ word. Decorative text is absent from the landing page.
 | The website makes no advertising or telemetry request. | 8 |
 | Your audio stays on your computer | 7 |
 | In desktop setup, choose Delete downloaded model or Remove supporter license. | 11 |
-| Checkout opens Dodo through Sociobot. | 5 |
-| Review the checkout terms before paying. | 7 |
+| The checkout link opens through Sociobot. | 6 |
+| If it does not open, try again later. | 9 |
 | Page not found | 3 |
 | The address does not point to a page here. | 9 |
 
@@ -72,11 +73,11 @@ word. Decorative text is absent from the landing page.
 | Speech model downloads use the listed `ggerganov/whisper.cpp` Hugging Face repository. | 10 |
 | The bundled upstream MIT license copy is pinned in `third_party/whisper.cpp-LICENSE`. | 9 |
 | Desktop installers are built only in GitHub Actions. | 8 |
-| Tag the exact commit with the version from `package.json`, such as `v0.1.11`. | 12 |
+| Tag the exact commit with the version from `package.json`, such as `v0.1.12`. | 12 |
 | To rebuild, run the workflow for that tag. | 8 |
-| The workflow rejects a tag or commit mismatch. | 8 |
+| The workflow resolves that tag to one commit before packaging. | 10 |
 | It creates unsigned packages for macOS, Windows, and Linux. | 9 |
-| It also publishes `SHA256SUMS` and `latest.json` with the source commit. | 10 |
+| It also publishes `SHA256SUMS` and `latest.json` with that commit. | 9 |
 | The workflow audits their source identity, package list, URLs, and checksums after publication. | 13 |
 | After deploying the tagged site build, run `npm run verify:published-release` to check the live identity against GitHub. | 16 |
 | The site offers packages only when the release and deployed site use the same tag and commit. | 15 |
