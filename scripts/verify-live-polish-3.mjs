@@ -13,7 +13,16 @@ async function inspectRoute(path) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, serviceWorkers: "block" });
   const page = await context.newPage();
   const consoleErrors = [];
-  page.on("console", (message) => { if (message.type() === "error") consoleErrors.push(message.text()); });
+  // A real 404 navigation is intentionally served with an HTTP 404 status.
+  // Chromium reports that document response as a console resource error; do
+  // not mistake it for an application error, while keeping every other failed
+  // resource or script error visible in this regression report.
+  const expectedNavigationUrl = `${base}${path}`;
+  page.on("console", (message) => {
+    if (message.type() !== "error") return;
+    if (message.location().url === expectedNavigationUrl && /status of 404/.test(message.text())) return;
+    consoleErrors.push(message.text());
+  });
   const response = await page.goto(`${base}${path}`, { waitUntil: "networkidle" });
   const axe = await new AxeBuilder({ page }).analyze();
   report.routes[path] = {
@@ -60,6 +69,10 @@ for (const path of ["/", "/demo", "/privacy", "/terms", "/not-a-real-route"]) aw
   const external = [];
   page.on("request", (request) => { if (new URL(request.url()).origin !== new URL(base).origin) external.push(request.url()); });
   await page.goto(`${base}/?demo=1`, { waitUntil: "networkidle" });
+  await page.evaluate(() => {
+    localStorage.setItem("real:polish-probe", "kept");
+    sessionStorage.setItem("demo:polish-probe", "discarded");
+  });
   await page.getByRole("button", { name: "Reset demo" }).click();
   const downloadPromise = page.waitForEvent("download");
   await page.getByRole("button", { name: "Export TXT" }).click();
@@ -70,12 +83,23 @@ for (const path of ["/", "/demo", "/privacy", "/terms", "/not-a-real-route"]) aw
   report.demo = {
     banner: await page.getByText("Demo — sample data, nothing is saved", { exact: false }).isVisible(),
     captions: await page.locator("#transcript-list li").count(),
-    externalRequests: external,
+    externalRequests: [...external],
     textDownload: { filename: download.suggestedFilename(), lines: Buffer.concat(chunks).toString("utf8").trim().split(/\r?\n/).length },
+    resetKeepsRealAndClearsDemo: await page.evaluate(() => ({
+      real: localStorage.getItem("real:polish-probe"),
+      demoProbe: sessionStorage.getItem("demo:polish-probe"),
+    })),
   };
   await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
   report.demo.overflowAt200Percent = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   await page.screenshot({ path: `${evidence}/live-demo-390.png`, fullPage: true });
+  await page.evaluate(() => { sessionStorage.setItem("demo:polish-probe", "discarded"); });
+  await page.getByRole("link", { name: "Start for real" }).click();
+  await page.waitForURL(`${base}/`);
+  report.demo.startForRealKeepsRealAndClearsDemo = await page.evaluate(() => ({
+    real: localStorage.getItem("real:polish-probe"),
+    demoKeys: Object.keys(sessionStorage).filter((key) => key.startsWith("demo:")),
+  }));
   await context.close();
 }
 
@@ -84,8 +108,10 @@ for (const path of ["/", "/demo", "/privacy", "/terms", "/not-a-real-route"]) aw
   const page = await context.newPage();
   await page.goto(`${base}/privacy`, { waitUntil: "networkidle" });
   await page.getByRole("link", { name: "How it works" }).click();
+  await page.waitForFunction(() => document.activeElement?.id === "how-title");
   const sectionFocused = await page.getByRole("heading", { name: "How it works" }).evaluate((element) => document.activeElement === element);
   await page.goBack();
+  await page.waitForFunction(() => document.activeElement === document.querySelector("h1"));
   const privacyFocused = await page.getByRole("heading", { level: 1 }).evaluate((element) => document.activeElement === element);
   report.focus = { sectionFocused, privacyFocused, pathAfterBack: new URL(page.url()).pathname };
   await context.close();

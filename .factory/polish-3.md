@@ -1,9 +1,11 @@
 # Polish round 3 — complete finding ledger
 
 This round starts from `6a82d399e8cd9515f799972596f8aabbb875b439`.
-The remaining release blocker, F-3-1, is repaired in the patch release by the
-repository-owned native runner. The final checks named below run from a new
-clone. Live screenshots and route checks are recorded under
+The remaining release blocker, F-3-1, is repaired in release `v0.1.16`
+(`0ecd456533c7eaac81923580e7875c381e1b50ba`) by the repository-owned native
+runner. The final checks named below ran from a new clone. The release matrix
+passed at <https://github.com/B-Divyesh/sf-local-live-captions/actions/runs/33563915326>.
+Live screenshots, route checks, and Lighthouse output are recorded under
 `.factory/evidence-polish-3/` after deployment.
 
 | Finding | Change made | Evidence |
@@ -33,12 +35,20 @@ clone. Live screenshots and route checks are recorded under
 | F-2-6 | Kept the release-artifact inventory and immutable-release test. | `@claim:release-artifacts`; live `release-identity.json` and published release check. |
 | F-2-7 | Kept “Confirm consent and start captions” as the third step heading. | `landing page states the job and has one heading`; live `/`. |
 | F-2-8 | Kept plain-language processing and subtitle-export labels. | `@claim:srt-export`; live `/demo`. |
-| F-3-1 | Native claims now enter through `scripts/run-native-claim.sh`, which uses a pinned Ubuntu image when Docker exists or installs its explicit GLib, Tauri, ALSA, and PulseAudio prerequisites before testing. This round adds direct `libglib2.0-dev` declarations and pins Rust 1.98.0 in the container so Docker and the GitHub Linux runner accept the locked dependency graph. | `@claim:native-claim-environment`; every `npm run test:native-claim -- <id>` command from a clean clone; clean-clone setup log and final `claims.json` run log. |
+| F-3-1 | Native claims now enter through `scripts/run-native-claim.sh`, which uses a pinned Ubuntu image when Docker exists or installs its explicit GLib, Tauri, ALSA, and PulseAudio prerequisites before testing. This round adds direct `libglib2.0-dev` declarations and pins Rust 1.98.0 in the container so Docker and the GitHub Linux runner accept the locked dependency graph. | `@claim:native-claim-environment`; all 27 commands in `.factory/claims.json` passed from a clean clone (`/tmp/local-live-captions-polish3-final2-dRqZKL/all-claims.log`); the tagged GitHub `npm run test:linux-audio` Docker stage passed in release run `33563915326`. |
 
 ## Final live regression set
 
 - Cold desktop and 390 px phone first screens: `live-first-read-desktop.png` and `live-first-read-390.png`.
-- Direct `?demo=1`, banner, reset, start-for-real, exports, and 200% mobile layout: `live-demo-390.png`.
+- Direct `?demo=1`, banner, reset, start-for-real, exports, and 200% mobile layout: `live-demo-390.png` and `live-routes.json` (four bundled captions, zero external demo requests, TXT export, reset/start-for-real namespace assertions, zero horizontal overflow).
 - `/`, `/demo`, `/privacy`, `/terms`, and a real 404: `live-routes.json`.
 - Console, title, language, main landmark, and image alternatives: `verify-live/verify.json`.
-- Serious and critical Axe findings: zero on the five checked live routes, recorded in `live-axe.json`.
+- Serious and critical Axe findings: zero on the five checked live routes, recorded in `live-routes.json`.
+- History focus is true for the How-it-works heading and the restored Privacy heading in `live-routes.json`.
+- Lighthouse mobile: Performance 100 and Accessibility 100, LCP 1.36 s, CLS 0.012: `lighthouse-mobile.json`.
+
+## Final status
+
+Every review 1, 2, and 3 finding is closed. The live URL
+<https://local-live-captions.sociobot.in> was opened from a cold browser after
+deployment of `v0.1.16`; no unaddressed finding remains.
