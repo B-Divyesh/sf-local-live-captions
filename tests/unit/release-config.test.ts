@@ -70,7 +70,7 @@ describe("release configuration regressions", () => {
   it("@claim:release-artifacts publishes the documented desktop packages and integrity files", async () => {
     const [workflow, fixture, packageText, tauriText, cargoText, shellInstaller, windowsInstaller, viteConfig, releaseBuilder] = await Promise.all([
       readFile(".github/workflows/release.yml", "utf8"),
-      readFile("tests/fixtures/release-v0.1.13.json", "utf8"),
+      readFile("tests/fixtures/release-v0.1.14.json", "utf8"),
       readFile("package.json", "utf8"),
       readFile("src-tauri/tauri.conf.json", "utf8"),
       readFile("src-tauri/Cargo.toml", "utf8"),
@@ -112,15 +112,15 @@ describe("release configuration regressions", () => {
 
   it("rejects stale release tags and source commits before packaging", () => {
     const valid = {
-      releaseTag: "v0.1.13",
+      releaseTag: "v0.1.14",
       expectedSha: "candidate-sha",
       tagCommit: "candidate-sha",
-      packageVersion: "0.1.13",
-      tauriVersion: "0.1.13",
-      cargoVersion: "0.1.13",
+      packageVersion: "0.1.14",
+      tauriVersion: "0.1.14",
+      cargoVersion: "0.1.14",
     };
     expect(releaseSourceErrors(valid)).toEqual([]);
-    expect(releaseSourceErrors({ ...valid, releaseTag: "v0.1.12" })).toContain("Release tag v0.1.12 does not match package version 0.1.13.");
-    expect(releaseSourceErrors({ ...valid, tagCommit: "older-sha" })).toContain("Tag v0.1.13 resolves to older-sha, but this workflow is building candidate-sha.");
+    expect(releaseSourceErrors({ ...valid, releaseTag: "v0.1.13" })).toContain("Release tag v0.1.13 does not match package version 0.1.14.");
+    expect(releaseSourceErrors({ ...valid, tagCommit: "older-sha" })).toContain("Tag v0.1.14 resolves to older-sha, but this workflow is building candidate-sha.");
   });
 });

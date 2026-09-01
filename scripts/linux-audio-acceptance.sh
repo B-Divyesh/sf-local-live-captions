@@ -4,23 +4,28 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+mode="${1:-all}"
 fixture="$repo_root/tests/fixtures/jfk.wav"
 german_fixture="$repo_root/tests/fixtures/german.wav"
 cache_root="${LLC_AUDIO_TEST_CACHE:-$repo_root/.cache/linux-audio-acceptance}"
 runtime_dir="$(mktemp -d)"
 sink_module=""
 pulse_pid=""
+trace_dir="$(mktemp -d)"
 
 cleanup() {
   if [ -n "$sink_module" ]; then pactl unload-module "$sink_module" >/dev/null 2>&1 || true; fi
   if [ -n "$pulse_pid" ]; then kill "$pulse_pid" >/dev/null 2>&1 || true; wait "$pulse_pid" 2>/dev/null || true; fi
   rm -rf "$runtime_dir"
+  rm -rf "$trace_dir"
 }
 trap cleanup EXIT
 
 command -v pulseaudio >/dev/null || { echo "Install pulseaudio before running this test." >&2; exit 1; }
 command -v pactl >/dev/null || { echo "Install pulseaudio-utils before running this test." >&2; exit 1; }
 command -v paplay >/dev/null || { echo "Install pulseaudio-utils before running this test." >&2; exit 1; }
+command -v curl >/dev/null || { echo "Install curl before running this test." >&2; exit 1; }
+command -v strace >/dev/null || { echo "Install strace before running this test." >&2; exit 1; }
 test -f "$fixture" || { echo "Missing speech fixture: $fixture" >&2; exit 1; }
 test -f "$german_fixture" || { echo "Missing German speech fixture: $german_fixture" >&2; exit 1; }
 mkdir -p "$cache_root"
@@ -53,8 +58,62 @@ export LLC_TEST_GERMAN_FIXTURE="$german_fixture"
 export LLC_AUDIO_TEST_CACHE="$cache_root"
 
 cd "$repo_root"
-cargo test --manifest-path src-tauri/Cargo.toml claim_linux_monitor_end_to_end_captions_speech_and_restarts -- --ignored
-for german_run in $(seq 1 4); do
-  echo "German monitor regression run ${german_run}/4"
-  cargo test --manifest-path src-tauri/Cargo.toml claim_german_caption_end_to_end -- --ignored
-done
+
+# Compile before the network-isolated capture assertion. Model files are
+# prepared explicitly, then every capture test runs with Cargo offline and a
+# complete connect() trace. Unix-socket traffic to this private PulseAudio
+# server is expected; IPv4/IPv6 traffic would prove captions need the network.
+cargo test --manifest-path src-tauri/Cargo.toml --no-run
+
+prepare_model() {
+  local model="$1"
+  local name="$2"
+  local url="https://huggingface.co/ggerganov/whisper.cpp/resolve/main/$name"
+  local destination="$cache_root/models/$name"
+  mkdir -p "$cache_root/models"
+  if [ ! -s "$destination" ] || [ "$(wc -c < "$destination")" -lt 10000000 ]; then
+    echo "Fetching $model model into the isolated acceptance cache."
+    curl --fail --location --retry 3 --output "$destination.download" "$url"
+    test "$(wc -c < "$destination.download")" -ge 10000000
+    mv "$destination.download" "$destination"
+  fi
+}
+
+run_capture_test() {
+  local label="$1"
+  shift
+  local trace="$trace_dir/$label.connect.log"
+  echo "Tracing $label with network disabled for Cargo."
+  CARGO_NET_OFFLINE=true strace -f -qq -o "$trace" -e trace=connect "$@"
+  if grep -Eq 'AF_INET6?|sin_family=AF_INET6?' "$trace"; then
+    echo "Capture test opened an internet socket; local processing claim failed." >&2
+    sed -n '1,160p' "$trace" >&2
+    exit 1
+  fi
+}
+
+run_english() {
+  prepare_model "tiny.en" "ggml-tiny.en.bin"
+  run_capture_test english cargo test --manifest-path src-tauri/Cargo.toml claim_linux_monitor_end_to_end_captions_speech_and_restarts -- --ignored
+}
+
+run_german() {
+  prepare_model "base" "ggml-base.bin"
+  for german_run in $(seq 1 4); do
+    echo "German monitor regression run ${german_run}/4"
+    run_capture_test "german-${german_run}" cargo test --manifest-path src-tauri/Cargo.toml claim_german_caption_end_to_end -- --ignored
+  done
+}
+
+case "$mode" in
+  english) run_english ;;
+  german) run_german ;;
+  all)
+    run_english
+    run_german
+    ;;
+  *)
+    echo "Usage: $0 [english|german|all]" >&2
+    exit 2
+    ;;
+esac

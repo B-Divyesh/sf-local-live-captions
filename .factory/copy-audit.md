@@ -1,6 +1,6 @@
 # Copy audit
 
-Audited 29 August 2026 from `src/main.ts` and `README.md`. Counts use
+Audited 1 September 2026 from `src/main.ts` and `README.md`. Counts use
 whitespace-delimited words. Hyphenated terms, prices, versions, and URLs count
 as one word. No audited sentence exceeds 22 words or uses a banned marketing
 word. Decorative text is absent from the landing page.
@@ -70,6 +70,8 @@ word. Decorative text is absent from the landing page.
 | It downloads `tiny.en`, checks captions and SRT output, then starts capture again. | 11 |
 | It opens the monitor before playing the original German clip and runs four captures. | 14 |
 | The multilingual `base` model must return a multiword, recognizable German caption. | 11 |
+| Native claim commands use a pinned repository container when Docker is available. | 12 |
+| Without Docker, they install the required Linux packages before testing. | 10 |
 | Speech model downloads use the listed `ggerganov/whisper.cpp` Hugging Face repository. | 10 |
 | The bundled upstream MIT license copy is pinned in `third_party/whisper.cpp-LICENSE`. | 9 |
 | Desktop installers are built only in GitHub Actions. | 8 |
@@ -95,5 +97,5 @@ word. Decorative text is absent from the landing page.
 | Permission from participants | consent |
 | Isolated try-out | demo |
 
-Catalog description: **Caption Linux calls and recordings on your computer.**
-It starts with a verb and is 52 characters long.
+Catalog description: **Caption Linux calls, lectures, and recordings on your computer.**
+It starts with a verb and is 63 characters long.

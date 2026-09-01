@@ -13,4 +13,6 @@ test("German monitor acceptance opens capture before playback and repeats the ti
   );
   expect(script).toContain("for german_run in $(seq 1 4)");
   expect(script).toContain("German monitor regression run ${german_run}/4");
+  expect(script).toContain("CARGO_NET_OFFLINE=true strace -f -qq");
+  expect(script).toContain("AF_INET6?");
 });
