@@ -1,0 +1,137 @@
+[
+  {
+    "id": "private-local",
+    "test": "npm test -- --grep @claim:private-local",
+    "exit": 0
+  },
+  {
+    "id": "offline-reload",
+    "test": "npm test -- --grep @claim:offline-reload",
+    "exit": 0
+  },
+  {
+    "id": "srt-export",
+    "test": "npm test -- --grep @claim:srt-export",
+    "exit": 0
+  },
+  {
+    "id": "txt-export",
+    "test": "npm test -- --grep @claim:txt-export",
+    "exit": 0
+  },
+  {
+    "id": "live-caption-sizing",
+    "test": "npm test -- --grep @claim:live-caption-sizing",
+    "exit": 0
+  },
+  {
+    "id": "demo-isolated",
+    "test": "npm test -- --grep @claim:demo-isolated",
+    "exit": 0
+  },
+  {
+    "id": "free-and-paid",
+    "test": "npm test -- --grep @claim:free-and-paid",
+    "exit": 0
+  },
+  {
+    "id": "supporter-license-restore",
+    "test": "npm test -- --grep @claim:supporter-license-restore",
+    "exit": 0
+  },
+  {
+    "id": "native-local-processing",
+    "test": "npm run test:native-claim -- native-local-processing",
+    "exit": 0
+  },
+  {
+    "id": "capture-recovery",
+    "test": "npm test -- --grep @claim:capture-recovery",
+    "exit": 0
+  },
+  {
+    "id": "language-models",
+    "test": "npm run test:native-claim -- language-models",
+    "exit": 0
+  },
+  {
+    "id": "german-caption-end-to-end",
+    "test": "npm run test:native-claim -- german-caption-end-to-end",
+    "exit": 0
+  },
+  {
+    "id": "linux-system-audio",
+    "test": "npm run test:native-claim -- linux-system-audio",
+    "exit": 0
+  },
+  {
+    "id": "desktop-overlay",
+    "test": "npm test -- --grep @claim:desktop-overlay",
+    "exit": 0
+  },
+  {
+    "id": "no-audio-storage",
+    "test": "npm run test:native-claim -- no-audio-storage",
+    "exit": 0
+  },
+  {
+    "id": "session-transcript",
+    "test": "npm run test:native-claim -- session-transcript",
+    "exit": 0
+  },
+  {
+    "id": "no-telemetry-trackers",
+    "test": "npm test -- --grep @claim:no-telemetry-trackers",
+    "exit": 0
+  },
+  {
+    "id": "consent-before-capture",
+    "test": "npm run test:native-claim -- consent-before-capture",
+    "exit": 0
+  },
+  {
+    "id": "local-model-storage",
+    "test": "npm run test:native-claim -- local-model-storage",
+    "exit": 0
+  },
+  {
+    "id": "storage-controls",
+    "test": "npm test -- --grep @claim:storage-controls",
+    "exit": 0
+  },
+  {
+    "id": "source-start-validation",
+    "test": "npm run test:native-claim -- source-start-validation",
+    "exit": 0
+  },
+  {
+    "id": "call-speaker-boundaries",
+    "test": "npm run test:unit -- --testNamePattern @claim:call-speaker-boundaries",
+    "exit": 0
+  },
+  {
+    "id": "unsigned-installers",
+    "test": "npm run test:unit -- --testNamePattern @claim:unsigned-installers",
+    "exit": 0
+  },
+  {
+    "id": "linux-monitor-end-to-end",
+    "test": "npm run test:native-claim -- linux-monitor-end-to-end",
+    "exit": 0
+  },
+  {
+    "id": "model-provenance-license",
+    "test": "npm run test:unit -- --testNamePattern @claim:model-provenance-license",
+    "exit": 0
+  },
+  {
+    "id": "release-artifacts",
+    "test": "npm run test:unit -- --testNamePattern @claim:release-artifacts",
+    "exit": 0
+  },
+  {
+    "id": "native-claim-environment",
+    "test": "npm run test:unit -- --testNamePattern @claim:native-claim-environment",
+    "exit": 0
+  }
+]

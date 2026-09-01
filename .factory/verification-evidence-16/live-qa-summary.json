@@ -1,0 +1,36 @@
+{
+  "routes": {
+    "/": 200,
+    "/demo": 200,
+    "/privacy": 200,
+    "/terms": 200,
+    "/not-a-real-route": 404
+  },
+  "axe_serious_or_critical": 0,
+  "console_errors": 0,
+  "page_errors": 0,
+  "mobile_width_css_px": 390,
+  "mobile_horizontal_overflow_css_px": 0,
+  "mobile_targets_below_44_css_px": 0,
+  "demo_external_requests": 0,
+  "demo_srt_cues": 4,
+  "offline_reload_captions": 4,
+  "service_worker_update_completed": true,
+  "license_rate_limit": {
+    "allowed_requests": 30,
+    "first_limited_request": 31,
+    "status": 429,
+    "retry_after_seconds": 4
+  },
+  "lighthouse_mobile": {
+    "performance": 100,
+    "accessibility": 100,
+    "best_practices": 100,
+    "seo": 100,
+    "fcp_seconds": 1.2,
+    "lcp_seconds": 1.4,
+    "total_blocking_time_ms": 30,
+    "cls": 0.012,
+    "transfer_kib": 111
+  }
+}

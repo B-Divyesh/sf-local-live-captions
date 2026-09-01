@@ -1,0 +1,17 @@
+{
+  "candidate": "80ecfa4539967d063d22cf00abce8946ac0505fd",
+  "live_release_identity": {
+    "tag": "v0.1.16",
+    "commit": "80ecfa4539967d063d22cf00abce8946ac0505fd"
+  },
+  "git_tag_commit": "0ecd456533c7eaac81923580e7875c381e1b50ba",
+  "github_release_target": "0ecd456533c7eaac81923580e7875c381e1b50ba",
+  "published_latest_json_commit": "0ecd456533c7eaac81923580e7875c381e1b50ba",
+  "candidate_workflow_runs": 0,
+  "verify_published_release_exit": 1,
+  "release_site_build_exit": 1,
+  "live_detected_platform_download_links": 0,
+  "live_install_sh_exit": 1,
+  "published_deb_sha256": "459c993364e23bf4f8a4a72fa13f3043785f8ce6ca843d26b69e333511e48b44",
+  "published_deb_checksum_matches": true
+}

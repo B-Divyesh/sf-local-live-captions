@@ -1,0 +1,85 @@
+{
+  "base": "https://local-live-captions.sociobot.in",
+  "checkedAt": "2026-09-01T23:17:57.657Z",
+  "routes": {
+    "/": {
+      "status": 200,
+      "title": "Local Live Captions — Caption calls locally",
+      "lang": "en",
+      "h1Count": 1,
+      "mainCount": 1,
+      "seriousOrCritical": [],
+      "consoleErrors": []
+    },
+    "/demo": {
+      "status": 200,
+      "title": "Demo — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "mainCount": 1,
+      "seriousOrCritical": [],
+      "consoleErrors": []
+    },
+    "/privacy": {
+      "status": 200,
+      "title": "Privacy — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "mainCount": 1,
+      "seriousOrCritical": [],
+      "consoleErrors": []
+    },
+    "/terms": {
+      "status": 200,
+      "title": "Terms — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "mainCount": 1,
+      "seriousOrCritical": [],
+      "consoleErrors": []
+    },
+    "/not-a-real-route": {
+      "status": 404,
+      "title": "Page not found — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "mainCount": 1,
+      "seriousOrCritical": [],
+      "consoleErrors": []
+    }
+  },
+  "demo": {
+    "banner": true,
+    "captions": 4,
+    "externalRequests": [],
+    "textDownload": {
+      "filename": "sample-transcript.txt",
+      "lines": 4
+    },
+    "resetKeepsRealAndClearsDemo": {
+      "real": "kept",
+      "demoProbe": null
+    },
+    "overflowAt200Percent": 0,
+    "startForRealKeepsRealAndClearsDemo": {
+      "real": "kept",
+      "demoKeys": []
+    }
+  },
+  "firstScreen": {
+    "heading": "Caption Linux calls and recordings locally",
+    "withinViewport": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "focus": {
+    "sectionFocused": true,
+    "privacyFocused": true,
+    "pathAfterBack": "/privacy"
+  }
+}

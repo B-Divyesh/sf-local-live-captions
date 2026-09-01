@@ -1,103 +1,57 @@
-# Local Live Captions — polish round 3 handoff
+# Local Live Captions — independent verification 16 handoff
 
 ## Outcome
 
-**PASS.** Every finding in reviews 1, 2, and 3 is closed. Release
-[`v0.1.16`](https://github.com/B-Divyesh/sf-local-live-captions/releases/tag/v0.1.16)
-was built from `0ecd456533c7eaac81923580e7875c381e1b50ba`, deployed to
-<https://local-live-captions.sociobot.in>, and cold-checked after deployment.
+**FAIL.** Candidate `80ecfa4539967d063d22cf00abce8946ac0505fd` was tested
+against `https://local-live-captions.sociobot.in` on 1 September 2026.
 
-## What changed
+The product code, live demo, local native caption path, accessibility, privacy,
+performance, and all 27 declared claims pass. Release acceptance fails because
+the deployed site names candidate `80ecfa...`, while tag/release `v0.1.16`,
+`latest.json`, and all published installers name older commit `0ecd456...`.
+The live page therefore shows no platform download and `/install.sh` refuses to
+install.
 
-- Closed review-3 blocker F-3-1. `scripts/run-native-claim.sh` now declares
-  GLib alongside the Tauri, ALSA, and PulseAudio prerequisites in both its
-  direct Linux path and repository-owned Docker path. The image uses Rust
-  `1.98.0`, matching the locked dependency graph and GitHub runner.
-- Kept the previously repaired first-screen copy, one-click isolated
-  `?demo=1`/`/demo` sample, demo banner/reset/start-for-real behavior, real
-  route titles and 404, legal links, keyboard focus, mobile layout, and the
-  Listening Room visual system.
-- Completed the 27-entry `.factory/claims.json` inventory and updated the
-  catalog sentence to: “Caption Linux calls, lectures, and recordings on your
-  device.”
-- Added a live regression verifier that distinguishes the intentional document
-  404 from real console failures and proves reset/start-for-real isolation,
-  direct demo privacy, exported sample text, focus restoration, and mobile
-  overflow.
+## Blocking defect
 
-## Verification
+High: publish a new immutable version/tag from the exact candidate, run the
+full release workflow, publish matching cross-platform assets,
+`SHA256SUMS`, and `latest.json`, then deploy the site from that tag. Do not move
+or reuse `v0.1.16`.
 
-### Clean clone claims
+Acceptance must include successful runs of:
 
-A new clone at `0ecd456` ran `npm ci` and every exact command listed in
-`.factory/claims.json`: **27/27 passed**. The complete run is at
-`/tmp/local-live-captions-polish3-final2-dRqZKL/all-claims.log` and ends with
-`===== ALL CLAIMS PASSED =====`.
-
-This includes `@claim:offline-reload`, privacy/request-boundary, TXT/SRT
-exports, demo isolation, desktop overlay, language/model/storage, consent,
-release-artifact, and every native audio/model claim. The native suite built
-and exercised its actual Linux prerequisites rather than a mock.
-
-### Release and local gates
-
-- `npm test` — passed (26 unit tests; browser suite passed with 24 tests and
-  4 intentional platform skips).
-- `npm run typecheck`, `npm run lint`, and `npm run build` — passed on
-  `0.1.16`.
-- `RELEASE_TAG=v0.1.16 npm run build:release-site` — passed; site identity is
-  `v0.1.16 → 0ecd456533c7eaac81923580e7875c381e1b50ba`.
-- GitHub release workflow
-  [33563915326](https://github.com/B-Divyesh/sf-local-live-captions/actions/runs/33563915326)
-  — passed source, TypeScript, lint, browser lifecycle, full browser suite,
-  Rust tests, the Docker `test:linux-audio` native suite, and macOS/Windows/
-  Linux packaging.
-- `npm run verify:published-release -- --expected-tag v0.1.16 --expected-commit 0ecd456533c7eaac81923580e7875c381e1b50ba`
-  — passed. The release has Linux AppImage/DEB/RPM, macOS DMG/app archive,
-  Windows MSI/EXE, `SHA256SUMS`, and `latest.json`.
-
-### Live production checks
-
-- `/opt/fleet/lib/verify-url.sh https://local-live-captions.sociobot.in .factory/evidence-polish-3/verify-live`
-  — HTTP 200, no console errors, title/lang/one h1/main/image alternatives all
-  valid; cold load 916 ms.
-- `node scripts/verify-live-polish-3.mjs https://local-live-captions.sociobot.in .factory/evidence-polish-3`
-  — `/`, `/demo`, `/privacy`, `/terms` return 200; unknown route returns a
-  real 404; all five have one h1/main, correct titles, zero serious/critical
-  Axe findings, and no application console errors. Direct demo has four sample
-  captions, no external requests, a four-line TXT export, no 200% overflow,
-  and reset/start-for-real preserve `real:` while clearing `demo:` state.
-  Browser Back restores focus to the Privacy h1.
-- Lighthouse mobile (`.factory/evidence-polish-3/lighthouse-mobile.json`) —
-  Performance **100**, Accessibility **100**, FCP **1.21 s**, LCP **1.36 s**,
-  CLS **0.012**.
-
-Evidence includes first-screen desktop/mobile screenshots, direct-demo
-screenshot, route JSON, URL verifier output, and Lighthouse JSON under
-`.factory/evidence-polish-3/`. The finding-to-change-to-evidence ledger is
-in `.factory/polish-3.md`.
-
-## Run and deploy
-
-```bash
-npm ci
-npm test
-npm run typecheck
-npm run lint
-npm run build
-RELEASE_TAG=v0.1.16 npm run build:release-site
-npm run verify:published-release -- --expected-tag v0.1.16 --expected-commit 0ecd456533c7eaac81923580e7875c381e1b50ba
-/opt/fleet/lib/deploy-static.sh local-live-captions dist/site
+```sh
+RELEASE_TAG=<new-tag> npm run build:release-site
+npm run verify:published-release -- --expected-tag <new-tag> --expected-commit 80ecfa4539967d063d22cf00abce8946ac0505fd
 ```
 
-For the full claim inventory, execute every `test` command in
-`.factory/claims.json` from a new clone; native commands self-provision their
-test environment or use the pinned Docker image.
+Also confirm the live detected-platform button points to a real asset and both
+one-line installers complete with checksum verification.
 
-## Needs operator action
+## Verification summary
 
-No action is required for this release. Desktop installers are deliberately
-unsigned and the download UI states that plainly. For optional future signing,
-an operator must provide `APPLE_CERTIFICATE` and `WINDOWS_CERT_PFX` and wire
-them into the release workflow; no signing material is stored in this
-repository.
+- Claims: 27/27 passed, including actual isolated English capture and four
+  German multilingual captures.
+- `npm test`: passed (26 unit, 24 desktop E2E, 25 mobile E2E; documented skips).
+- TypeScript, Clippy, Rust format/test/check, site/app builds: passed.
+- Tauri packaging: passed; DEB, RPM, and AppImage produced locally.
+- Candidate AppImage: passed 15-second Xvfb launch smoke test.
+- First-read and one-click sample: passed on desktop and 390 px mobile.
+- Accessibility/privacy/PWA: passed; zero serious/critical axe findings, clean
+  console, keyboard focus, 44 px targets, 200% text, reduced motion, same-origin
+  demo requests, and offline reload.
+- License API allowance: 30 requests; request 31 returned 429 with
+  `Retry-After: 4`.
+- Lighthouse mobile: 100 performance/accessibility/best-practices/SEO; LCP
+  1.4 s, TBT 30 ms, CLS 0.012, 111 KiB transferred.
+- Live site assets and identity match candidate `80ecfa...`; published desktop
+  artifacts do not.
+
+Full evidence and exact findings are in
+[verification-16.md](verification-16.md) and `verification-evidence-16/`.
+
+## Known limits
+
+- macOS and Windows packages were not executed in this Linux worker.
+- The 75% keep-enabled success measure still requires the planned user pilot.
