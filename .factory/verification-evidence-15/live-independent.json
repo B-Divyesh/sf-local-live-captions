@@ -1,0 +1,333 @@
+{
+  "checkedAt": "2026-09-01T19:42:56.607Z",
+  "base": "https://local-live-captions.sociobot.in",
+  "routes": {
+    "/": {
+      "status": 200,
+      "title": "Local Live Captions — Caption calls locally",
+      "lang": "en",
+      "h1Count": 1,
+      "mainCount": 1,
+      "seriousOrCritical": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "requests": [
+        "https://local-live-captions.sociobot.in/",
+        "https://local-live-captions.sociobot.in/assets/index-BWJdvUX8.js",
+        "https://local-live-captions.sociobot.in/assets/index-DecVP1iZ.css",
+        "https://api.github.com/repos/B-Divyesh/sf-local-live-captions/releases?per_page=1",
+        "https://local-live-captions.sociobot.in/assets/listening-room-1120.webp",
+        "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2"
+      ],
+      "requestOrigins": [
+        "https://local-live-captions.sociobot.in",
+        "https://api.github.com"
+      ]
+    },
+    "/demo": {
+      "status": 200,
+      "title": "Demo — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "mainCount": 1,
+      "seriousOrCritical": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "requests": [
+        "https://local-live-captions.sociobot.in/demo",
+        "https://local-live-captions.sociobot.in/assets/index-BWJdvUX8.js",
+        "https://local-live-captions.sociobot.in/assets/index-DecVP1iZ.css",
+        "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2"
+      ],
+      "requestOrigins": [
+        "https://local-live-captions.sociobot.in"
+      ]
+    },
+    "/privacy": {
+      "status": 200,
+      "title": "Privacy — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "mainCount": 1,
+      "seriousOrCritical": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "requests": [
+        "https://local-live-captions.sociobot.in/privacy",
+        "https://local-live-captions.sociobot.in/assets/index-BWJdvUX8.js",
+        "https://local-live-captions.sociobot.in/assets/index-DecVP1iZ.css",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2",
+        "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2"
+      ],
+      "requestOrigins": [
+        "https://local-live-captions.sociobot.in"
+      ]
+    },
+    "/terms": {
+      "status": 200,
+      "title": "Terms — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "mainCount": 1,
+      "seriousOrCritical": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "requests": [
+        "https://local-live-captions.sociobot.in/terms",
+        "https://local-live-captions.sociobot.in/assets/index-BWJdvUX8.js",
+        "https://local-live-captions.sociobot.in/assets/index-DecVP1iZ.css",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2",
+        "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2"
+      ],
+      "requestOrigins": [
+        "https://local-live-captions.sociobot.in"
+      ]
+    },
+    "/not-a-real-route": {
+      "status": 404,
+      "title": "Page not found — Local Live Captions",
+      "lang": "en",
+      "h1Count": 1,
+      "mainCount": 1,
+      "seriousOrCritical": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "pageErrors": [],
+      "requests": [
+        "https://local-live-captions.sociobot.in/not-a-real-route",
+        "https://local-live-captions.sociobot.in/assets/index-BWJdvUX8.js",
+        "https://local-live-captions.sociobot.in/assets/index-DecVP1iZ.css",
+        "https://local-live-captions.sociobot.in/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2",
+        "https://local-live-captions.sociobot.in/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2"
+      ],
+      "requestOrigins": [
+        "https://local-live-captions.sociobot.in"
+      ]
+    }
+  },
+  "demo": {
+    "bannerVisible": true,
+    "captionsBefore": [
+      "00:00 Today we will trace how a star changes over its lifetime.",
+      "00:05 Gravity pulls the cloud inward while pressure pushes back.",
+      "00:10 That balance can last for billions of years.",
+      "00:15 Please stop me if the diagram is unclear."
+    ],
+    "pausedStateVisible": true,
+    "range": {
+      "max": "42",
+      "value": "42"
+    },
+    "textDownload": {
+      "filename": "sample-transcript.txt",
+      "lines": [
+        "Today we will trace how a star changes over its lifetime.",
+        "Gravity pulls the cloud inward while pressure pushes back.",
+        "That balance can last for billions of years.",
+        "Please stop me if the diagram is unclear."
+      ],
+      "bytes": 204
+    },
+    "requestOrigins": [
+      "https://local-live-captions.sociobot.in"
+    ],
+    "errors": [],
+    "title": "Demo — Local Live Captions",
+    "lang": "en",
+    "h1Count": 1,
+    "mainCount": 1,
+    "seriousOrCritical": []
+  },
+  "mobile": {
+    "firstActionVisibleInViewport": true,
+    "actionBox": {
+      "x": 20,
+      "y": 512.015625,
+      "width": 245.40625,
+      "height": 50.796875
+    },
+    "focusSequence": [
+      {
+        "tag": "A",
+        "text": "Skip to content",
+        "outlineStyle": "solid",
+        "outlineWidth": "3px",
+        "boxShadow": "rgb(217, 237, 123) 0px 0px 0px 6px"
+      },
+      {
+        "tag": "A",
+        "text": "Local Live Captions home",
+        "outlineStyle": "solid",
+        "outlineWidth": "3px",
+        "boxShadow": "rgb(217, 237, 123) 0px 0px 0px 6px"
+      },
+      {
+        "tag": "A",
+        "text": "Demo",
+        "outlineStyle": "solid",
+        "outlineWidth": "3px",
+        "boxShadow": "rgb(217, 237, 123) 0px 0px 0px 6px"
+      },
+      {
+        "tag": "A",
+        "text": "How it works",
+        "outlineStyle": "solid",
+        "outlineWidth": "3px",
+        "boxShadow": "rgb(217, 237, 123) 0px 0px 0px 6px"
+      },
+      {
+        "tag": "A",
+        "text": "Price",
+        "outlineStyle": "solid",
+        "outlineWidth": "3px",
+        "boxShadow": "rgb(217, 237, 123) 0px 0px 0px 6px"
+      },
+      {
+        "tag": "A",
+        "text": "Privacy",
+        "outlineStyle": "solid",
+        "outlineWidth": "3px",
+        "boxShadow": "rgb(217, 237, 123) 0px 0px 0px 6px"
+      },
+      {
+        "tag": "A",
+        "text": "Try it with sample data\n→",
+        "outlineStyle": "solid",
+        "outlineWidth": "3px",
+        "boxShadow": "rgb(217, 237, 123) 0px 0px 0px 6px"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Stop captions",
+        "outlineStyle": "solid",
+        "outlineWidth": "3px",
+        "boxShadow": "rgb(217, 237, 123) 0px 0px 0px 6px"
+      }
+    ],
+    "undersizedTargets": [],
+    "widthBefore": {
+      "scrollWidth": 390,
+      "clientWidth": 390
+    },
+    "widthAt200": {
+      "scrollWidth": 390,
+      "clientWidth": 390
+    }
+  },
+  "offline": {
+    "worker": {
+      "active": "activated",
+      "scriptURL": "https://local-live-captions.sociobot.in/sw.js",
+      "controlled": true
+    },
+    "title": "Demo — Local Live Captions",
+    "bannerVisible": true,
+    "captionCount": 4
+  },
+  "reducedMotion": {
+    "mediaMatches": true,
+    "animatedVisibleElements": []
+  },
+  "links": [
+    {
+      "href": "https://local-live-captions.sociobot.in/#main",
+      "status": 200,
+      "finalUrl": "https://local-live-captions.sociobot.in/"
+    },
+    {
+      "href": "https://local-live-captions.sociobot.in/",
+      "status": 200,
+      "finalUrl": "https://local-live-captions.sociobot.in/"
+    },
+    {
+      "href": "https://local-live-captions.sociobot.in/demo",
+      "status": 200,
+      "finalUrl": "https://local-live-captions.sociobot.in/demo"
+    },
+    {
+      "href": "https://local-live-captions.sociobot.in/#how",
+      "status": 200,
+      "finalUrl": "https://local-live-captions.sociobot.in/"
+    },
+    {
+      "href": "https://local-live-captions.sociobot.in/#price",
+      "status": 200,
+      "finalUrl": "https://local-live-captions.sociobot.in/"
+    },
+    {
+      "href": "https://local-live-captions.sociobot.in/privacy",
+      "status": 200,
+      "finalUrl": "https://local-live-captions.sociobot.in/privacy"
+    },
+    {
+      "href": "https://local-live-captions.sociobot.in/?demo=1",
+      "status": 200,
+      "finalUrl": "https://local-live-captions.sociobot.in/?demo=1"
+    },
+    {
+      "href": "https://api.sociobot.in/api/v1/products/local-live-captions/checkout",
+      "result": "checkout link shape confirmed; not opened"
+    },
+    {
+      "href": "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.13/Local.Live.Captions_0.1.13_amd64.AppImage",
+      "status": 200,
+      "finalUrl": "https://release-assets.githubusercontent.com/github-production-release-asset/1349821174/44c02670-13a6-4462-ae25-1c1421608c03?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-09-01T20%3A23%3A04Z&rscd=attachment%3B+filename%3DLocal.Live.Captions_0.1.13_amd64.AppImage&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-09-01T19%3A22%3A22Z&ske=2026-09-01T20%3A23%3A04Z&sks=b&skv=2018-11-09&sig=z%2BarnNdkE3P1L4oidRvDOPkj34qlAjqooMWTt1gFxFE%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc4ODI5MzU5NCwibmJmIjoxNzg4MjkxNzk0LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.aDJz8GosEYqWINMc89023HTU5N_6b8Rd9Xvd6MZznH0&response-content-disposition=attachment%3B%20filename%3DLocal.Live.Captions_0.1.13_amd64.AppImage&response-content-type=application%2Foctet-stream"
+    },
+    {
+      "href": "https://github.com/B-Divyesh/sf-local-live-captions/releases",
+      "status": 200,
+      "finalUrl": "https://github.com/B-Divyesh/sf-local-live-captions/releases"
+    },
+    {
+      "href": "https://local-live-captions.sociobot.in/terms",
+      "status": 200,
+      "finalUrl": "https://local-live-captions.sociobot.in/terms"
+    },
+    {
+      "href": "https://hello-factory.sociobot.in/",
+      "status": 200,
+      "finalUrl": "https://hello-factory.sociobot.in/"
+    },
+    {
+      "href": "https://github.com/B-Divyesh/sf-local-live-captions/blob/main/.factory/design.md",
+      "status": 200,
+      "finalUrl": "https://github.com/B-Divyesh/sf-local-live-captions/blob/main/.factory/design.md"
+    },
+    {
+      "href": "https://local-live-captions.sociobot.in/demo#main",
+      "status": 200,
+      "finalUrl": "https://local-live-captions.sociobot.in/demo"
+    },
+    {
+      "href": "https://local-live-captions.sociobot.in/privacy#main",
+      "status": 200,
+      "finalUrl": "https://local-live-captions.sociobot.in/privacy"
+    },
+    {
+      "href": "mailto:privacy@sociobot.in",
+      "result": "mailto"
+    },
+    {
+      "href": "https://local-live-captions.sociobot.in/terms#main",
+      "status": 200,
+      "finalUrl": "https://local-live-captions.sociobot.in/terms"
+    },
+    {
+      "href": "mailto:support@sociobot.in",
+      "result": "mailto"
+    },
+    {
+      "href": "https://local-live-captions.sociobot.in/not-a-real-route#main",
+      "status": 404,
+      "finalUrl": "https://local-live-captions.sociobot.in/not-a-real-route"
+    }
+  ]
+}

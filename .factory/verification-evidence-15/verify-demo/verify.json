@@ -1,0 +1,14 @@
+{
+  "url": "https://local-live-captions.sociobot.in/demo",
+  "loadMs": 758,
+  "errors": [],
+  "a11y": {
+    "title": "Demo — Local Live Captions",
+    "lang": "en",
+    "h1": 1,
+    "main": true,
+    "imgsMissingAlt": 0,
+    "buttonsUnlabeled": 0,
+    "textLength": 976
+  }
+}
