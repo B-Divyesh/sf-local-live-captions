@@ -33,7 +33,7 @@ clone. Live screenshots and route checks are recorded under
 | F-2-6 | Kept the release-artifact inventory and immutable-release test. | `@claim:release-artifacts`; live `release-identity.json` and published release check. |
 | F-2-7 | Kept “Confirm consent and start captions” as the third step heading. | `landing page states the job and has one heading`; live `/`. |
 | F-2-8 | Kept plain-language processing and subtitle-export labels. | `@claim:srt-export`; live `/demo`. |
-| F-3-1 | Native claims now enter through `scripts/run-native-claim.sh`, which uses a pinned Ubuntu image when Docker exists or installs its explicit GLib, Tauri, ALSA, and PulseAudio prerequisites before testing. This round adds direct `libglib2.0-dev` declarations to both paths and verifies them. | `@claim:native-claim-environment`; every `npm run test:native-claim -- <id>` command from a clean clone; clean-clone setup log and final `claims.json` run log. |
+| F-3-1 | Native claims now enter through `scripts/run-native-claim.sh`, which uses a pinned Ubuntu image when Docker exists or installs its explicit GLib, Tauri, ALSA, and PulseAudio prerequisites before testing. This round adds direct `libglib2.0-dev` declarations and pins Rust 1.98.0 in the container so Docker and the GitHub Linux runner accept the locked dependency graph. | `@claim:native-claim-environment`; every `npm run test:native-claim -- <id>` command from a clean clone; clean-clone setup log and final `claims.json` run log. |
 
 ## Final live regression set
 

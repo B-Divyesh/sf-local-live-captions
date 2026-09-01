@@ -76,5 +76,6 @@ describe("claim governance", () => {
     expect(runner).toContain("docker build --pull");
     expect(container).toMatch(/^FROM ubuntu:22\.04@sha256:[a-f0-9]{64}$/m);
     expect(container).toContain("libglib2.0-dev");
+    expect(container).toContain("--default-toolchain 1.98.0");
   });
 });

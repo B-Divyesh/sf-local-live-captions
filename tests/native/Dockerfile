@@ -22,6 +22,6 @@ RUN apt-get update \
   && tar --extract --xz --file /tmp/node.tar.xz --directory /usr/local --strip-components=1 \
   && rm -f /tmp/node.tar.xz \
   && curl --proto '=https' --tlsv1.2 --fail --silent --show-error https://sh.rustup.rs -o /tmp/rustup-init.sh \
-  && sh /tmp/rustup-init.sh -y --profile minimal --default-toolchain 1.85.1 \
+  && sh /tmp/rustup-init.sh -y --profile minimal --default-toolchain 1.98.0 \
   && rm -f /tmp/rustup-init.sh \
   && rm -rf /var/lib/apt/lists/*
