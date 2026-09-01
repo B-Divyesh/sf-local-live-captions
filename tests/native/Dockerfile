@@ -14,7 +14,7 @@ ARG NODE_SHA256=14d7de44f235534799f8b171a4050d9a6a4bc99c87e053a25d3d54afa580aa20
 
 RUN apt-get update \
   && apt-get install --yes --no-install-recommends \
-    build-essential cmake curl file libclang-dev libwebkit2gtk-4.1-dev \
+    build-essential cmake curl file libclang-dev libglib2.0-dev libwebkit2gtk-4.1-dev \
     libappindicator3-dev librsvg2-dev patchelf libasound2-dev libpulse-dev \
     pkg-config pulseaudio pulseaudio-utils strace xz-utils ca-certificates \
   && curl --fail --location --silent --show-error --output /tmp/node.tar.xz "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" \

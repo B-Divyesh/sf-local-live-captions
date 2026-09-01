@@ -97,5 +97,5 @@ word. Decorative text is absent from the landing page.
 | Permission from participants | consent |
 | Isolated try-out | demo |
 
-Catalog description: **Caption Linux calls, lectures, and recordings on your computer.**
+Catalog description: **Caption Linux calls, lectures, and recordings on your device.**
 It starts with a verb and is 63 characters long.

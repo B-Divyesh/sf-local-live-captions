@@ -71,8 +71,10 @@ describe("claim governance", () => {
     ];
     for (const id of nativeIds) expect(commandFor(id)).toBe(`npm run test:native-claim -- ${id}`);
     expect(runner).toContain("ensure_native_packages");
+    expect(runner).toContain("libglib2.0-dev");
     expect(runner).toContain("apt-get install --yes --no-install-recommends");
     expect(runner).toContain("docker build --pull");
     expect(container).toMatch(/^FROM ubuntu:22\.04@sha256:[a-f0-9]{64}$/m);
+    expect(container).toContain("libglib2.0-dev");
   });
 });

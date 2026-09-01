@@ -27,7 +27,7 @@ case "$claim" in
 esac
 
 if [ "${LLC_NATIVE_ENV_READY:-}" != "1" ] && command -v docker >/dev/null 2>&1; then
-  image="local-live-captions-native-claims:0.1.14"
+  image="local-live-captions-native-claims:0.1.15"
   docker build --pull --tag "$image" --file "$repo_root/tests/native/Dockerfile" "$repo_root"
   exec docker run --rm \
     --env LLC_NATIVE_ENV_READY=1 \
@@ -39,7 +39,7 @@ fi
 
 ensure_native_packages() {
   local packages=(
-    build-essential cmake curl file libclang-dev libwebkit2gtk-4.1-dev
+    build-essential cmake curl file libclang-dev libglib2.0-dev libwebkit2gtk-4.1-dev
     libappindicator3-dev librsvg2-dev patchelf libasound2-dev libpulse-dev
     pkg-config pulseaudio pulseaudio-utils strace
   )
