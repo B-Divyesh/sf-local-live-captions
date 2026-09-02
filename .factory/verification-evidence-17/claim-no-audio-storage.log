@@ -1,0 +1,122 @@
+
+> local-live-captions@0.1.17 test:native-claim
+> bash scripts/run-native-claim.sh no-audio-storage
+
+W: [pulseaudio] main.c: Running in system mode, but --disallow-module-loading not set.
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [pulseaudio] core-util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+W: [pulseaudio] main.c: Home directory of user 'pulse' is not '/var/run/pulse', ignoring.
+W: [pulseaudio] main.c: OK, so you are running PA in system mode. Please make sure that you actually do want to do that.
+W: [pulseaudio] main.c: Please read http://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/WhatIsWrongWithSystemWide/ for an explanation why system mode is usually a bad idea.
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+W: [pulseaudio] main.c: Unable to contact D-Bus: org.freedesktop.DBus.Error.FileNotFound: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.28s
+  Executable unittests src/lib.rs (src-tauri/target/debug/deps/local_live_captions_lib-991d03c199eabb0b)
+  Executable unittests src/main.rs (src-tauri/target/debug/deps/local_live_captions-526bb48388948f39)
+Tracing english with network disabled for Cargo.
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.80s
+     Running unittests src/lib.rs (src-tauri/target/debug/deps/local_live_captions_lib-991d03c199eabb0b)
+
+running 1 test
+test tests::claim_linux_monitor_end_to_end_captions_speech_and_restarts ... whisper_init_from_file_with_params_no_state: loading model from '/work/repo/.cache/linux-audio-acceptance/models/ggml-tiny.en.bin'
+whisper_init_with_params_no_state: use gpu    = 0
+whisper_init_with_params_no_state: flash attn = 0
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+whisper_init_with_params_no_state: devices    = 1
+whisper_init_with_params_no_state: backends   = 1
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51864
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 384
+whisper_model_load: n_audio_head  = 6
+whisper_model_load: n_audio_layer = 4
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 384
+whisper_model_load: n_text_head   = 6
+whisper_model_load: n_text_layer  = 4
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 1 (tiny)
+whisper_model_load: adding 1607 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:          CPU total size =    77.11 MB
+whisper_model_load: model size    =   77.11 MB
+whisper_backend_init_gpu: no GPU found
+whisper_init_state: kv self size  =    3.15 MB
+whisper_init_state: kv cross size =    9.44 MB
+whisper_init_state: kv pad  size  =    2.36 MB
+whisper_init_state: compute buffer (conv)   =   13.21 MB
+whisper_init_state: compute buffer (encode) =   64.81 MB
+whisper_init_state: compute buffer (cross)  =    3.89 MB
+whisper_init_state: compute buffer (decode) =   95.91 MB
+
+whisper_full_with_state: strategy = 0, decoding with 1 decoders, temperature = 0.00
+
+
+whisper_full_with_state: prompt[0] = [_SOT_]
+
+
+whisper_full_with_state: id =   0, decoder = 0, token =  50363, p =  0.983, ts =    [_BEG_],  0.983, result_len =    0 '[_BEG_]'
+whisper_full_with_state: id =   1, decoder = 0, token =   5891, p =  0.440, ts =        [?],  0.000, result_len =    0 ' fellow'
+whisper_full_with_state: id =   2, decoder = 0, token =   3399, p =  0.842, ts =        [?],  0.029, result_len =    0 ' Americans'
+whisper_full_with_state: id =   3, decoder = 0, token =   1265, p =  0.411, ts =  [_TT_100],  0.122, result_len =    0 ' ask'
+whisper_full_with_state: id =   4, decoder = 0, token =    407, p =  0.876, ts =        [?],  0.028, result_len =    0 ' not'
+whisper_full_with_state: id =   5, decoder = 0, token =    644, p =  0.903, ts =        [?],  0.050, result_len =    0 ' what'
+whisper_full_with_state: id =   6, decoder = 0, token =    534, p =  0.978, ts =  [_TT_215],  0.122, result_len =    0 ' your'
+whisper_full_with_state: id =   7, decoder = 0, token =   1499, p =  0.970, ts =  [_TT_228],  0.118, result_len =    0 ' country'
+whisper_full_with_state: id =   8, decoder = 0, token =    460, p =  0.981, ts =  [_TT_253],  0.126, result_len =    0 ' can'
+whisper_full_with_state: id =   9, decoder = 0, token =    466, p =  0.986, ts =  [_TT_270],  0.166, result_len =    0 ' do'
+whisper_full_with_state: id =  10, decoder = 0, token =    329, p =  0.941, ts =  [_TT_280],  0.108, result_len =    0 ' for'
+whisper_full_with_state: id =  11, decoder = 0, token =    345, p =  0.964, ts =  [_TT_290],  0.118, result_len =    0 ' you'
+whisper_full_with_state: id =  12, decoder = 0, token =   1265, p =  0.519, ts =        [?],  0.060, result_len =    0 ' ask'
+whisper_full_with_state: id =  13, decoder = 0, token =    644, p =  0.907, ts =        [?],  0.065, result_len =    0 ' what'
+whisper_full_with_state: id =  14, decoder = 0, token =    345, p =  0.957, ts =  [_TT_375],  0.210, result_len =    0 ' you'
+whisper_full_with_state: id =  15, decoder = 0, token =    460, p =  0.894, ts =  [_TT_387],  0.147, result_len =    0 ' can'
+whisper_full_with_state: id =  16, decoder = 0, token =    466, p =  0.941, ts =  [_TT_404],  0.249, result_len =    0 ' do'
+whisper_full_with_state: id =  17, decoder = 0, token =    329, p =  0.852, ts =  [_TT_412],  0.196, result_len =    0 ' for'
+whisper_full_with_state: id =  18, decoder = 0, token =    534, p =  0.701, ts =  [_TT_425],  0.168, result_len =    0 ' your'
+whisper_full_with_state: id =  19, decoder = 0, token =  50797, p =  0.056, ts =        [?],  0.056, result_len =   20 '[_TT_434]'
+whisper_full_with_state: id =  20, decoder = 0, token =  50797, p =  0.893, ts =  [_TT_434],  0.893, result_len =   21 '[_TT_434]'
+whisper_full_with_state: id =  21, decoder = 0, token =   1499, p =  0.981, ts =        [?],  0.000, result_len =   21 ' country'
+whisper_full_with_state: id =  22, decoder = 0, token =     13, p =  0.730, ts =        [?],  0.051, result_len =   21 '.'
+whisper_full_with_state: id =  23, decoder = 0, token =  50811, p =  0.163, ts =  [_TT_448],  0.163, result_len =   24 '[_TT_448]'
+whisper_full_with_state: decoder 0 completed
+whisper_full_with_state: decoder  0: score = -0.37282, result_len =  24, avg_logprobs = -0.37282, entropy =  2.65819
+whisper_full_with_state: best decoder = 0
+single timestamp ending - skip entire chunk
+seek = 899, seek_delta = 899
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 33.65s
+
+     Running unittests src/main.rs (src-tauri/target/debug/deps/local_live_captions-526bb48388948f39)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+E: [null-sink] util.c: Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory

@@ -1,0 +1,55 @@
+
+> local-live-captions@0.1.17 build
+> npm run build:site && npm run build:app
+
+
+> local-live-captions@0.1.17 build:site
+> vite build --mode site --outDir dist/site && cp dist/site/index.html dist/site/404.html
+
+vite v7.3.6 building client environment for site...
+transforming...
+✓ 11 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/site/release-identity.json                                              0.07 kB │ gzip: 0.09 kB
+dist/site/index.html                                                         1.69 kB │ gzip: 0.59 kB
+dist/site/assets/atkinson-hyperlegible-latin-ext-700-normal-CKkU2Dpt.woff    7.36 kB
+dist/site/assets/atkinson-hyperlegible-latin-ext-400-normal-Bbz-b3yf.woff    7.36 kB
+dist/site/assets/atkinson-hyperlegible-latin-ext-700-normal-BoVPHkS0.woff2   9.37 kB
+dist/site/assets/atkinson-hyperlegible-latin-ext-400-normal-DRk46D-x.woff2   9.38 kB
+dist/site/assets/fraunces-vietnamese-wght-normal-CnvboYUG.woff2             11.57 kB
+dist/site/assets/atkinson-hyperlegible-latin-400-normal-BbWidj28.woff       14.02 kB
+dist/site/assets/atkinson-hyperlegible-latin-700-normal-BK6Glc0m.woff       14.29 kB
+dist/site/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2      17.21 kB
+dist/site/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2      17.52 kB
+dist/site/assets/fraunces-latin-ext-wght-normal-Ca2vKHc0.woff2              33.58 kB
+dist/site/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2                  36.62 kB
+dist/site/assets/index-DecVP1iZ.css                                         18.49 kB │ gzip: 4.87 kB
+dist/site/assets/core-DV6XEvTN.js                                            0.14 kB │ gzip: 0.15 kB │ map: 11.01 kB
+dist/site/assets/index-n2O55Zut.js                                          29.23 kB │ gzip: 9.91 kB │ map: 50.85 kB
+✓ built in 572ms
+
+> local-live-captions@0.1.17 build:app
+> vite build --mode desktop --outDir dist/app
+
+vite v7.3.6 building client environment for desktop...
+transforming...
+✓ 11 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/app/index.html                                                         1.69 kB │ gzip: 0.59 kB
+dist/app/assets/atkinson-hyperlegible-latin-ext-400-normal-Bbz-b3yf.woff    7.36 kB
+dist/app/assets/atkinson-hyperlegible-latin-ext-700-normal-CKkU2Dpt.woff    7.36 kB
+dist/app/assets/atkinson-hyperlegible-latin-ext-700-normal-BoVPHkS0.woff2   9.37 kB
+dist/app/assets/atkinson-hyperlegible-latin-ext-400-normal-DRk46D-x.woff2   9.38 kB
+dist/app/assets/fraunces-vietnamese-wght-normal-CnvboYUG.woff2             11.57 kB
+dist/app/assets/atkinson-hyperlegible-latin-400-normal-BbWidj28.woff       14.02 kB
+dist/app/assets/atkinson-hyperlegible-latin-700-normal-BK6Glc0m.woff       14.29 kB
+dist/app/assets/atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2      17.21 kB
+dist/app/assets/atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2      17.52 kB
+dist/app/assets/fraunces-latin-ext-wght-normal-Ca2vKHc0.woff2              33.58 kB
+dist/app/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2                  36.62 kB
+dist/app/assets/index-DecVP1iZ.css                                         18.49 kB │ gzip: 4.87 kB
+dist/app/assets/core-DV6XEvTN.js                                            0.14 kB │ gzip: 0.15 kB │ map: 11.01 kB
+dist/app/assets/index-uSIYqEUn.js                                          10.66 kB │ gzip: 4.29 kB │ map: 43.34 kB
+✓ built in 553ms

@@ -1,0 +1,46 @@
+
+> local-live-captions@0.1.17 test
+> vitest run && node scripts/run-e2e.mjs --grep @claim:live-caption-sizing
+
+
+ RUN  v3.2.7 /work/repo
+
+ ✓ tests/unit/claims-governance.test.ts (4 tests) 13ms
+ ✓ tests/unit/public-claims.test.ts (4 tests) 86ms
+ ✓ tests/unit/install-release-identity.test.ts (1 test) 509ms
+   ✓ one-line installer release identity > rejects an older release and installs only the exact site build  508ms
+ ✓ tests/unit/published-release-contract.test.ts (4 tests) 6ms
+ ✓ tests/unit/release-config.test.ts (8 tests) 90ms
+ ✓ tests/unit/linux-audio-acceptance.test.ts (1 test) 8ms
+ ✓ tests/unit/release-site-build.test.ts (3 tests) 5ms
+ ✓ tests/unit/transcript.test.ts (3 tests) 78ms
+
+ Test Files  8 passed (8)
+      Tests  28 passed (28)
+   Start at  00:53:26
+   Duration  4.27s (transform 661ms, setup 0ms, collect 1.27s, tests 795ms, environment 2ms, prepare 3.05s)
+
+[WebServer] (node:3887) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3920) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:3940) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:3940) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+·
+  1 passed (5.1s)
+[WebServer] (node:4038) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:4072) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+(node:4092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:4092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+·
+  1 passed (5.0s)

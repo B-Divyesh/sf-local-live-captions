@@ -1,0 +1,15 @@
+
+> local-live-captions@0.1.17 verify:published-release
+> node scripts/verify-published-release.mjs
+
+file:///work/repo/scripts/verify-published-release.mjs:92
+  if (errors.length) throw new Error(errors.join("\n"));
+                           ^
+
+Error: Latest release commit 5a5d585503d23707cbf0fdb4a9301b9113463849 does not match site commit 7188bacd897b1040d81772938c59afcb3a4d2384.
+latest.json commit 5a5d585503d23707cbf0fdb4a9301b9113463849 does not match site commit 7188bacd897b1040d81772938c59afcb3a4d2384.
+    at audit (file:///work/repo/scripts/verify-published-release.mjs:92:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async run (file:///work/repo/scripts/verify-published-release.mjs:101:22)
+
+Node.js v22.23.2
