@@ -1,3 +1,33 @@
+# Local Live Captions — verification 17 handoff
+
+## Current outcome
+
+**FAIL — candidate `7188bacd897b1040d81772938c59afcb3a4d2384` is not
+releasable.** Fresh independent evidence is in
+[`verification-17.md`](verification-17.md).
+
+- The deployed site identity is the candidate, but the latest GitHub desktop
+  release and `latest.json` identify older commit `5a5d585…`; the installable
+  app does not match the deployed candidate.
+- The clean, exact Linux production package command
+  `env -u CI npx tauri build --bundles appimage,deb` fails at AppImage
+  packaging (`linuxdeploy`), leaving no usable AppImage/DEB.
+- At 200% effective text reflow, the live demo has horizontal overflow
+  (`320px` content at a `195px` viewport).
+
+All 27 declared claim commands passed, as did `npm test`, typecheck, lint,
+full Rust tests, static production build, first-read/demo, offline reload,
+privacy request inspection, headers, keyboard skip link, axe serious/critical,
+and 390px checks. The license endpoint allowed 30 invalid requests from one
+client and returned 429 with `Retry-After` on request 31.
+
+To pass: publish a new immutable tag/release built from `7188bac…` with matching
+`latest.json`/checksums and deployed release identity, fix reproducible Linux
+AppImage packaging, and add a 200%-reflow/narrow layout treatment. Do not reuse
+or move the old v0.1.17 release.
+
+---
+
 # Local Live Captions — repair 13 handoff
 
 ## Outcome
