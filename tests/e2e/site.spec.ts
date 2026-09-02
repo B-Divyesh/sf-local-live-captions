@@ -51,8 +51,8 @@ test("mobile first screen keeps the three plain facts visible", async ({ page },
 test("download refuses a stale release and selects the exact site build", async ({ page }) => {
   await page.addInitScript(() => { Reflect.deleteProperty(Navigator.prototype, "serviceWorker"); });
   const assets = [
-    { name: "Local.Live.Captions_0.1.18_amd64.AppImage", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.18/Local.Live.Captions_0.1.18_amd64.AppImage" },
-    { name: "Local.Live.Captions_0.1.18_x64_en-US.msi", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.18/Local.Live.Captions_0.1.18_x64_en-US.msi" },
+    { name: "Local.Live.Captions_0.1.19_amd64.AppImage", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.19/Local.Live.Captions_0.1.19_amd64.AppImage" },
+    { name: "Local.Live.Captions_0.1.19_x64_en-US.msi", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.19/Local.Live.Captions_0.1.19_x64_en-US.msi" },
   ];
   let release = { tag_name: "v0.1.7", target_commitish: "older-sha", assets };
   await page.route("https://api.github.com/**", (route) => route.fulfill({
@@ -64,14 +64,14 @@ test("download refuses a stale release and selects the exact site build", async 
   await expect(page.getByText("Downloads are being published.")).toBeVisible();
   await expect(page.getByRole("link", { name: /^Download for/ })).toHaveCount(0);
 
-  release = { tag_name: "v0.1.18", target_commitish: "older-sha", assets };
+  release = { tag_name: "v0.1.19", target_commitish: "older-sha", assets };
   await page.reload();
   await expect(page.getByText("Downloads are being published.")).toBeVisible();
   await expect(page.getByRole("link", { name: /^Download for/ })).toHaveCount(0);
 
-  release = { tag_name: "v0.1.18", target_commitish: buildSha, assets };
+  release = { tag_name: "v0.1.19", target_commitish: buildSha, assets };
   await page.reload();
-  await expect(page.getByRole("link", { name: /^Download for/ })).toHaveAttribute("href", /\/releases\/download\/v0\.1\.18\//);
+  await expect(page.getByRole("link", { name: /^Download for/ })).toHaveAttribute("href", /\/releases\/download\/v0\.1\.19\//);
 });
 
 test("Android visitors get a desktop explanation instead of a Linux package", async ({ page }) => {
@@ -166,6 +166,18 @@ test("mobile demo banner actions meet the 44px touch target", async ({ page }, t
     expect(box, name).not.toBeNull();
     expect(box!.width, name).toBeGreaterThanOrEqual(44);
     expect(box!.height, name).toBeGreaterThanOrEqual(44);
+  }
+});
+
+test("legal page links meet the 44px touch target", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "mobile project only");
+  for (const route of ["/privacy", "/terms"]) {
+    await page.goto(route);
+    const undersized = await page.locator("a, button, input, select").evaluateAll((elements) => elements.map((element) => {
+      const box = element.getBoundingClientRect();
+      return { name: element.textContent?.trim() || element.getAttribute("aria-label") || element.tagName, width: box.width, height: box.height };
+    }).filter((size) => size.width < 44 || size.height < 44));
+    expect(undersized, route).toEqual([]);
   }
 });
 

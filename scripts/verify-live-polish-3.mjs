@@ -3,9 +3,9 @@ import { chromium } from "playwright";
 import { mkdir, writeFile } from "node:fs/promises";
 
 const base = process.argv[2] || "https://local-live-captions.sociobot.in";
-const evidence = process.argv[3] || ".factory/evidence-polish-3";
+const evidence = process.argv[3] || ".factory/evidence-polish-4";
 const browser = await chromium.launch({ headless: true });
-const report = { base, checkedAt: new Date().toISOString(), routes: {}, demo: {}, firstScreen: {}, focus: {} };
+const report = { base, checkedAt: new Date().toISOString(), routes: {}, demo: {}, firstScreen: {}, focus: {}, legalTargets: {} };
 
 await mkdir(evidence, { recursive: true });
 
@@ -39,6 +39,23 @@ async function inspectRoute(path) {
 }
 
 for (const path of ["/", "/demo", "/privacy", "/terms", "/not-a-real-route"]) await inspectRoute(path);
+
+{
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, serviceWorkers: "block" });
+  const page = await context.newPage();
+  for (const path of ["/privacy", "/terms"]) {
+    await page.goto(`${base}${path}`, { waitUntil: "networkidle" });
+    const targets = await page.locator("a, button, input, select").evaluateAll((elements) => elements.map((element) => {
+      const box = element.getBoundingClientRect();
+      return { name: element.textContent?.trim() || element.getAttribute("aria-label") || element.tagName, width: box.width, height: box.height };
+    }));
+    const undersized = targets.filter(({ width, height }) => width < 44 || height < 44);
+    if (undersized.length) throw new Error(`${path} has undersized targets: ${JSON.stringify(undersized)}`);
+    report.legalTargets[path] = targets;
+  }
+  await page.screenshot({ path: `${evidence}/live-legal-mobile.png`, fullPage: true });
+  await context.close();
+}
 
 {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, acceptDownloads: true, serviceWorkers: "block" });

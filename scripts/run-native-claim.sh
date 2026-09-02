@@ -15,6 +15,7 @@ Supported claim ids:
   all
   native-local-processing  no-audio-storage  linux-monitor-end-to-end
   german-caption-end-to-end  language-models  linux-system-audio
+  microphone-input-listing
   session-transcript  consent-before-capture  local-model-storage
   source-start-validation
 EOF
@@ -22,12 +23,12 @@ EOF
 }
 
 case "$claim" in
-  all|native-local-processing|no-audio-storage|linux-monitor-end-to-end|german-caption-end-to-end|language-models|linux-system-audio|session-transcript|consent-before-capture|local-model-storage|source-start-validation) ;;
+  all|native-local-processing|no-audio-storage|linux-monitor-end-to-end|german-caption-end-to-end|language-models|linux-system-audio|microphone-input-listing|session-transcript|consent-before-capture|local-model-storage|source-start-validation) ;;
   *) usage ;;
 esac
 
 if [ "${LLC_NATIVE_ENV_READY:-}" != "1" ] && command -v docker >/dev/null 2>&1; then
-  image="local-live-captions-native-claims:0.1.18"
+  image="local-live-captions-native-claims:0.1.19"
   docker build --pull --tag "$image" --file "$repo_root/tests/native/Dockerfile" "$repo_root"
   exec docker run --rm \
     --env LLC_NATIVE_ENV_READY=1 \
@@ -86,6 +87,9 @@ case "$claim" in
     ;;
   linux-system-audio)
     exec cargo test --manifest-path src-tauri/Cargo.toml claim_linux_system_audio
+    ;;
+  microphone-input-listing)
+    exec cargo test --manifest-path src-tauri/Cargo.toml claim_native_microphone_and_system_monitor
     ;;
   session-transcript)
     exec cargo test --manifest-path src-tauri/Cargo.toml claim_session_transcript

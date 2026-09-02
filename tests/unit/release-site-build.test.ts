@@ -3,7 +3,7 @@ import { siteIdentityErrors } from "../../scripts/build-release-site.mjs";
 
 describe("immutable static release builds", () => {
   it("accepts a site built from its exact release tag source", () => {
-    const identity = { tag: "v0.1.18", commit: "released-source" };
+    const identity = { tag: "v0.1.19", commit: "released-source" };
     expect(siteIdentityErrors({
       releaseTag: identity.tag,
       releaseCommit: identity.commit,

@@ -83,18 +83,27 @@ fn reset_session(state: &CaptionState) -> Result<(), String> {
 #[tauri::command]
 fn list_audio_devices() -> Result<Vec<String>, String> {
     let host = cpal::default_host();
-    let mut names: Vec<String> = host
+    let native_inputs = host
         .input_devices()
         .map_err(|error| format!("Audio sources are unavailable: {error}"))?
         .filter_map(|device| device.name().ok())
-        .collect();
-    names.sort();
-    names.dedup();
+        .collect::<Vec<_>>();
     #[cfg(target_os = "linux")]
-    names.extend(pulse_monitor_sources());
+    let monitor_sources = pulse_monitor_sources();
+    #[cfg(not(target_os = "linux"))]
+    let monitor_sources = Vec::new();
+    Ok(list_audio_devices_from(native_inputs, monitor_sources))
+}
+
+fn list_audio_devices_from(
+    native_inputs: impl IntoIterator<Item = String>,
+    monitor_sources: impl IntoIterator<Item = String>,
+) -> Vec<String> {
+    let mut names: Vec<String> = native_inputs.into_iter().collect();
+    names.extend(monitor_sources);
     names.sort();
     names.dedup();
-    Ok(names)
+    names
 }
 
 /// PipeWire exposes its PulseAudio compatibility server through `pactl`; a
@@ -781,6 +790,22 @@ mod tests {
         );
     }
 
+    #[test]
+    // @claim:microphone-input-listing
+    fn claim_native_microphone_and_system_monitor_both_appear_as_audio_sources() {
+        let sources = list_audio_devices_from(
+            vec!["Classroom USB Microphone".to_string()],
+            vec!["pulse:classroom-output.monitor".to_string()],
+        );
+        assert_eq!(
+            sources,
+            vec![
+                "Classroom USB Microphone".to_string(),
+                "pulse:classroom-output.monitor".to_string(),
+            ]
+        );
+    }
+
     #[cfg(target_os = "linux")]
     #[test]
     // @claim:source-start-validation
@@ -857,6 +882,11 @@ mod tests {
     // @claim:no-audio-storage
     // @claim:linux-monitor-end-to-end
     fn claim_linux_monitor_end_to_end_captions_speech_and_restarts() {
+        assert_eq!(
+            std::env::var("LLC_CAPTURE_STORAGE_AUDIT_SCOPE").as_deref(),
+            Ok("all-paths"),
+            "run this claim through the full-path storage audit"
+        );
         let cache = std::env::var("LLC_AUDIO_TEST_CACHE")
             .expect("run through scripts/linux-audio-acceptance.sh");
         let source = std::env::var("LLC_TEST_PULSE_SOURCE")
@@ -866,12 +896,6 @@ mod tests {
         let destination = model_destination(std::path::Path::new(&cache), "tiny.en").unwrap();
         tauri::async_runtime::block_on(download_model_file("tiny.en", &destination))
             .expect("the real model download must complete");
-        let model_folder = destination.parent().unwrap();
-        let before_capture: Vec<_> = std::fs::read_dir(model_folder)
-            .unwrap()
-            .map(|entry| entry.unwrap().file_name())
-            .collect();
-
         let audio = capture_fixture_from_monitor(&source, &fixture, 9)
             .expect("the selected monitor must yield fixture audio");
         let captions = transcribe(destination.to_str().unwrap(), &audio, "en")
@@ -887,15 +911,6 @@ mod tests {
             text: captions.join(" "),
         }];
         assert!(format_srt(&lines).contains("00:00:00,000 --> 00:00:09,000"));
-        let after_capture: Vec<_> = std::fs::read_dir(model_folder)
-            .unwrap()
-            .map(|entry| entry.unwrap().file_name())
-            .collect();
-        assert_eq!(
-            before_capture, after_capture,
-            "capturing must not write raw audio beside the local model"
-        );
-
         let restarted = capture_fixture_from_monitor(&source, &fixture, 2)
             .expect("a new capture can open after the first capture stops");
         assert!(restarted.iter().any(|sample| sample.abs() > 0.01));

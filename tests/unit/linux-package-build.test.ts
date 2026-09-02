@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { linuxPackageErrors } from "../../scripts/build-linux-packages.mjs";
 
 describe("Linux AppImage packaging", () => {
-  const version = "0.1.18";
+  const version = "0.1.19";
   const artifacts = [
     { name: `Local Live Captions_${version}_amd64.AppImage`, bytes: 81_000_000 },
     { name: `Local Live Captions_${version}_amd64.deb`, bytes: 5_400_000 },

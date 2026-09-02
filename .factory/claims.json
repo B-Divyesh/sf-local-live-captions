@@ -102,7 +102,7 @@
     "claim": "The app does not save raw audio.",
     "where": "landing, privacy policy, README",
     "test": "npm run test:native-claim -- no-audio-storage",
-    "sandbox": "the self-provisioned isolated PulseAudio capture compares the complete local model folder before and after audio is captioned"
+    "sandbox": "run real PulseAudio monitor capture under a full path-based filesystem syscall trace; fail any successful write anywhere, and verify isolated HOME, app-data, XDG, temporary, and working roots remain byte-for-byte unchanged"
   },
   {
     "id": "session-transcript",
@@ -187,5 +187,19 @@
     "where": "README Test and build",
     "test": "npm run test:unit -- --testNamePattern @claim:native-claim-environment",
     "sandbox": "assert the pinned repository container and matching Debian/Ubuntu bootstrap are wired into every native claim command"
+  },
+  {
+    "id": "project-license",
+    "claim": "The application source is available under the MIT License.",
+    "where": "README and site terms",
+    "test": "npm run test:unit -- --testNamePattern @claim:project-license",
+    "sandbox": "verify the root MIT license text, copyright notice, README link, npm package license, and Rust package license"
+  },
+  {
+    "id": "microphone-input-listing",
+    "claim": "The app lists microphones reported by the operating system.",
+    "where": "README Linux system audio section",
+    "test": "npm run test:native-claim -- microphone-input-listing",
+    "sandbox": "inject a native microphone and a PulseAudio monitor into the production audio-source combiner and assert both remain selectable"
   }
 ]

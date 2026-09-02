@@ -1,1 +1,1 @@
-Caption Linux calls, lectures, and recordings on your device.
+Caption Linux calls, lectures, and recordings locally without uploading audio.

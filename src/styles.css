@@ -143,6 +143,7 @@ footer p { color: #c8d4cc; margin-bottom: 0; }
 .legal-intro { font-size: 1.3rem; color: var(--ink-soft); margin: 24px 0 64px; }
 .legal h2 { font-size: 2rem; margin: 48px 0 12px; }
 .legal p { max-width: 68ch; }
+.legal a { display: inline-flex; align-items: center; min-height: 44px; }
 .not-found { min-height: 70vh; display: grid; place-content: center; padding: 48px 24px; text-align: center; }
 .not-found h1 { max-width: 10ch; }
 .not-found .button { justify-self: center; margin-top: 24px; }

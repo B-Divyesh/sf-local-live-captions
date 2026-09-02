@@ -41,13 +41,15 @@ describe("claim governance", () => {
       "german-caption-end-to-end",
       "storage-controls",
       "native-claim-environment",
+      "project-license",
+      "microphone-input-listing",
     ]) expect(ids, `missing public claim ${id}`).toContain(id);
   });
 
   it("runs unit-policy claims through Vitest instead of the browser-only claim filter", async () => {
     const claims = JSON.parse(await readFile(".factory/claims.json", "utf8")) as { id: string; test: string }[];
     const commandFor = (id: string) => claims.find((claim) => claim.id === id)?.test;
-    for (const id of ["call-speaker-boundaries", "unsigned-installers"]) {
+    for (const id of ["call-speaker-boundaries", "unsigned-installers", "project-license"]) {
       expect(commandFor(id)).toBe(`npm run test:unit -- --testNamePattern @claim:${id}`);
     }
   });
@@ -64,6 +66,7 @@ describe("claim governance", () => {
       "german-caption-end-to-end",
       "language-models",
       "linux-system-audio",
+      "microphone-input-listing",
       "session-transcript",
       "consent-before-capture",
       "local-model-storage",

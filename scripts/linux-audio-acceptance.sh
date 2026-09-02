@@ -12,12 +12,14 @@ runtime_dir="$(mktemp -d)"
 sink_module=""
 pulse_pid=""
 trace_dir="$(mktemp -d)"
+storage_audit_root="$(mktemp -d)"
 
 cleanup() {
   if [ -n "$sink_module" ]; then pactl unload-module "$sink_module" >/dev/null 2>&1 || true; fi
   if [ -n "$pulse_pid" ]; then kill "$pulse_pid" >/dev/null 2>&1 || true; wait "$pulse_pid" 2>/dev/null || true; fi
   rm -rf "$runtime_dir"
   rm -rf "$trace_dir"
+  rm -rf "$storage_audit_root"
 }
 trap cleanup EXIT
 
@@ -92,9 +94,86 @@ run_capture_test() {
   fi
 }
 
+snapshot_storage_root() {
+  local root="$1"
+  local output="$2"
+  find "$root" -xdev -type f -print0 \
+    | sort -z \
+    | xargs -0 -r sha256sum > "$output"
+}
+
+run_storage_audited_english() {
+  local source_model="$cache_root/models/ggml-tiny.en.bin"
+  local audit_cache="$storage_audit_root/app-data"
+  local audit_trace="$trace_dir/english.storage.log"
+  local before="$trace_dir/english.storage.before"
+  local after="$trace_dir/english.storage.after"
+  local write_attempts="$trace_dir/english.storage.writes"
+  local test_binary
+
+  mkdir -p \
+    "$storage_audit_root/home" \
+    "$storage_audit_root/tmp" \
+    "$storage_audit_root/cache" \
+    "$storage_audit_root/config" \
+    "$storage_audit_root/data" \
+    "$storage_audit_root/state" \
+    "$storage_audit_root/work" \
+    "$storage_audit_root/config/pulse" \
+    "$audit_cache/models"
+  head -c 256 /dev/urandom > "$storage_audit_root/config/pulse/cookie"
+  chmod 600 "$storage_audit_root/config/pulse/cookie"
+  cp --reflink=auto "$source_model" "$audit_cache/models/ggml-tiny.en.bin"
+
+  test_binary="$(find "$repo_root/src-tauri/target/debug/deps" -maxdepth 1 -type f -perm /111 -name 'local_live_captions_lib-*' -printf '%T@ %p\n' \
+    | sort -rn \
+    | sed -n '1s/^[^ ]* //p')"
+  test -n "$test_binary" || { echo "The compiled native claim test binary was not found." >&2; exit 1; }
+
+  snapshot_storage_root "$storage_audit_root" "$before"
+  echo "Tracing real monitor capture across every filesystem path visible to the process."
+  (
+    cd "$storage_audit_root/work"
+    HOME="$storage_audit_root/home" \
+    TMPDIR="$storage_audit_root/tmp" \
+    XDG_CACHE_HOME="$storage_audit_root/cache" \
+    XDG_CONFIG_HOME="$storage_audit_root/config" \
+    XDG_DATA_HOME="$storage_audit_root/data" \
+    XDG_STATE_HOME="$storage_audit_root/state" \
+    LLC_AUDIO_TEST_CACHE="$audit_cache" \
+    LLC_CAPTURE_STORAGE_AUDIT_SCOPE="all-paths" \
+    CARGO_NET_OFFLINE=true \
+      strace -f -qq -s 4096 -o "$audit_trace" -e trace=%file,%network \
+      "$test_binary" tests::claim_linux_monitor_end_to_end_captions_speech_and_restarts --exact --ignored --nocapture
+  )
+
+  if grep -Eq 'AF_INET6?|sin_family=AF_INET6?' "$audit_trace"; then
+    echo "Capture opened an internet socket; local processing claim failed." >&2
+    grep -E 'AF_INET6?|sin_family=AF_INET6?' "$audit_trace" >&2
+    exit 1
+  fi
+
+  {
+    grep -E '(open|openat|openat2)\(.*O_(WRONLY|RDWR|CREAT|TRUNC|APPEND)' "$audit_trace" || true
+    grep -E '^[[:digit:]]+[[:space:]]+(creat|mkdir|mkdirat|unlink|unlinkat|rename|renameat|renameat2|link|linkat|symlink|symlinkat|truncate|ftruncate|chmod|fchmod|fchmodat|chown|fchown|fchownat|utime|utimes|futimesat|utimensat|mknod|mknodat)\(' "$audit_trace" || true
+  } | grep -v ' = -1 ' > "$write_attempts" || true
+  if [ -s "$write_attempts" ]; then
+    echo "Capture changed or opened a filesystem path for writing; no-audio-storage claim failed." >&2
+    sed -n '1,160p' "$write_attempts" >&2
+    exit 1
+  fi
+
+  snapshot_storage_root "$storage_audit_root" "$after"
+  if ! diff -u "$before" "$after"; then
+    echo "Capture changed the isolated HOME, app-data, XDG, temporary, or working directory." >&2
+    exit 1
+  fi
+  echo "Storage audit passed: zero successful path-based write opens or filesystem mutations by capture or its child process; isolated HOME, app-data, XDG, temporary, and working directories are unchanged."
+}
+
 run_english() {
   prepare_model "tiny.en" "ggml-tiny.en.bin"
-  run_capture_test english cargo test --manifest-path src-tauri/Cargo.toml claim_linux_monitor_end_to_end_captions_speech_and_restarts -- --ignored
+  run_storage_audited_english
 }
 
 run_german() {

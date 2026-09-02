@@ -1,6 +1,6 @@
 # Copy audit
 
-Audited 1 September 2026 from `src/main.ts` and `README.md`. Counts use
+Audited 2 September 2026 from `src/main.ts` and `README.md`. Counts use
 whitespace-delimited words. Hyphenated terms, prices, versions, and URLs count
 as one word. No audited sentence exceeds 22 words or uses a banned marketing
 word. Decorative text is absent from the landing page.
@@ -31,7 +31,7 @@ word. Decorative text is absent from the landing page.
 | The app does not join calls, name speakers, or save audio. | 11 |
 | It keeps transcript text only while the session is open. | 10 |
 | English and German speech models, size controls, and transcript export stay free. | 11 |
-| A supporter license helps fund updates; it does not unlock caption features. | 12 |
+| A supporter license is optional; it does not unlock caption features. | 11 |
 | The checkout link opens through Sociobot. | 6 |
 | If it does not open, try again later. | 9 |
 | Captions stay free. | 3 |
@@ -75,7 +75,7 @@ word. Decorative text is absent from the landing page.
 | Speech model downloads use the listed `ggerganov/whisper.cpp` Hugging Face repository. | 10 |
 | The bundled upstream MIT license copy is pinned in `third_party/whisper.cpp-LICENSE`. | 9 |
 | Desktop installers are built in GitHub Actions. | 7 |
-| Tag the exact commit with the version from `package.json`, such as `v0.1.18`. | 12 |
+| Tag the exact commit with the version from `package.json`, such as `v0.1.19`. | 12 |
 | To rebuild, run the workflow for that tag. | 8 |
 | The workflow resolves that tag to one commit before packaging. | 10 |
 | It creates unsigned packages for macOS, Windows, and Linux. | 9 |
@@ -98,5 +98,5 @@ word. Decorative text is absent from the landing page.
 | Permission from participants | consent |
 | Isolated try-out | demo |
 
-Catalog description: **Caption Linux calls, lectures, and recordings on your device.**
-It starts with a verb and is 63 characters long.
+Catalog description: **Caption Linux calls, lectures, and recordings locally without uploading audio.**
+It starts with a verb and is 77 characters long.
