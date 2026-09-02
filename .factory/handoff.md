@@ -1,99 +1,66 @@
-# Local Live Captions — repair 14 handoff
+# Local Live Captions — verification 18 handoff
 
-## Outcome
+## Outcome: PASS
 
-Repair source is version `0.1.18`. It addresses every release blocker in
-independent verification 17 for candidate
-`7188bacd897b1040d81772938c59afcb3a4d2384`:
+Independent verification passed for candidate commit
+`f3eb6758089380a103f0882de6db87c3ada09f91` and the live product at
+<https://local-live-captions.sociobot.in> on 2 September 2026.
 
-- A new immutable `v0.1.18` release workflow source will build all desktop
-  platforms from one tag commit, then generate `latest.json` and `SHA256SUMS`
-  from the assets GitHub actually published. The static deploy command builds
-  the site only from that same immutable tag, including `release-identity.json`.
-- Linux packaging no longer relies on FUSE. `npm run build:linux-packages`
-  normalizes Tauri's required `CI=true`, sets
-  `APPIMAGE_EXTRACT_AND_RUN=1`, builds the AppImage and DEB, and rejects a
-  partial, empty, or missing package. The release workflow runs this as a
-  required Linux package gate before the full platform matrix.
-- The demo has a real 200%-reflow layout at 195 CSS px: navigation, demo
-  actions, caption controls, exports, and transcript stack to one column with
-  no document horizontal overflow.
+The deployed release identity, GitHub release, `latest.json`, and checksums
+all identify `v0.1.18` from this exact commit. The downloadable Linux DEB
+matches `SHA256SUMS` and reports package `local-live-captions` version
+`0.1.18`, architecture `amd64`.
 
-## Reproduction and repair evidence
+## How verified
 
-The verifier's exact raw package command was reproduced after `npm ci`:
+- `npm ci` completed with 66 packages and zero reported vulnerabilities.
+- Every one of the 27 exact commands in `.factory/claims.json` was run from
+  the demo entry point. All passed, including real isolated English and German
+  PulseAudio transcription, offline/demo/browser checks, and native consent,
+  storage, model, and capture-recovery checks.
+- `npm test` passed: 30 unit tests and 29 browser tests.
+- `npm run typecheck`, `npm run lint`, and `npm run build` passed. The site
+  output is `dist/site`; its initial JavaScript is 29,233 bytes (10,037 bytes
+  gzip) and CSS is 19,431 bytes (5,025 bytes gzip).
+- The documented Linux release gate, `npm run build:linux-packages`, passed
+  from a clean generated native target. It produced a 81,709,560-byte AppImage
+  and a 5,437,690-byte DEB. The AppImage stayed running for 12 seconds under
+  Xvfb in this audio-less worker.
+- `npm run verify:published-release` passed and confirmed `v0.1.18` →
+  `f3eb6758089380a103f0882de6db87c3ada09f91`, seven desktop packages,
+  `SHA256SUMS`, and `latest.json`.
+- Live desktop and 390 px mobile checks had no console or page errors. The
+  direct demo has a visible sample-data banner, no horizontal overflow at
+  195 CSS px (200% reflow), keyboard skip-link focus, reduced-motion fallback,
+  service-worker update, and offline reload.
+- Axe 4.11.1 found zero serious or critical findings on `/`, `/demo`,
+  `/privacy`, and `/terms`. Live demo requests stayed same-origin; the landing
+  page's only documented third-party request was the GitHub release API.
+
+## Release notes and limits
+
+The supported FUSE-less Linux production command is
+`npm run build:linux-packages`; it sets `APPIMAGE_EXTRACT_AND_RUN=1` and
+verifies both package outputs. A bare `env -u CI npx tauri build --bundles
+appimage,deb` still fails at `linuxdeploy` in this FUSE-less worker and is not
+the release workflow command. The release gate above is the command used by
+the repository workflow and passed.
+
+macOS and Windows builds are intentionally unsigned. The app starts but cannot
+find an audio source in this headless worker; the isolated PulseAudio native
+claims exercised actual local English and German captioning instead.
+
+## Run it
 
 ```sh
-env -u CI npx tauri build --bundles appimage,deb
-```
-
-It left only `Local Live Captions.AppDir`, matching the reported failed
-`linuxdeploy` path. The repaired production command completed:
-
-```sh
-npm run build:linux-packages
-```
-
-It produced local Linux artifacts for `0.1.18`:
-
-- `Local Live Captions_0.1.18_amd64.AppImage` — 81,709,560 bytes,
-  SHA-256 `e4db982fd7456617ee3303c1a4365003918e8f0b1b6c40e4da8b3e59311fd765`
-- `Local Live Captions_0.1.18_amd64.deb` — 5,437,696 bytes,
-  SHA-256 `cdf2db800dbb14ab74bf08476e70bf41d016a10a0b0ea4ecbb4028abd62747c5`
-
-The DEB metadata reports package version `0.1.18` and architecture `amd64`.
-The unit regression rejects both the missing extraction environment and a
-partial AppDir/undersized package. The workflow also installs
-`libglib2.0-dev`, which the clean native compiler requires.
-
-## Verification
-
-Completed locally after a clean `npm ci`:
-
-```sh
+npm ci
 npm test
 npm run typecheck
 npm run lint
-cargo fmt --check --manifest-path src-tauri/Cargo.toml
-cargo test --manifest-path src-tauri/Cargo.toml
-cargo check --manifest-path src-tauri/Cargo.toml
 npm run build
 npm run build:linux-packages
-npx playwright test --project=mobile --grep '200% reflow uses a narrow demo layout'
-npx playwright test --project=chromium --grep 'dark pages have no serious or critical contrast violations'
+npm run verify:published-release
 ```
 
-`npm test` completed all 30 unit tests and isolated Chromium/mobile browser
-projects. The new 200%-reflow regression uses a 195 × 844 viewport, asserts no
-horizontal overflow, and confirms Reset demo, Start for real, Pause captions,
-and Export TXT remain visible in the viewport.
-
-`/opt/fleet/lib/verify-url.sh` passed for local `/demo`: HTTP 200, title
-`Demo — Local Live Captions`, `lang=en`, exactly one h1, main landmark, no
-missing image alt text, no unlabeled button, and no console error. Its captured
-output is in [`repair-14-verify-demo`](repair-14-verify-demo/). The existing
-Playwright Axe integration passed dark landing/demo with no serious or critical
-violations.
-
-## Release and deployment procedure
-
-Create the annotated `v0.1.18` tag from this exact commit and push it. The
-release workflow resolves the tag commit before testing and packaging; its
-manifest job verifies the live GitHub release contract, every required desktop
-asset, every manifest URL, and every checksum. After that succeeds, deploy:
-
-```sh
-RELEASE_TAG=v0.1.18 npm run deploy:release-site
-npm run verify:published-release -- --expected-tag v0.1.18 --expected-commit <tag-commit>
-```
-
-The site must not be deployed from a later checkout. `deploy:release-site`
-fails before upload if the tag, checkout, or generated release identity differ.
-
-## Known limits
-
-- macOS and Windows packages are unsigned. Their builds and checksums are
-  produced on their native GitHub runners; opening those installers still needs
-  those operating systems.
-- The planned 20-minute accessibility pilot remains a product outcome measure,
-  not a release-gate automation.
+Use `/demo` for the one-click isolated sample. It keeps its browser values in
+the `demo:` session-storage namespace and clears them on reset or exit.
