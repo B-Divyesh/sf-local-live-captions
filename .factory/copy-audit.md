@@ -99,4 +99,4 @@ word. Decorative text is absent from the landing page.
 | Isolated try-out | demo |
 
 Catalog description: **Caption Linux calls, lectures, and recordings locally without uploading audio.**
-It starts with a verb and is 77 characters long.
+It starts with a verb and is 78 characters long.
