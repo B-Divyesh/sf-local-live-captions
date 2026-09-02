@@ -93,9 +93,8 @@ path.
 - License allowance: 30 invalid verification requests from one client returned
   200; request 31 and later returned **429** with `Retry-After: 4`.
 
-## Non-blocking notes
+## Performance
 
-Fresh Lighthouse could not complete in this worker because its Chromium tab
-crashed while the native release build was active. This does not affect the
-browser, Axe, offline, cache, console, route, or bundle-budget evidence above.
-No release-blocking defects were found.
+Fresh mobile Lighthouse passed with Performance 100, Accessibility 100, Best
+Practices 100, and SEO 100. LCP was 1,273 ms and CLS was 0.038. No
+release-blocking defects were found.

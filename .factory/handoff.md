@@ -36,6 +36,8 @@ matches `SHA256SUMS` and reports package `local-live-captions` version
 - Axe 4.11.1 found zero serious or critical findings on `/`, `/demo`,
   `/privacy`, and `/terms`. Live demo requests stayed same-origin; the landing
   page's only documented third-party request was the GitHub release API.
+- Fresh mobile Lighthouse scored 100 for Performance, Accessibility, Best
+  Practices, and SEO; LCP was 1,273 ms and CLS was 0.038.
 
 ## Release notes and limits
 
