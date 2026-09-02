@@ -51,8 +51,8 @@ test("mobile first screen keeps the three plain facts visible", async ({ page },
 test("download refuses a stale release and selects the exact site build", async ({ page }) => {
   await page.addInitScript(() => { Reflect.deleteProperty(Navigator.prototype, "serviceWorker"); });
   const assets = [
-    { name: "Local.Live.Captions_0.1.17_amd64.AppImage", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.17/Local.Live.Captions_0.1.17_amd64.AppImage" },
-    { name: "Local.Live.Captions_0.1.17_x64_en-US.msi", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.17/Local.Live.Captions_0.1.17_x64_en-US.msi" },
+    { name: "Local.Live.Captions_0.1.18_amd64.AppImage", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.18/Local.Live.Captions_0.1.18_amd64.AppImage" },
+    { name: "Local.Live.Captions_0.1.18_x64_en-US.msi", browser_download_url: "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.18/Local.Live.Captions_0.1.18_x64_en-US.msi" },
   ];
   let release = { tag_name: "v0.1.7", target_commitish: "older-sha", assets };
   await page.route("https://api.github.com/**", (route) => route.fulfill({
@@ -64,14 +64,14 @@ test("download refuses a stale release and selects the exact site build", async 
   await expect(page.getByText("Downloads are being published.")).toBeVisible();
   await expect(page.getByRole("link", { name: /^Download for/ })).toHaveCount(0);
 
-  release = { tag_name: "v0.1.17", target_commitish: "older-sha", assets };
+  release = { tag_name: "v0.1.18", target_commitish: "older-sha", assets };
   await page.reload();
   await expect(page.getByText("Downloads are being published.")).toBeVisible();
   await expect(page.getByRole("link", { name: /^Download for/ })).toHaveCount(0);
 
-  release = { tag_name: "v0.1.17", target_commitish: buildSha, assets };
+  release = { tag_name: "v0.1.18", target_commitish: buildSha, assets };
   await page.reload();
-  await expect(page.getByRole("link", { name: /^Download for/ })).toHaveAttribute("href", /\/releases\/download\/v0\.1\.17\//);
+  await expect(page.getByRole("link", { name: /^Download for/ })).toHaveAttribute("href", /\/releases\/download\/v0\.1\.18\//);
 });
 
 test("Android visitors get a desktop explanation instead of a Linux package", async ({ page }) => {
@@ -116,6 +116,27 @@ test("mobile layout fits 390px", async ({ page }, testInfo) => {
   await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
   const resizedOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(resizedOverflow).toBeLessThanOrEqual(1);
+});
+
+test("200% reflow uses a narrow demo layout without horizontal scrolling", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "mobile project only");
+  // A 390 px phone at 200% text reflow has an effective 195 CSS px viewport.
+  // This is intentionally not an overflow:hidden assertion: every demo
+  // control remains visible and the document itself stays within the viewport.
+  await page.setViewportSize({ width: 195, height: 844 });
+  await page.goto("/demo");
+  const dimensions = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }));
+  expect(dimensions.scrollWidth - dimensions.clientWidth).toBeLessThanOrEqual(1);
+  for (const name of ["Reset demo", "Start for real", "Pause captions", "Export TXT"]) {
+    const locator = page.getByRole(name === "Start for real" ? "link" : "button", { name });
+    await expect(locator).toBeVisible();
+    const box = await locator.boundingBox();
+    expect(box, name).not.toBeNull();
+    expect(box!.x + box!.width, name).toBeLessThanOrEqual(196);
+  }
 });
 
 test("one click demo query opens an isolated sample with reset controls", async ({ page }) => {

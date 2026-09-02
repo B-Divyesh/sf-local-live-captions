@@ -21,7 +21,7 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; min-height: 100vh; background: var(--paper); font-size: 17px; line-height: 1.55; }
+body { margin: 0; min-height: 100vh; background: var(--paper); font-size: 17px; line-height: 1.55; }
 button, input, select { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 a { color: inherit; text-underline-offset: 4px; text-decoration-thickness: 1.5px; }
@@ -238,6 +238,32 @@ footer p { color: #c8d4cc; margin-bottom: 0; }
   .demo-notes { padding: 24px 18px; }
   .app-brand > span:last-child { display: none; }
   .app-actions, .overlay-controls, .storage-actions { align-items: stretch; flex-direction: column; }
+}
+
+/*
+ * 200% reflow turns a 390 px phone viewport into roughly 195 CSS pixels.
+ * Keep this as a deliberate one-column reading mode instead of preserving the
+ * phone navigation's two-column minimum layout.
+ */
+@media (max-width: 240px) {
+  body { min-width: 0; font-size: 16px; overflow-wrap: anywhere; }
+  .site-header { align-items: stretch; padding: 12px; }
+  nav { width: 100%; grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  nav a { justify-content: center; min-width: 0; }
+  .hero, .product-preview, .steps, .limits, .price, .download, .demo-main { padding-inline: 12px; }
+  .demo-main { padding-block: 32px 48px; gap: 24px; }
+  .demo-banner { padding: 10px 12px; gap: 8px; }
+  .demo-banner span { width: 100%; align-items: stretch; flex-direction: column; gap: 8px; }
+  .demo-banner button, .demo-banner a { justify-content: center; width: 100%; }
+  .caption-stage { min-height: 0; padding: 12px; border-radius: 20px 4px 20px 4px; }
+  .caption-stack { padding-block: 32px; }
+  .caption-stack p, .demo-notes li { overflow-wrap: anywhere; }
+  .demo-notes { padding: 20px 12px; }
+  .button, input, select { max-width: 100%; min-width: 0; overflow-wrap: anywhere; }
+  .export-row { display: grid; grid-template-columns: minmax(0, 1fr); }
+  footer { padding: 32px 12px; gap: 24px; }
+  .legal { padding-inline: 12px; }
+  .lost-ribbon { width: min(100%, 180px); }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,14 @@
+{
+  "tag_name": "v0.1.18",
+  "assets": [
+    "latest.json",
+    "Local.Live.Captions-0.1.18-1.x86_64.rpm",
+    "Local.Live.Captions_0.1.18_amd64.AppImage",
+    "Local.Live.Captions_0.1.18_amd64.deb",
+    "Local.Live.Captions_0.1.18_universal.dmg",
+    "Local.Live.Captions_0.1.18_x64-setup.exe",
+    "Local.Live.Captions_0.1.18_x64_en-US.msi",
+    "Local.Live.Captions_universal.app.tar.gz",
+    "SHA256SUMS"
+  ]
+}

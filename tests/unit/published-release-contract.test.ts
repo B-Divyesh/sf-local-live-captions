@@ -7,18 +7,18 @@ const verification13PublishedRelease = "6b919f6a10327f48725327fd2d3ed02ddf9dcec8
 const verification16Candidate = "80ecfa4539967d063d22cf00abce8946ac0505fd";
 const verification16PublishedRelease = "0ecd456533c7eaac81923580e7875c381e1b50ba";
 const names = [
-  "Local.Live.Captions-0.1.17-1.x86_64.rpm",
-  "Local.Live.Captions_0.1.17_amd64.AppImage",
-  "Local.Live.Captions_0.1.17_amd64.deb",
-  "Local.Live.Captions_0.1.17_universal.dmg",
-  "Local.Live.Captions_0.1.17_x64-setup.exe",
-  "Local.Live.Captions_0.1.17_x64_en-US.msi",
+  "Local.Live.Captions-0.1.18-1.x86_64.rpm",
+  "Local.Live.Captions_0.1.18_amd64.AppImage",
+  "Local.Live.Captions_0.1.18_amd64.deb",
+  "Local.Live.Captions_0.1.18_universal.dmg",
+  "Local.Live.Captions_0.1.18_x64-setup.exe",
+  "Local.Live.Captions_0.1.18_x64_en-US.msi",
   "Local.Live.Captions_universal.app.tar.gz",
   "SHA256SUMS",
   "latest.json",
 ];
 
-function publication(commit = repairedCommit, identity = { tag: "v0.1.17", commit: repairedCommit }) {
+function publication(commit = repairedCommit, identity = { tag: "v0.1.18", commit: repairedCommit }) {
   const assets = names.map((name) => ({
     name,
     browser_download_url: `https://github.com/B-Divyesh/sf-local-live-captions/releases/download/${identity.tag}/${name}`,
@@ -63,8 +63,8 @@ describe("published release contract", () => {
     incomplete.manifest.assets = incomplete.manifest.assets.filter((asset) => !asset.name.endsWith(".AppImage"));
     incomplete.checksums = incomplete.checksums.split("\n").filter((line) => !line.endsWith(".AppImage")).join("\n");
     expect(publicationErrors(incomplete)).toEqual([
-      "latest.json does not contain the published URL for Local.Live.Captions_0.1.17_amd64.AppImage.",
-      "SHA256SUMS does not cover Local.Live.Captions_0.1.17_amd64.AppImage.",
+      "latest.json does not contain the published URL for Local.Live.Captions_0.1.18_amd64.AppImage.",
+      "SHA256SUMS does not cover Local.Live.Captions_0.1.18_amd64.AppImage.",
     ]);
   });
 });

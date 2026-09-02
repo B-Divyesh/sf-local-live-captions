@@ -55,7 +55,7 @@ jobs:
         run: npm run verify:release-source
       - uses: dtolnay/rust-toolchain@stable
       - name: Install native test dependencies
-        run: sudo apt-get update && sudo apt-get install -y build-essential cmake file libclang-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libasound2-dev libpulse-dev pulseaudio pulseaudio-utils
+        run: sudo apt-get update && sudo apt-get install -y build-essential cmake file libclang-dev libglib2.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libasound2-dev libpulse-dev pulseaudio pulseaudio-utils
       - run: npm ci
       - name: Install the pinned Playwright browser
         run: npx playwright install --with-deps chromium
@@ -68,8 +68,31 @@ jobs:
       - run: npm run test:linux-audio
       - run: cargo check --manifest-path src-tauri/Cargo.toml
 
-  build:
+  linux-package:
     needs: [resolve, verify]
+    runs-on: ubuntu-22.04
+    env:
+      CI: 1
+      RELEASE_TAG: ${{ needs.resolve.outputs.tag }}
+      RELEASE_COMMIT: ${{ needs.resolve.outputs.commit }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ needs.resolve.outputs.tag }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install Linux package dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential cmake file libclang-dev libglib2.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libasound2-dev libpulse-dev pulseaudio-utils
+      - run: npm ci
+      - name: Build a usable Linux AppImage and DEB without FUSE
+        run: npm run build:linux-packages
+
+  build:
+    needs: [resolve, verify, linux-package]
     strategy:
       fail-fast: false
       matrix:
@@ -100,7 +123,7 @@ jobs:
           echo "CMAKE_OSX_DEPLOYMENT_TARGET=10.15" >> "$GITHUB_ENV"
       - name: Install Linux libraries
         if: matrix.platform == 'ubuntu-22.04'
-        run: sudo apt-get update && sudo apt-get install -y build-essential cmake file libclang-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libasound2-dev libpulse-dev pulseaudio-utils
+        run: sudo apt-get update && sudo apt-get install -y build-essential cmake file libclang-dev libglib2.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libasound2-dev libpulse-dev pulseaudio-utils
       - run: npm ci
       - uses: tauri-apps/tauri-action@v0
         env:

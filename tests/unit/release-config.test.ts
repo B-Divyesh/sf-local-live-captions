@@ -68,9 +68,9 @@ describe("release configuration regressions", () => {
   });
 
   it("@claim:release-artifacts publishes the documented desktop packages and integrity files", async () => {
-    const [workflow, fixture, packageText, tauriText, cargoText, shellInstaller, windowsInstaller, viteConfig, releaseBuilder, deployer] = await Promise.all([
+    const [workflow, fixture, packageText, tauriText, cargoText, shellInstaller, windowsInstaller, viteConfig, releaseBuilder, deployer, linuxBuilder] = await Promise.all([
       readFile(".github/workflows/release.yml", "utf8"),
-      readFile("tests/fixtures/release-v0.1.17.json", "utf8"),
+      readFile("tests/fixtures/release-v0.1.18.json", "utf8"),
       readFile("package.json", "utf8"),
       readFile("src-tauri/tauri.conf.json", "utf8"),
       readFile("src-tauri/Cargo.toml", "utf8"),
@@ -79,12 +79,16 @@ describe("release configuration regressions", () => {
       readFile("vite.config.ts", "utf8"),
       readFile("scripts/build-release-site.mjs", "utf8"),
       readFile("scripts/deploy-release-site.mjs", "utf8"),
+      readFile("scripts/build-linux-packages.mjs", "utf8"),
     ]);
     const assets = JSON.parse(fixture).assets as string[];
     const packageVersion = JSON.parse(packageText).version as string;
     const tauriVersion = JSON.parse(tauriText).version as string;
     const cargoVersion = cargoText.match(/^version = "([^"]+)"$/m)?.[1];
     expect(workflow).toContain("tauri-apps/tauri-action@v0");
+    expect(workflow).toContain("linux-package:");
+    expect(workflow).toContain("npm run build:linux-packages");
+    expect(workflow).toContain("libglib2.0-dev");
     expect(workflow).toContain("tags: [\"v*\"]");
     expect(workflow).toContain("workflow_dispatch");
     expect(workflow).toContain("sha256sum * > SHA256SUMS");
@@ -109,6 +113,9 @@ describe("release configuration regressions", () => {
     expect(releaseBuilder).toContain("VITE_BUILD_SHA: releaseCommit");
     expect(deployer).toContain('npm", ["run", "build:release-site"]');
     expect(deployer).toContain('"/opt/fleet/lib/deploy-static.sh"');
+    expect(linuxBuilder).toContain('APPIMAGE_EXTRACT_AND_RUN: "1"');
+    expect(linuxBuilder).toContain('CI: "true"');
+    expect(linuxBuilder).toContain('"appimage,deb"');
     expect(JSON.parse(fixture).tag_name).toBe(`v${packageVersion}`);
     expect(tauriVersion).toBe(packageVersion);
     expect(cargoVersion).toBe(packageVersion);
@@ -119,15 +126,15 @@ describe("release configuration regressions", () => {
 
   it("rejects stale release tags and source commits before packaging", () => {
     const valid = {
-      releaseTag: "v0.1.17",
+      releaseTag: "v0.1.18",
       expectedSha: "candidate-sha",
       tagCommit: "candidate-sha",
-      packageVersion: "0.1.17",
-      tauriVersion: "0.1.17",
-      cargoVersion: "0.1.17",
+      packageVersion: "0.1.18",
+      tauriVersion: "0.1.18",
+      cargoVersion: "0.1.18",
     };
     expect(releaseSourceErrors(valid)).toEqual([]);
-    expect(releaseSourceErrors({ ...valid, releaseTag: "v0.1.16" })).toContain("Release tag v0.1.16 does not match package version 0.1.17.");
-    expect(releaseSourceErrors({ ...valid, tagCommit: "older-sha" })).toContain("Tag v0.1.17 resolves to older-sha, but this workflow is building candidate-sha.");
+    expect(releaseSourceErrors({ ...valid, releaseTag: "v0.1.16" })).toContain("Release tag v0.1.16 does not match package version 0.1.18.");
+    expect(releaseSourceErrors({ ...valid, tagCommit: "older-sha" })).toContain("Tag v0.1.18 resolves to older-sha, but this workflow is building candidate-sha.");
   });
 });

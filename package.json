@@ -1,6 +1,6 @@
 {
   "name": "local-live-captions",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,6 +10,7 @@
     "build": "npm run build:site && npm run build:app",
     "build:site": "vite build --mode site --outDir dist/site && cp dist/site/index.html dist/site/404.html",
     "build:release-site": "node scripts/build-release-site.mjs",
+    "build:linux-packages": "node scripts/build-linux-packages.mjs",
     "deploy:release-site": "node scripts/deploy-release-site.mjs",
     "build:app": "vite build --mode desktop --outDir dist/app",
     "test": "vitest run && node scripts/run-e2e.mjs",

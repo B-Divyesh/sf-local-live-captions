@@ -53,19 +53,19 @@ npm run build        # site in dist/site; desktop frontend in dist/app
 cargo fmt --check --manifest-path src-tauri/Cargo.toml
 cargo test --manifest-path src-tauri/Cargo.toml
 cargo check --manifest-path src-tauri/Cargo.toml
-APPIMAGE_EXTRACT_AND_RUN=1 CI=true npm run tauri build
+npm run build:linux-packages # AppImage + DEB, including FUSE-less Linux workers
 ```
 
 Release verification sets `CI=1`. Desktop and 390 px mobile tests run in
 separate Playwright processes, and every test receives a newly launched browser
 and context. An unexpected Chromium exit gets one clean retry in CI.
 
-Desktop installers are built only in GitHub Actions. Tag the exact commit with the version from `package.json`, such as `v0.1.17`. To rebuild, run the workflow for that tag. The workflow resolves that tag to one commit before packaging. It creates unsigned packages for macOS, Windows, and Linux. It also publishes `SHA256SUMS` and `latest.json` with that commit. The workflow audits their source identity, package list, URLs, and checksums after publication.
+Desktop installers are built in GitHub Actions. Tag the exact commit with the version from `package.json`, such as `v0.1.18`. To rebuild, run the workflow for that tag. The workflow resolves that tag to one commit before packaging. It creates unsigned packages for macOS, Windows, and Linux. Linux first proves a usable AppImage and DEB in a FUSE-less worker. It also publishes `SHA256SUMS` and `latest.json` with that commit. The workflow audits their source identity, package list, URLs, and checksums after publication.
 
 Deploy the static site only from that checked-out tag:
 
 ```sh
-RELEASE_TAG=v0.1.17 npm run deploy:release-site
+RELEASE_TAG=v0.1.18 npm run deploy:release-site
 npm run verify:published-release
 ```
 

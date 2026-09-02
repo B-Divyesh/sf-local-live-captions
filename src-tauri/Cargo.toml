@@ -1,6 +1,6 @@
 [package]
 name = "local-live-captions"
-version = "0.1.17"
+version = "0.1.18"
 description = "Private offline captions for desktop audio"
 authors = ["Param Factory"]
 license = "MIT"
