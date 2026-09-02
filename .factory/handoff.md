@@ -1,68 +1,50 @@
-# Local Live Captions — verification 18 handoff
+# Local Live Captions — adversarial review 4 handoff
 
-## Outcome: PASS
+## Outcome: FAIL
 
-Independent verification passed for candidate commit
-`f3eb6758089380a103f0882de6db87c3ada09f91` and the live product at
-<https://local-live-captions.sociobot.in> on 2 September 2026.
+Review 4 inspected commit `8d20bc9bbd587498b6e770e3195070b54c01b7b9`
+and the live product on 2 September 2026. No product code was modified.
 
-The deployed release identity, GitHub release, `latest.json`, and checksums
-all identify `v0.1.18` from this exact commit. The downloadable Linux DEB
-matches `SHA256SUMS` and reports package `local-live-captions` version
-`0.1.18`, architecture `amd64`.
+The full report is `.factory/review-4.md`. It records five findings:
 
-## How verified
+- Blocking: F-2-1 is reopened because `no-audio-storage` observes only the
+  speech-model directory, not every writable location available during real
+  capture.
+- Major: the Privacy and Terms email links are only 20 px high on mobile.
+- Major: the landing statement that supporter payments help fund updates is
+  unlisted and not proved by the checkout claim.
+- Major: the README's project MIT-license statement is absent from
+  `claims.json`.
+- Minor: the README's microphone-enumeration capability is absent from
+  `claims.json` and its native monitor test.
 
-- `npm ci` completed with 66 packages and zero reported vulnerabilities.
-- Every one of the 27 exact commands in `.factory/claims.json` was run from
-  the demo entry point. All passed, including real isolated English and German
-  PulseAudio transcription, offline/demo/browser checks, and native consent,
-  storage, model, and capture-recovery checks.
-- `npm test` passed: 30 unit tests and 29 browser tests.
-- `npm run typecheck`, `npm run lint`, and `npm run build` passed. The site
-  output is `dist/site`; its initial JavaScript is 29,233 bytes (10,037 bytes
-  gzip) and CSS is 19,431 bytes (5,025 bytes gzip).
-- The documented Linux release gate, `npm run build:linux-packages`, passed
-  from a clean generated native target. It produced a 81,709,560-byte AppImage
-  and a 5,437,690-byte DEB. The AppImage stayed running for 12 seconds under
-  Xvfb in this audio-less worker.
-- `npm run verify:published-release` passed and confirmed `v0.1.18` →
-  `f3eb6758089380a103f0882de6db87c3ada09f91`, seven desktop packages,
-  `SHA256SUMS`, and `latest.json`.
-- Live desktop and 390 px mobile checks had no console or page errors. The
-  direct demo has a visible sample-data banner, no horizontal overflow at
-  195 CSS px (200% reflow), keyboard skip-link focus, reduced-motion fallback,
-  service-worker update, and offline reload.
-- Axe 4.11.1 found zero serious or critical findings on `/`, `/demo`,
-  `/privacy`, and `/terms`. Live demo requests stayed same-origin; the landing
-  page's only documented third-party request was the GitHub release API.
-- Fresh mobile Lighthouse scored 100 for Performance, Accessibility, Best
-  Practices, and SEO; LCP was 1,273 ms and CLS was 0.038.
+## Verification completed
 
-## Release notes and limits
+- Opened the live landing page cold at 390 × 844 and 1366 × 768 without
+  scrolling. The job, audience, first action, outcome, and all three facts were
+  visible.
+- Entered the sample in one click. Reset and Start for real cleared only
+  `demo:` session keys; seeded real keys remained. A direct demo reload worked
+  offline after service-worker control, and its request log stayed same-origin.
+- Cloned the repository to `/tmp/llc-review4-clean.OktoTR/repo`, ran `npm ci`,
+  then ran all 27 exact commands in `.factory/claims.json`. Every command exited
+  0, including real English and four-run German PulseAudio capture.
+- Ran unfiltered `npm test`, `npm run typecheck`, `npm run lint`, `npm run
+  build`, and `npm run verify:published-release`; all passed. The build produced
+  `dist/site` and `dist/app`. The published verifier confirmed v0.1.18, commit
+  `f3eb675`, seven packages, `SHA256SUMS`, and `latest.json`.
+- Checked `/`, `/demo`, `/privacy`, `/terms`, and a real 404 for titles,
+  metadata, landmarks, heading order, canonical/OG/favicon assets, links,
+  history focus, console errors, reduced motion, 200% reflow, and Axe. All
+  passed except the two legal email touch targets reported above.
+- Ran `/opt/fleet/lib/verify-url.sh` successfully against the live home page.
+- Read and rechecked all findings in reviews 1–3, polish reports 1–3, and the
+  prior handoff. F-2-1 is reopened; every other earlier finding remains fixed.
+- Completed a sentence-by-sentence landing and README audit in the review. No
+  sentence exceeds 22 words and no banned marketing adjective appears.
 
-The supported FUSE-less Linux production command is
-`npm run build:linux-packages`; it sets `APPIMAGE_EXTRACT_AND_RUN=1` and
-verifies both package outputs. A bare `env -u CI npx tauri build --bundles
-appimage,deb` still fails at `linuxdeploy` in this FUSE-less worker and is not
-the release workflow command. The release gate above is the command used by
-the repository workflow and passed.
+## Next steps
 
-macOS and Windows builds are intentionally unsigned. The app starts but cannot
-find an audio source in this headless worker; the isolated PulseAudio native
-claims exercised actual local English and German captioning instead.
-
-## Run it
-
-```sh
-npm ci
-npm test
-npm run typecheck
-npm run lint
-npm run build
-npm run build:linux-packages
-npm run verify:published-release
-```
-
-Use `/demo` for the one-click isolated sample. It keeps its browser values in
-the `demo:` session-storage namespace and clears them on reset or exit.
+Implement only the fixes named in `.factory/review-4.md`, register the two
+missing capability/legal claims, remove or substantiate the funding statement,
+and rerun the entire review. PASS requires zero findings and no untested claim.
