@@ -13,6 +13,7 @@ describe("one-line installer release identity", () => {
     const installDir = join(root, "installed");
     const identity = join(root, "identity.json");
     const release = join(root, "release.json");
+    const manifest = join(root, "latest.json");
     const asset = join(root, "caption.AppImage");
     await mkdir(fakeBin);
     await writeFile(identity, JSON.stringify({ tag: "v0.1.16", commit }));
@@ -32,6 +33,7 @@ done
 case "$url" in
   */release-identity.json) cat "$MOCK_IDENTITY" ;;
   */releases/latest) cat "$MOCK_RELEASE" ;;
+  */latest.json) cat "$MOCK_MANIFEST" ;;
   */caption.AppImage) cp "$MOCK_ASSET" "$out" ;;
   */SHA256SUMS) printf '%s  caption.AppImage\\n' "$(sha256sum "$MOCK_ASSET" | cut -d ' ' -f 1)" > "$out" ;;
   *) exit 22 ;;
@@ -45,6 +47,7 @@ esac
       PATH: `${fakeBin}:${process.env.PATH}`,
       MOCK_IDENTITY: identity,
       MOCK_RELEASE: release,
+      MOCK_MANIFEST: manifest,
       MOCK_ASSET: asset,
     };
     const releaseData = (target: string) => JSON.stringify({
@@ -53,6 +56,7 @@ esac
       assets: [
         { browser_download_url: "https://downloads.invalid/caption.AppImage" },
         { browser_download_url: "https://downloads.invalid/SHA256SUMS" },
+        { browser_download_url: "https://downloads.invalid/latest.json" },
       ],
     }, null, 2);
 
@@ -62,6 +66,12 @@ esac
     expect(stale.stderr).toContain("still being published");
 
     await writeFile(release, releaseData(commit));
+    await writeFile(manifest, JSON.stringify({ version: "v0.1.16", commit: "older-source" }));
+    const staleManifest = spawnSync("sh", ["public/install.sh"], { cwd: process.cwd(), env, encoding: "utf8" });
+    expect(staleManifest.status).toBe(1);
+    expect(staleManifest.stderr).toContain("still being published");
+
+    await writeFile(manifest, JSON.stringify({ version: "v0.1.16", commit }));
     execFileSync("sh", ["public/install.sh"], { cwd: process.cwd(), env });
     expect(await readFile(join(installDir, "local-live-captions"), "utf8")).toBe("exact release package\n");
   });

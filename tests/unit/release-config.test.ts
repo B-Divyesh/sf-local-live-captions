@@ -68,9 +68,9 @@ describe("release configuration regressions", () => {
   });
 
   it("@claim:release-artifacts publishes the documented desktop packages and integrity files", async () => {
-    const [workflow, fixture, packageText, tauriText, cargoText, shellInstaller, windowsInstaller, viteConfig, releaseBuilder] = await Promise.all([
+    const [workflow, fixture, packageText, tauriText, cargoText, shellInstaller, windowsInstaller, viteConfig, releaseBuilder, deployer] = await Promise.all([
       readFile(".github/workflows/release.yml", "utf8"),
-      readFile("tests/fixtures/release-v0.1.16.json", "utf8"),
+      readFile("tests/fixtures/release-v0.1.17.json", "utf8"),
       readFile("package.json", "utf8"),
       readFile("src-tauri/tauri.conf.json", "utf8"),
       readFile("src-tauri/Cargo.toml", "utf8"),
@@ -78,6 +78,7 @@ describe("release configuration regressions", () => {
       readFile("public/install.ps1", "utf8"),
       readFile("vite.config.ts", "utf8"),
       readFile("scripts/build-release-site.mjs", "utf8"),
+      readFile("scripts/deploy-release-site.mjs", "utf8"),
     ]);
     const assets = JSON.parse(fixture).assets as string[];
     const packageVersion = JSON.parse(packageText).version as string;
@@ -98,10 +99,16 @@ describe("release configuration regressions", () => {
     expect(workflow).toContain("commit:$commit");
     expect(shellInstaller).toContain("release-identity.json");
     expect(shellInstaller).toContain('release_commit" != "$expected_commit');
+    expect(shellInstaller).toContain('manifest_commit" != "$expected_commit');
     expect(windowsInstaller).toContain("$release.target_commitish -ne $identity.commit");
+    expect(windowsInstaller).toContain("$manifest.commit -ne $identity.commit");
+    expect(windowsInstaller).toContain("param([switch]$VerifyOnly)");
+    expect(windowsInstaller).toContain("Get-FileHash -Algorithm SHA256");
     expect(viteConfig).toContain('fileName: "release-identity.json"');
     expect(releaseBuilder).toContain("Static release must be built from");
     expect(releaseBuilder).toContain("VITE_BUILD_SHA: releaseCommit");
+    expect(deployer).toContain('npm", ["run", "build:release-site"]');
+    expect(deployer).toContain('"/opt/fleet/lib/deploy-static.sh"');
     expect(JSON.parse(fixture).tag_name).toBe(`v${packageVersion}`);
     expect(tauriVersion).toBe(packageVersion);
     expect(cargoVersion).toBe(packageVersion);
@@ -112,15 +119,15 @@ describe("release configuration regressions", () => {
 
   it("rejects stale release tags and source commits before packaging", () => {
     const valid = {
-      releaseTag: "v0.1.16",
+      releaseTag: "v0.1.17",
       expectedSha: "candidate-sha",
       tagCommit: "candidate-sha",
-      packageVersion: "0.1.16",
-      tauriVersion: "0.1.16",
-      cargoVersion: "0.1.16",
+      packageVersion: "0.1.17",
+      tauriVersion: "0.1.17",
+      cargoVersion: "0.1.17",
     };
     expect(releaseSourceErrors(valid)).toEqual([]);
-    expect(releaseSourceErrors({ ...valid, releaseTag: "v0.1.15" })).toContain("Release tag v0.1.15 does not match package version 0.1.16.");
-    expect(releaseSourceErrors({ ...valid, tagCommit: "older-sha" })).toContain("Tag v0.1.16 resolves to older-sha, but this workflow is building candidate-sha.");
+    expect(releaseSourceErrors({ ...valid, releaseTag: "v0.1.16" })).toContain("Release tag v0.1.16 does not match package version 0.1.17.");
+    expect(releaseSourceErrors({ ...valid, tagCommit: "older-sha" })).toContain("Tag v0.1.17 resolves to older-sha, but this workflow is building candidate-sha.");
   });
 });

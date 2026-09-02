@@ -1,0 +1,53 @@
+name: Verify published installers
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Immutable release tag to verify
+        required: true
+      commit:
+        description: Commit named by the deployed release identity
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  release-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run verify:published-release -- --expected-tag "${{ inputs.tag }}" --expected-commit "${{ inputs.commit }}" --attempts 12
+      - run: npm run verify:published-release -- --attempts 12
+
+  linux-installer:
+    needs: release-contract
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run the published checksum-validating Linux installer
+        shell: bash
+        run: |
+          set -euo pipefail
+          install_dir="$RUNNER_TEMP/local-live-captions-bin"
+          curl -fsSL https://local-live-captions.sociobot.in/install.sh -o "$RUNNER_TEMP/install.sh"
+          XDG_BIN_HOME="$install_dir" sh "$RUNNER_TEMP/install.sh"
+          test -x "$install_dir/local-live-captions"
+
+  windows-installer:
+    needs: release-contract
+    runs-on: windows-latest
+    steps:
+      - name: Run the published checksum-validating Windows installer
+        shell: pwsh
+        run: |
+          $script = Join-Path $env:RUNNER_TEMP "install.ps1"
+          Invoke-WebRequest -Uri https://local-live-captions.sociobot.in/install.ps1 -OutFile $script
+          & $script -VerifyOnly

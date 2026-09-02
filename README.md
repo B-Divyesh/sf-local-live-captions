@@ -60,17 +60,16 @@ Release verification sets `CI=1`. Desktop and 390 px mobile tests run in
 separate Playwright processes, and every test receives a newly launched browser
 and context. An unexpected Chromium exit gets one clean retry in CI.
 
-Desktop installers are built only in GitHub Actions. Tag the exact commit with the version from `package.json`, such as `v0.1.16`. To rebuild, run the workflow for that tag. The workflow resolves that tag to one commit before packaging. It creates unsigned packages for macOS, Windows, and Linux. It also publishes `SHA256SUMS` and `latest.json` with that commit. The workflow audits their source identity, package list, URLs, and checksums after publication.
+Desktop installers are built only in GitHub Actions. Tag the exact commit with the version from `package.json`, such as `v0.1.17`. To rebuild, run the workflow for that tag. The workflow resolves that tag to one commit before packaging. It creates unsigned packages for macOS, Windows, and Linux. It also publishes `SHA256SUMS` and `latest.json` with that commit. The workflow audits their source identity, package list, URLs, and checksums after publication.
 
 Deploy the static site only from that checked-out tag:
 
 ```sh
-RELEASE_TAG=v0.1.16 npm run build:release-site
-/opt/fleet/lib/deploy-static.sh local-live-captions dist/site
+RELEASE_TAG=v0.1.17 npm run deploy:release-site
 npm run verify:published-release
 ```
 
-`build:release-site` stops before writing a deployable site when the checkout, tag, or generated `release-identity.json` disagree. The site offers packages only when the release and deployed site use the same tag and commit.
+`deploy:release-site` always runs `build:release-site` before uploading. It stops before the uploader can see `dist/site` when the checkout, tag, or generated `release-identity.json` disagree. The site offers packages only when the release, manifest, and deployed site use the same tag and commit.
 
 ## Privacy and licensing
 
