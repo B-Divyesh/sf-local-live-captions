@@ -1,57 +1,113 @@
-# Local Live Captions — independent verification 16 handoff
+# Local Live Captions — repair 13 handoff
 
 ## Outcome
 
-**FAIL.** Candidate `80ecfa4539967d063d22cf00abce8946ac0505fd` was tested
-against `https://local-live-captions.sociobot.in` on 1 September 2026.
+**PASS.** Repair source `5a5d585503d23707cbf0fdb4a9301b9113463849` is
+published as the new annotated tag `v0.1.17`. The tag, GitHub release,
+`latest.json`, `SHA256SUMS`, deployed site, detected Linux download, and both
+published one-line installers now identify that same source. `v0.1.16` was not
+moved or reused.
 
-The product code, live demo, local native caption path, accessibility, privacy,
-performance, and all 27 declared claims pass. Release acceptance fails because
-the deployed site names candidate `80ecfa...`, while tag/release `v0.1.16`,
-`latest.json`, and all published installers name older commit `0ecd456...`.
-The live page therefore shows no platform download and `/install.sh` refuses to
-install.
+Release: <https://github.com/B-Divyesh/sf-local-live-captions/releases/tag/v0.1.17>
 
-## Blocking defect
+- GitHub cross-platform release run: <https://github.com/B-Divyesh/sf-local-live-captions/actions/runs/33574273189>
+  — resolve, verification, Linux, Windows, macOS universal, and manifest jobs
+  all passed.
+- Post-deploy installer verification: <https://github.com/B-Divyesh/sf-local-live-captions/actions/runs/33576083559>
+  — release contract, real Linux installer, and Windows PowerShell checksum
+  validation all passed.
+- Live `/release-identity.json`: `{"tag":"v0.1.17","commit":"5a5d585503d23707cbf0fdb4a9301b9113463849"}`.
+- `latest.json` has version `v0.1.17`, the same commit, and all seven package
+  URLs. The published-release verifier reports seven packages plus
+  `SHA256SUMS` and `latest.json`.
 
-High: publish a new immutable version/tag from the exact candidate, run the
-full release workflow, publish matching cross-platform assets,
-`SHA256SUMS`, and `latest.json`, then deploy the site from that tag. Do not move
-or reuse `v0.1.16`.
+## Repair
 
-Acceptance must include successful runs of:
+The independent verifier’s exact release failure was reproduced before the
+change:
 
 ```sh
-RELEASE_TAG=<new-tag> npm run build:release-site
-npm run verify:published-release -- --expected-tag <new-tag> --expected-commit 80ecfa4539967d063d22cf00abce8946ac0505fd
+RELEASE_TAG=v0.1.16 npm run build:release-site
+npm run verify:published-release -- --expected-tag v0.1.16 \
+  --expected-commit 80ecfa4539967d063d22cf00abce8946ac0505fd
 ```
 
-Also confirm the live detected-platform button points to a real asset and both
-one-line installers complete with checksum verification.
+Both failed because `v0.1.16` and its release resolved to
+`0ecd456533c7eaac81923580e7875c381e1b50ba`, not candidate `80ecfa…`.
 
-## Verification summary
+Changes in `5a5d585`:
 
-- Claims: 27/27 passed, including actual isolated English capture and four
-  German multilingual captures.
-- `npm test`: passed (26 unit, 24 desktop E2E, 25 mobile E2E; documented skips).
-- TypeScript, Clippy, Rust format/test/check, site/app builds: passed.
-- Tauri packaging: passed; DEB, RPM, and AppImage produced locally.
-- Candidate AppImage: passed 15-second Xvfb launch smoke test.
-- First-read and one-click sample: passed on desktop and 390 px mobile.
-- Accessibility/privacy/PWA: passed; zero serious/critical axe findings, clean
-  console, keyboard focus, 44 px targets, 200% text, reduced motion, same-origin
-  demo requests, and offline reload.
-- License API allowance: 30 requests; request 31 returned 429 with
-  `Retry-After: 4`.
-- Lighthouse mobile: 100 performance/accessibility/best-practices/SEO; LCP
-  1.4 s, TBT 30 ms, CLS 0.012, 111 KiB transferred.
-- Live site assets and identity match candidate `80ecfa...`; published desktop
-  artifacts do not.
+- Added a precise verification-16 regression for the `80ecfa…` / `0ecd456…`
+  stale release pair.
+- Added `npm run deploy:release-site`, which rebuilds from the selected
+  immutable tag and verifies `release-identity.json` before invoking the
+  static deployer.
+- Bumped package, Tauri, Cargo, and fixture versions to `0.1.17`.
+- Hardened both installers to require `latest.json` tag/commit identity in
+  addition to the release identity and SHA-256 check.
+- Added `verify-live-installers.yml`, which checks the deployed release,
+  downloads/installs the Linux AppImage, and uses Windows PowerShell
+  `-VerifyOnly` to verify the published MSI/EXE checksum without opening an
+  installer UI.
 
-Full evidence and exact findings are in
-[verification-16.md](verification-16.md) and `verification-evidence-16/`.
+## Verification
 
-## Known limits
+Clean local verification completed after `npm ci` (66 packages, 0
+vulnerabilities):
 
-- macOS and Windows packages were not executed in this Linux worker.
-- The 75% keep-enabled success measure still requires the planned user pilot.
+```sh
+npm test
+npm run typecheck
+npm run lint
+npm run test:browser-lifecycle
+npm run test:linux-audio
+cargo fmt --check --manifest-path src-tauri/Cargo.toml
+cargo test --manifest-path src-tauri/Cargo.toml
+cargo check --manifest-path src-tauri/Cargo.toml
+npm run build
+APPIMAGE_EXTRACT_AND_RUN=1 CI=true npm run tauri build
+```
+
+All passed. Local packaging produced the `0.1.17` Linux DEB (5,437,400
+bytes), RPM (5,436,910 bytes), and AppImage (81,709,560 bytes). The native
+acceptance run completed real isolated PulseAudio monitor capture, English
+transcription, restart, and four German captures.
+
+The exact tag build also passed:
+
+```sh
+RELEASE_TAG=v0.1.17 npm run build:release-site
+npm run verify:published-release -- --expected-tag v0.1.17 \
+  --expected-commit 5a5d585503d23707cbf0fdb4a9301b9113463849
+```
+
+Live checks passed:
+
+- Factory URL checks at `/` and `/demo`: HTTP 200, correct title/lang, one
+  `h1`, `main`, no missing image alt, unlabeled buttons, or console errors.
+  Evidence: `evidence-repair-13/verify-home/` and
+  `evidence-repair-13/verify-demo/`.
+- Playwright axe at 390 px found zero serious/critical violations on `/`,
+  `/demo`, `/privacy`, `/terms`, and the 404 route.
+- Keyboard skip link focused and moved focus to `#main`; demo pause/resume
+  worked; 390 px overflow was zero. Demo requests stayed same-origin only.
+- A fresh controlled service-worker context reloaded `/demo` offline with the
+  expected two caption ribbons and four transcript lines.
+- Release-site CSP, HSTS, permissions policy, referrer policy, nosniff, and
+  immutable cache header for the fingerprinted JS are live.
+- A live Linux browser received a real `Download for Linux` button pointing to
+  `Local.Live.Captions_0.1.17_amd64.AppImage`; no console errors occurred.
+- The live `install.sh` downloaded, source-checked, checksum-checked, and
+  installed that AppImage to an isolated PATH. Its SHA-256 was
+  `77e4842755510cd36b09e9e090678f9b5446c681074f790c58f5e139a702946e`,
+  matching `SHA256SUMS`. Windows MSI checksum published as
+  `f982248e94572929441127a3c8a492afd4c38307972b483fa935fcc183f3534c`.
+
+## Known limits / next steps
+
+- macOS and Windows packages were built and checksum-verified on their GitHub
+  runners; executing the unsigned installers still requires those operating
+  systems. The Windows checksum path was executed in the hosted Windows
+  verification job; it intentionally does not launch the installer.
+- The planned 20-minute accessibility user pilot remains a product outcome
+  measure, not a pre-release automated test.
