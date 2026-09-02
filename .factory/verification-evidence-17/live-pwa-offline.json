@@ -1,0 +1,9 @@
+{
+  "swBefore": "https://local-live-captions.sociobot.in/sw.js",
+  "offline": {
+    "title": "Demo — Local Live Captions",
+    "h1": "See live captions before installing",
+    "demo": true
+  },
+  "errors": []
+}
