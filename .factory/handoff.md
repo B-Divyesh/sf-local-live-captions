@@ -1,6 +1,39 @@
-# Local Live Captions — verification 20 handoff
+# Local Live Captions — review 5 handoff
 
 ## Outcome: PASS
+
+Strict review 5 accepted the live desktop app and release with zero findings
+and zero untested public claims.
+
+- Implementation SHA: `541c7907f2805d2bcad10140520a50309b92b435`
+- Documentation checkout: `0aae941b1a4d143a65db0335f480f19dbe081cf0`
+- Release: `v0.1.20`
+- Report: `.factory/review-5.md`
+- Fresh evidence: `.factory/review-evidence-5/`
+
+The review ran all 29 exact claim commands and every quality gate from a clean
+checkout. It independently exercised the live phone and desktop flows,
+offline reload, demo isolation, exports, invalid license handling, billing
+rate limiting, legal and 404 routes, keyboard/focus behavior, reduced motion,
+dark mode, 200% reflow, security headers, and link health.
+
+The live Linux installer installed into a fresh consumer home, matched the
+published SHA-256, remained running under Xvfb, loaded the bundled sample, and
+showed a visible keyboard focus ring. `npm run verify:published-release`
+confirmed all seven platform packages and the `v0.1.20` / `541c790…` identity.
+
+Fresh Lighthouse mobile scores were 100 for Performance, Accessibility, Best
+Practices, and SEO. LCP was 1.351 seconds, CLS 0.0118, and transfer 113,300
+bytes. The site build is 9.90 kB JavaScript gzip and 5.04 kB CSS gzip.
+
+## Known limitation
+
+macOS and Windows installers remain intentionally unsigned. The product
+discloses this. Operator-owned signing certificates are needed to change it.
+
+## Previous verification 20 handoff
+
+### Outcome: PASS
 
 Independent verification 20 accepted the live desktop app and release with
 zero findings and zero untested claims.
@@ -21,7 +54,7 @@ reduced motion, Axe checks, headers, and product-license 429 allowance passed.
 The reports added after the implementation are documentation-only; live
 release identity remains tied to the implementation SHA above.
 
-## Known limitation
+### Known limitation
 
 Installers remain intentionally unsigned. The product clearly discloses this;
 operator-owned Apple and Windows signing certificates would be required to

@@ -1,0 +1,353 @@
+{
+  "checkedAt": "2026-09-06T06:26:47.398Z",
+  "firstRead": {
+    "phone": {
+      "job": "Caption Linux calls and recordings locally",
+      "audience": "For deaf and hard-of-hearing students when lectures, calls, or recordings have no captions.",
+      "action": "Try it with sample data →",
+      "facts": [
+        "PrivateAudio stays on your device.",
+        "OfflineThe sample works offline after your first visit.",
+        "FreeEnglish and German speech models are free."
+      ],
+      "visible": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "errors": []
+    },
+    "desktop": {
+      "job": "Caption Linux calls and recordings locally",
+      "audience": "For deaf and hard-of-hearing students when lectures, calls, or recordings have no captions.",
+      "action": "Try it with sample data →",
+      "facts": [
+        "PrivateAudio stays on your device.",
+        "OfflineThe sample works offline after your first visit.",
+        "FreeEnglish and German speech models are free."
+      ],
+      "visible": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "errors": []
+    }
+  },
+  "routes": {
+    "/": {
+      "status": 200,
+      "title": "Local Live Captions — Caption calls locally",
+      "lang": "en",
+      "h1": 1,
+      "main": 1,
+      "headings": [
+        1,
+        2,
+        2,
+        3,
+        3,
+        3,
+        2,
+        2,
+        3,
+        2
+      ],
+      "errors": []
+    },
+    "/demo": {
+      "status": 200,
+      "title": "Demo — Local Live Captions",
+      "lang": "en",
+      "h1": 1,
+      "main": 1,
+      "headings": [
+        1,
+        2
+      ],
+      "errors": []
+    },
+    "/privacy": {
+      "status": 200,
+      "title": "Privacy — Local Live Captions",
+      "lang": "en",
+      "h1": 1,
+      "main": 1,
+      "headings": [
+        1,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "errors": []
+    },
+    "/terms": {
+      "status": 200,
+      "title": "Terms — Local Live Captions",
+      "lang": "en",
+      "h1": 1,
+      "main": 1,
+      "headings": [
+        1,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "errors": []
+    },
+    "/not-a-real-route": {
+      "status": 404,
+      "title": "Page not found — Local Live Captions",
+      "lang": "en",
+      "h1": 1,
+      "main": 1,
+      "headings": [
+        1
+      ],
+      "errors": []
+    }
+  },
+  "axe": {
+    "/": [],
+    "/demo": [],
+    "/privacy": [],
+    "/terms": [],
+    "/not-a-real-route": []
+  },
+  "demo": {
+    "sample": [
+      "00:00 Today we will trace how a star changes over its lifetime.",
+      "00:05 Gravity pulls the cloud inward while pressure pushes back.",
+      "00:10 That balance can last for billions of years.",
+      "00:15 Please stop me if the diagram is unclear."
+    ],
+    "txt": {
+      "filename": "sample-transcript.txt",
+      "lines": 4
+    },
+    "srt": {
+      "filename": "sample-captions.srt",
+      "cues": 4
+    },
+    "afterReset": {
+      "real": "kept",
+      "demo": null
+    },
+    "afterExit": {
+      "real": "kept",
+      "demoKeys": []
+    },
+    "bannerAfterReset": true
+  },
+  "offline": {
+    "captions": 4,
+    "pauseWorked": true
+  },
+  "keyboard": {
+    "skipFocused": true,
+    "skipTarget": "main",
+    "focus": {
+      "outline": "solid",
+      "width": "3px"
+    },
+    "resumeVisible": true,
+    "reduced": {
+      "matches": true,
+      "animations": []
+    },
+    "darkAxeSerious": 0
+  },
+  "reflow": {
+    "dimensions": {
+      "scrollWidth": 195,
+      "clientWidth": 195
+    },
+    "controls": {
+      "Reset demo": {
+        "x": 12,
+        "y": 280.59375,
+        "width": 171,
+        "height": 44
+      },
+      "Start for real": {
+        "x": 12,
+        "y": 332.59375,
+        "width": 171,
+        "height": 44
+      },
+      "Pause captions": {
+        "x": 25,
+        "y": 1562.234375,
+        "width": 145,
+        "height": 44
+      },
+      "Export TXT": {
+        "x": 24,
+        "y": 2429.59375,
+        "width": 147,
+        "height": 50.796875
+      }
+    }
+  },
+  "history": {
+    "forward": true,
+    "back": true,
+    "forwardAgain": true
+  },
+  "links": {
+    "legalTargets": {
+      "/privacy": [
+        {
+          "name": "Skip to content",
+          "width": 139,
+          "height": 48.796875
+        },
+        {
+          "name": "Local LiveCaptions",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "name": "Demo",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "name": "How it works",
+          "width": 98,
+          "height": 44
+        },
+        {
+          "name": "Price",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "name": "Privacy",
+          "width": 98,
+          "height": 44
+        },
+        {
+          "name": "privacy@sociobot.in",
+          "width": 137,
+          "height": 44
+        },
+        {
+          "name": "Privacy",
+          "width": 350,
+          "height": 44
+        },
+        {
+          "name": "Terms",
+          "width": 350,
+          "height": 44
+        },
+        {
+          "name": "Built by Param Factory (external)",
+          "width": 350,
+          "height": 44
+        },
+        {
+          "name": "design notes (external)",
+          "width": 83,
+          "height": 44
+        }
+      ],
+      "/terms": [
+        {
+          "name": "Skip to content",
+          "width": 139,
+          "height": 48.796875
+        },
+        {
+          "name": "Local LiveCaptions",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "name": "Demo",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "name": "How it works",
+          "width": 98,
+          "height": 44
+        },
+        {
+          "name": "Price",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "name": "Privacy",
+          "width": 98,
+          "height": 44
+        },
+        {
+          "name": "support@sociobot.in",
+          "width": 143,
+          "height": 44
+        },
+        {
+          "name": "Privacy",
+          "width": 350,
+          "height": 44
+        },
+        {
+          "name": "Terms",
+          "width": 350,
+          "height": 44
+        },
+        {
+          "name": "Built by Param Factory (external)",
+          "width": 350,
+          "height": 44
+        },
+        {
+          "name": "design notes (external)",
+          "width": 83,
+          "height": 44
+        }
+      ]
+    },
+    "internal": {
+      "/": 200,
+      "/demo": 200,
+      "/privacy": 200,
+      "/?demo=1": 200,
+      "/terms": 200,
+      "/not-a-real-route": 404
+    },
+    "external": [
+      "https://api.sociobot.in/api/v1/products/local-live-captions/checkout",
+      "https://github.com/B-Divyesh/sf-local-live-captions/blob/main/.factory/design.md",
+      "https://github.com/B-Divyesh/sf-local-live-captions/releases",
+      "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.20/Local.Live.Captions_0.1.20_amd64.AppImage",
+      "https://hello-factory.sociobot.in/",
+      "mailto:privacy@sociobot.in",
+      "mailto:support@sociobot.in"
+    ]
+  },
+  "requests": {
+    "demo": {
+      "count": 8,
+      "external": []
+    }
+  },
+  "errors": [],
+  "identity": {
+    "tag": "v0.1.20",
+    "commit": "541c7907f2805d2bcad10140520a50309b92b435"
+  }
+}
