@@ -1,14 +1,15 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { resolveImplementationCommit } from "./release-identity.mjs";
 
-function siteIdentityErrors({ releaseTag, releaseCommit, checkedOutCommit, siteIdentity }) {
+function siteIdentityErrors({ releaseTag, releaseCommit, implementationCommit, siteIdentity }) {
   const errors = [];
   if (!/^v\d+\.\d+\.\d+$/.test(releaseTag || "")) {
     errors.push(`Release tag ${releaseTag || "<empty>"} is not a vMAJOR.MINOR.PATCH tag.`);
   }
-  if (checkedOutCommit !== releaseCommit) {
-    errors.push(`Static release must be built from ${releaseCommit}, but the checkout is ${checkedOutCommit}.`);
+  if (implementationCommit !== releaseCommit) {
+    errors.push(`Static release must use implementation ${releaseCommit}, but the checkout contains implementation ${implementationCommit}.`);
   }
   if (siteIdentity && siteIdentity.tag !== releaseTag) {
     errors.push(`Built site tag ${siteIdentity.tag || "<missing>"} does not match ${releaseTag}.`);
@@ -29,8 +30,8 @@ function run() {
   if (!releaseTag) throw new Error("Pass RELEASE_TAG=vMAJOR.MINOR.PATCH or a release tag argument.");
 
   const releaseCommit = git(root, ["rev-list", "-n", "1", releaseTag]);
-  const checkedOutCommit = git(root, ["rev-parse", "HEAD"]);
-  const sourceErrors = siteIdentityErrors({ releaseTag, releaseCommit, checkedOutCommit });
+  const implementationCommit = resolveImplementationCommit(root);
+  const sourceErrors = siteIdentityErrors({ releaseTag, releaseCommit, implementationCommit });
   if (sourceErrors.length) throw new Error(sourceErrors.join("\n"));
 
   const releaseEnv = {
@@ -43,7 +44,7 @@ function run() {
   execFileSync("npm", ["run", "build:site"], { cwd: root, env: releaseEnv, stdio: "inherit" });
 
   const siteIdentity = JSON.parse(readFileSync(new URL("../dist/site/release-identity.json", import.meta.url), "utf8"));
-  const outputErrors = siteIdentityErrors({ releaseTag, releaseCommit, checkedOutCommit, siteIdentity });
+  const outputErrors = siteIdentityErrors({ releaseTag, releaseCommit, implementationCommit, siteIdentity });
   if (outputErrors.length) throw new Error(outputErrors.join("\n"));
   console.log(`Release site built: ${releaseTag} -> ${releaseCommit}.`);
 }

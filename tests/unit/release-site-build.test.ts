@@ -3,11 +3,11 @@ import { siteIdentityErrors } from "../../scripts/build-release-site.mjs";
 
 describe("immutable static release builds", () => {
   it("accepts a site built from its exact release tag source", () => {
-    const identity = { tag: "v0.1.19", commit: "released-source" };
+    const identity = { tag: "v0.1.20", commit: "released-source" };
     expect(siteIdentityErrors({
       releaseTag: identity.tag,
       releaseCommit: identity.commit,
-      checkedOutCommit: identity.commit,
+      implementationCommit: identity.commit,
       siteIdentity: identity,
     })).toEqual([]);
   });
@@ -18,10 +18,10 @@ describe("immutable static release builds", () => {
     expect(siteIdentityErrors({
       releaseTag: "v0.1.12",
       releaseCommit: publishedRelease,
-      checkedOutCommit: candidate,
+      implementationCommit: candidate,
       siteIdentity: { tag: "v0.1.12", commit: candidate },
     })).toEqual([
-      `Static release must be built from ${publishedRelease}, but the checkout is ${candidate}.`,
+      `Static release must use implementation ${publishedRelease}, but the checkout contains implementation ${candidate}.`,
       `Built site commit ${candidate} does not match ${publishedRelease}.`,
     ]);
   });
@@ -32,10 +32,10 @@ describe("immutable static release builds", () => {
     expect(siteIdentityErrors({
       releaseTag: "v0.1.16",
       releaseCommit: publishedRelease,
-      checkedOutCommit: candidate,
+      implementationCommit: candidate,
       siteIdentity: { tag: "v0.1.16", commit: candidate },
     })).toEqual([
-      `Static release must be built from ${publishedRelease}, but the checkout is ${candidate}.`,
+      `Static release must use implementation ${publishedRelease}, but the checkout contains implementation ${candidate}.`,
       `Built site commit ${candidate} does not match ${publishedRelease}.`,
     ]);
   });

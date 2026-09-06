@@ -1,20 +1,11 @@
 import { defineConfig } from "vite";
-import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { resolveImplementationCommit } from "./scripts/release-identity.mjs";
 
 const packageVersion = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")).version as string;
 
-function buildCommit(): string {
-  if (process.env.VITE_BUILD_SHA) return process.env.VITE_BUILD_SHA;
-  if (process.env.GITHUB_SHA) return process.env.GITHUB_SHA;
-  try {
-    return execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
-  } catch {
-    return "development";
-  }
-}
-
-const buildSha = buildCommit();
+const buildSha = resolveImplementationCommit(fileURLToPath(new URL(".", import.meta.url)));
 
 export default defineConfig(({ mode }) => ({
   plugins: mode === "site" ? [{
