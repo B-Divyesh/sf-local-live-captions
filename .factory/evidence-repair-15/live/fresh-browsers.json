@@ -1,0 +1,70 @@
+{
+  "checkedAt": "2026-09-06T04:58:29.834Z",
+  "expected": {
+    "tag": "v0.1.20",
+    "commit": "541c7907f2805d2bcad10140520a50309b92b435"
+  },
+  "firstScreens": {
+    "phone": {
+      "heading": "Caption Linux calls and recordings locally",
+      "audience": "For deaf and hard-of-hearing students when lectures, calls, or recordings have no captions.",
+      "firstAction": "Try it with sample data →",
+      "facts": [
+        "PrivateAudio stays on your device.",
+        "OfflineThe sample works offline after your first visit.",
+        "FreeEnglish and German speech models are free."
+      ],
+      "visible": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "errors": [],
+      "seriousOrCritical": []
+    },
+    "desktop": {
+      "heading": "Caption Linux calls and recordings locally",
+      "audience": "For deaf and hard-of-hearing students when lectures, calls, or recordings have no captions.",
+      "firstAction": "Try it with sample data →",
+      "facts": [
+        "PrivateAudio stays on your device.",
+        "OfflineThe sample works offline after your first visit.",
+        "FreeEnglish and German speech models are free."
+      ],
+      "visible": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "errors": [],
+      "seriousOrCritical": [],
+      "download": "https://github.com/B-Divyesh/sf-local-live-captions/releases/download/v0.1.20/Local.Live.Captions_0.1.20_amd64.AppImage"
+    }
+  },
+  "demo": {
+    "captionCount": 4,
+    "labelPersistedAfterReset": true,
+    "exportedTextLines": 4,
+    "afterReset": {
+      "real": "kept",
+      "demo": null
+    },
+    "afterExit": {
+      "real": "kept",
+      "demoKeys": []
+    }
+  },
+  "offline": {
+    "captionCount": 4
+  },
+  "identity": {
+    "tag": "v0.1.20",
+    "commit": "541c7907f2805d2bcad10140520a50309b92b435"
+  }
+}

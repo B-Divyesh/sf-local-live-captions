@@ -1,6 +1,6 @@
 # Copy audit
 
-Audited 2 September 2026 from `src/main.ts` and `README.md`. Counts use
+Audited 6 September 2026 from `src/main.ts` and `README.md`. Counts use
 whitespace-delimited words. Hyphenated terms, prices, versions, and URLs count
 as one word. No audited sentence exceeds 22 words or uses a banned marketing
 word. Decorative text is absent from the landing page.
@@ -75,15 +75,18 @@ word. Decorative text is absent from the landing page.
 | Speech model downloads use the listed `ggerganov/whisper.cpp` Hugging Face repository. | 10 |
 | The bundled upstream MIT license copy is pinned in `third_party/whisper.cpp-LICENSE`. | 9 |
 | Desktop installers are built in GitHub Actions. | 7 |
-| Tag the exact commit with the version from `package.json`, such as `v0.1.19`. | 12 |
+| Tag the implementation commit with the version from `package.json`, such as `v0.1.20`. | 12 |
 | To rebuild, run the workflow for that tag. | 8 |
 | The workflow resolves that tag to one commit before packaging. | 10 |
 | It creates unsigned packages for macOS, Windows, and Linux. | 9 |
 | Linux first proves a usable AppImage and DEB in a FUSE-less worker. | 12 |
 | It also publishes `SHA256SUMS` and `latest.json` with that commit. | 9 |
 | The workflow audits their source identity, package list, URLs, and checksums after publication. | 13 |
-| After deploying the tagged site build, run `npm run verify:published-release` to check the live identity against GitHub. | 16 |
-| The site offers packages only when the release and deployed site use the same tag and commit. | 15 |
+| Deploy the static site from that tag or a later report-only commit. | 12 |
+| `deploy-release-site` always runs `build:release-site` before uploading. | 7 |
+| It stops when the latest implementation commit differs from the release tag. | 11 |
+| Later `.factory` or Graphify report commits keep the released implementation identity. | 10 |
+| The site offers packages only when the release, manifest, and deployed site use the same tag and commit. | 16 |
 
 ## Terminology
 
