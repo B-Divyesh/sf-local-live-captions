@@ -1,0 +1,12 @@
+{
+  "viewport": {
+    "width": 195,
+    "height": 844
+  },
+  "route": "https://local-live-captions.sociobot.in/demo",
+  "scrollWidth": 195,
+  "clientWidth": 195,
+  "innerWidth": 195,
+  "bodyScrollWidth": 195,
+  "result": "PASS"
+}

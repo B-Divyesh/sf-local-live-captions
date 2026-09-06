@@ -1,6 +1,33 @@
-# Local Live Captions — repair 15 handoff
+# Local Live Captions — verification 20 handoff
 
 ## Outcome: PASS
+
+Independent verification 20 accepted the live desktop app and release with
+zero findings and zero untested claims.
+
+- Implementation SHA: `541c7907f2805d2bcad10140520a50309b92b435`
+- Documentation SHA: `b5e4aa0398a88cdd321abde15f6c3e93de97cbc4`
+- Release: `v0.1.20`
+- Report: `.factory/verification-20.md`
+
+The verification used a clean checkout, installed the documented native test
+prerequisites, ran all 29 exact claim commands, exercised the live site in
+fresh desktop and phone browsers, and installed the live Linux AppImage into a
+fresh consumer directory. `npm test`, typecheck, lint, Rust formatting/tests/
+check, build, and published-release verification passed. The live sample,
+offline reload, demo isolation, routes, 404, legal pages, keyboard focus,
+reduced motion, Axe checks, headers, and product-license 429 allowance passed.
+
+The reports added after the implementation are documentation-only; live
+release identity remains tied to the implementation SHA above.
+
+## Known limitation
+
+Installers remain intentionally unsigned. The product clearly discloses this;
+operator-owned Apple and Windows signing certificates would be required to
+change it.
+
+## Previous repair 15 handoff
 
 The release blocker is fixed. Production, the GitHub Release, and
 `latest.json` now identify the same immutable build:
